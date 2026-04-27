@@ -1,15 +1,15 @@
 {
   "version": 2,
-  "rewrites": [{ "source": "/", "destination": "/The_Great_Redeployment.html" }],
+  "rewrites": [{ "source": "/", "destination": "/index.html" }],
   "headers": [
     {
-      "source": "/The_Great_Redeployment.html",
+      "source": "/index.html",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }]
     }
   ],
   "functions": {
-    "api/clone-voice.js": { "maxDuration": 60, "memory": 3008 },
+    "api/clone-voice.js": { "maxDuration": 60, "memory": 2048 },
     "api/tts.js": { "maxDuration": 30 },
-    "api/image-to-video.js": { "maxDuration": 60, "memory": 3008 }
+    "api/image-to-video.js": { "maxDuration": 60, "memory": 2048 }
   }
 }
