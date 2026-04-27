@@ -1,0 +1,2148 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="default">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Great Redeployment — Nathaniel Baldock · Tauranga 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,300;1,9..144,400;1,9..144,600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+@property --p10{syntax:'<number>';inherits:true;initial-value:0}
+:root {
+  --sky:       hsl(207,58%,34%);
+  --sky2:      hsl(200,52%,44%);
+  --sky-dark:  hsl(213,62%,14%);
+  --sky-light: hsl(205,55%,93%);
+  --lime:      hsl(79,82%,50%);
+  --lime-d:    hsl(79,70%,34%);
+  --lime-mute: hsl(79,40%,93%);
+  --gold:      #C9A227;
+  --gold-lt:   #FFF8E1;
+  --red:       #C0392B;
+  --red-lt:    #FDE8E8;
+  --green:     #1e8a5a;
+  --green-lt:  #E8F8F0;
+  --amber:     hsl(38,88%,44%);
+  --amber-lt:  hsl(40,70%,95%);
+  --fg:        #0f1117;
+  --fg-med:    hsl(220,10%,28%);
+  --muted:     hsl(220,8%,47%);
+  --bg:        #f8f8f6;
+  --bg-warm:   hsl(40,25%,97%);
+  --border:    hsl(220,14%,88%);
+  --dark:      hsl(218,32%,9%);
+  --dark2:     hsl(218,28%,13%);
+  --white:     #ffffff;
+  --ease:      cubic-bezier(0.23,1,0.32,1);
+  --ease-b:    cubic-bezier(0.34,1.56,0.64,1);
+  --body:      'DM Sans', system-ui, sans-serif;
+  --display:   'Fraunces', Georgia, serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{overflow:hidden;height:100%;width:100%;}
+body{font-family:var(--body);color:var(--fg);background:#090c14;}
+
+/* ─── PLAY OVERLAY ─── */
+#play-overlay{
+  position:fixed;inset:0;z-index:99999;
+  background:var(--sky-dark);
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:space-between;
+  padding:clamp(1.5rem,5vw,3rem) 1.5rem clamp(1.5rem,4vw,2.5rem);
+  transition:opacity 0.6s var(--ease),visibility 0.6s;
+}
+#play-overlay::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--sky),var(--sky2) 55%,var(--lime));}
+#play-overlay.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+.po-hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;max-width:46rem;margin:0 auto;gap:0;}
+.po-eyebrow{font-size:clamp(.6rem,.88vw,.74rem);font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--lime);margin-bottom:1.5rem;}
+.po-title{font-family:var(--display);font-size:clamp(2rem,5vw,4rem);font-weight:700;color:var(--white);line-height:1.1;letter-spacing:-.02em;margin-bottom:.4rem;}
+.po-title em{font-style:italic;font-weight:300;color:rgba(255,255,255,.5);display:block;font-size:.6em;margin-top:.2em;}
+.po-sub{font-size:clamp(.85rem,1.2vw,.95rem);color:rgba(255,255,255,.42);line-height:1.65;margin-bottom:2.2rem;max-width:36rem;}
+#start-btn{display:inline-flex;align-items:center;gap:.7rem;padding:.82rem 2.2rem;border-radius:50px;background:transparent;border:1.5px solid rgba(255,255,255,.25);color:rgba(255,255,255,.78);font-family:var(--body);font-size:.86rem;font-weight:600;letter-spacing:.05em;cursor:pointer;transition:all .25s;}
+#start-btn:hover{background:rgba(147,217,17,.1);border-color:var(--lime);color:var(--lime);}
+#start-btn .arr{transition:transform .2s;}
+#start-btn:hover .arr{transform:translateX(4px);}
+.po-footer{display:flex;flex-direction:column;align-items:center;gap:.25rem;}
+.po-name{font-size:.78rem;font-weight:600;color:rgba(255,255,255,.72);letter-spacing:.02em;}
+.po-name .yr{font-weight:400;color:rgba(255,255,255,.32);}
+.po-tag{font-size:.6rem;color:rgba(255,255,255,.26);letter-spacing:.04em;}
+
+/* ─── VIDEO OVERLAY ─── */
+#video-overlay{position:fixed;inset:0;z-index:99998;background:#000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .5s,visibility .5s;}
+#video-overlay.visible{opacity:1;visibility:visible;}
+#video-overlay iframe{width:100%;height:100%;border:none;}
+#skip-video{position:fixed;bottom:2rem;right:2rem;z-index:99999;font-size:.76rem;font-weight:600;color:rgba(255,255,255,.5);background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);padding:.5rem 1.3rem;border-radius:8px;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden;}
+#skip-video.visible{opacity:1;visibility:visible;}
+#skip-video:hover{background:rgba(255,255,255,.16);color:#fff;}
+
+/* ─── DECK & SLIDES ─── */
+#deck{width:100vw;height:100vh;overflow:hidden;position:relative;perspective:1800px;transform-style:preserve-3d;}
+.slide{position:absolute;inset:0;opacity:0;visibility:hidden;pointer-events:none;z-index:0;transition:opacity .2s var(--ease),visibility .2s,clip-path 0s;transform-style:preserve-3d;will-change:clip-path,transform;}
+.slide.active{opacity:1;visibility:visible;pointer-events:auto;z-index:2;}
+.slide.pre-active{opacity:1;visibility:visible;z-index:1;pointer-events:none;}
+.slide.exiting{z-index:3;pointer-events:none;}
+.slide-inner{width:100vw;height:100vh;background:var(--bg);position:relative;overflow:hidden;display:flex;flex-direction:column;}
+.slide-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--sky),var(--sky2) 55%,var(--lime));z-index:10;}
+.slide-inner.dark{background:var(--dark);color:var(--white);}
+.slide-inner.dark2{background:var(--dark2);color:var(--white);}
+.slide-inner.warm{background:var(--bg-warm);}
+.slide-inner.session-div{background:var(--sky-dark);}
+
+/* slide transitions */
+@keyframes wipeExitFwd{from{clip-path:polygon(0 0,100% 0,100% 100%,0 100%);transform:scale(1) rotateX(0) translateZ(0);opacity:1}to{clip-path:polygon(100% 0,100% 0,100% 100%,100% 100%);transform:scale(.94) rotateX(-3deg) translateZ(-60px);opacity:.92}}
+@keyframes wipeExitBack{from{clip-path:polygon(0 0,100% 0,100% 100%,0 100%);transform:scale(1) rotateX(0) translateZ(0);opacity:1}to{clip-path:polygon(0 0,0 0,0 100%,0 100%);transform:scale(.94) rotateX(3deg) translateZ(-60px);opacity:.92}}
+@keyframes wipeExitDownToUp{from{clip-path:polygon(0 0,100% 0,100% 100%,0 100%);transform:scale(1) rotateX(0) translateZ(0);opacity:1}to{clip-path:polygon(0 0,100% 0,100% 0,0 0);transform:scale(.95) rotateX(2deg) translateZ(-50px);opacity:.92}}
+@keyframes wipeExitUpToDown{from{clip-path:polygon(0 0,100% 0,100% 100%,0 100%);transform:scale(1) rotateX(0) translateZ(0);opacity:1}to{clip-path:polygon(0 100%,100% 100%,100% 100%,0 100%);transform:scale(.95) rotateX(-2deg) translateZ(-50px);opacity:.92}}
+@keyframes curtainExit{0%{clip-path:inset(0% 0% 0% 0%)}100%{clip-path:inset(50% 0% 50% 0%)}}
+@keyframes scanlineFlash{0%{transform:translateY(-100%);opacity:0}15%{opacity:1}100%{transform:translateY(100vh);opacity:0}}
+.slide.exiting--wipe-fwd{animation:wipeExitFwd .52s cubic-bezier(.85,0,.15,1) forwards;}
+.slide.exiting--wipe-back{animation:wipeExitBack .52s cubic-bezier(.85,0,.15,1) forwards;}
+.slide.exiting--wipe-dtu{animation:wipeExitDownToUp .52s cubic-bezier(.85,0,.15,1) forwards;}
+.slide.exiting--wipe-utd{animation:wipeExitUpToDown .52s cubic-bezier(.85,0,.15,1) forwards;}
+.slide.exiting--curtain{animation:curtainExit .55s cubic-bezier(.85,0,.15,1) forwards;}
+html.reduce-motion-override .slide.exiting--wipe-fwd,html.reduce-motion-override .slide.exiting--wipe-back,html.reduce-motion-override .slide.exiting--wipe-dtu,html.reduce-motion-override .slide.exiting--wipe-utd,html.reduce-motion-override .slide.exiting--curtain{animation:none;opacity:0;transition:opacity .2s}
+.scanline{position:absolute;inset:0;pointer-events:none;z-index:20;overflow:hidden}
+.scanline::after{content:'';position:absolute;left:0;right:0;height:4px;background:linear-gradient(90deg,transparent,rgba(147,217,17,.6),var(--lime),rgba(147,217,17,.4),transparent);box-shadow:0 0 20px var(--lime);transform:translateY(-20%);animation:scanlineFlash .25s ease-out forwards;opacity:0}
+.session-div.scan-active .scanline::after{animation:scanlineFlash .28s ease-out forwards;opacity:1}
+.bg-img .ov.mesh-grad{background:linear-gradient(135deg,rgba(0,20,55,.55)0%,rgba(0,50,100,.4)25%,rgba(0,30,60,.5)50%,rgba(0,40,80,.45)75%,rgba(0,20,50,.6)100%);background-size:200% 200%;animation:meshDrift 18s ease-in-out infinite alternate}
+@keyframes meshDrift{0%{background-position:0% 0%}100%{background-position:100% 100%}}
+.slide-inner.dark .bg-img .ov:not(.mesh-grad),.slide-inner.dark2 .bg-img .ov:not(.mesh-grad){transition:opacity .4s}
+.slide.active .bg-img .ov.mesh-grad{animation-play-state:running}
+/* token reveals */
+.tk-w,.tk-c{display:inline;opacity:0;transform:translateY(.3em);transition:opacity .5s var(--ease),transform .5s var(--ease)}
+.tk-c{display:inline}
+.anim.in .tk-w,.anim.in .tk-c,.line-reveal.in .tk-w,.line-reveal.in .tk-c{opacity:1;transform:none}
+.s-title .tk-w,.s-title .tk-c{transition-delay:calc(var(--ti,0)*38ms)}
+.session-split-title{line-height:1.1;display:block}
+.session-split-top,.session-split-bot{display:block;overflow:hidden}
+.session-split-top .inner{transform:translateY(100%);transition:transform .65s cubic-bezier(.25,.8,.2,1)}
+.session-split-bot .inner{transform:translateY(-100%);transition:transform .65s cubic-bezier(.25,.8,.2,1)}
+.session-div-title.line-reveal.in .session-split-top .inner,.session-div-title.line-reveal.in .session-split-bot .inner{transform:translateY(0)}
+/* clip word title S00 */
+.title-word-clip{overflow:hidden;display:inline-block;vertical-align:bottom}
+.title-word-clip>span{display:inline-block;transform:translateX(-100%);transition:transform .5s cubic-bezier(.25,.8,.2,1)}
+.title-word-clip.in>span{transform:translateX(0)}
+.s-div svg,.is-arrow .arrow-svg{overflow:visible}
+.stroke-lime{stroke:var(--lime);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:400;stroke-dashoffset:400;transition:stroke-dashoffset 1.1s var(--ease)}
+.stroke-sky{stroke:var(--sky2);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:400;stroke-dashoffset:400;transition:stroke-dashoffset 1.1s var(--ease)}
+.svg-drawn{stroke-dashoffset:0!important}
+.pulse-danger .s-num{animation:numDangerPulse 1.4s ease-in-out 2}
+@keyframes numDangerPulse{0%,100%{text-shadow:0 0 0 rgba(201,57,43,0);color:inherit}50%{text-shadow:0 0 18px rgba(255,80,50,.5);color:#ffdede}}
+.hbar.pct-anim .hbar-pct{transition:none}
+.s19-burst{position:absolute;inset:0;pointer-events:none;z-index:5}
+.s19-burst i{position:absolute;left:50%;top:50%;width:6px;height:6px;border-radius:50%;background:var(--lime);opacity:.9;margin:-3px 0 0 -3px;--tx:0px;--ty:-40px;animation:burstPart .7s ease-out forwards}
+@keyframes burstPart{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--tx),var(--ty)) scale(.3);opacity:0}}
+#donut-9010{--p10:0;--ring:0;width:min(200px,40vw);height:min(200px,40vw);border-radius:50%;background:conic-gradient(var(--lime) calc(var(--p10)*3.6deg),rgba(255,255,255,.08)0);position:relative;flex-shrink:0;transition:--p10 1.1s var(--ease)}
+#donut-9010::before{content:'';position:absolute;inset:18%;border-radius:50%;background:var(--dark);box-shadow:inset 0 0 0 2px rgba(255,255,255,.06)}
+#donut-9010.don-anim{--p10:36}
+.cal-mini{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;max-width:120px}
+.cal-cell{width:7px;height:7px;border-radius:1px;background:rgba(255,255,255,.1);transition:background .1s,transform .2s}
+.cal-cell.filled{background:var(--lime);box-shadow:0 0 4px rgba(147,217,17,.3)}
+#carousel-pulse.card-pulse-anim{animation:carouselHB 1.6s ease-in-out infinite}
+@keyframes carouselHB{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-3px) scale(1.02)}}
+#carousel-trigger .warn-tri{transition:filter .2s;filter:drop-shadow(0 0 0 transparent)}
+#carousel-trigger.flash-warn .warn-tri{animation:triFlash .35s ease}
+@keyframes triFlash{0%,100%{filter:brightness(1) drop-shadow(0 0 0 transparent)}50%{filter:brightness(1.5) drop-shadow(0 0 8px var(--red))}}
+@keyframes s02Stamp{0%{transform:translateY(-32px) scale(.98);opacity:0}60%{transform:translateY(4px) scale(1.01)}100%{transform:translateY(0) scale(1);opacity:1}}
+@keyframes s14RedFlash{0%,100%{filter:none}20%{color:#ff3b2e}}
+.callout.lime.gap-flash{animation:gapFlashLime .35s ease}
+.callout.lime.gap-data{animation:gapFlashLime .35s ease}
+@keyframes gapFlashLime{0%,100%{box-shadow:0 0 0 0 rgba(147,217,17,0);border-color:rgba(147,217,17,.2)}50%{box-shadow:0 0 24px 6px rgba(147,217,17,.4);border-color:var(--lime)}}
+#refl-verse-float{opacity:0;transform:translateY(24px);transition:opacity 1s .5s,transform 1.2s .5s var(--ease)}
+#refl-verse-float.in{opacity:1;transform:none}
+#contact-photo-wrap{--spot:0%;position:relative;overflow:hidden;border-radius:12px}
+#contact-photo-wrap::after{content:'';position:absolute;inset:0;pointer-events:none;border-radius:12px;mask-image:radial-gradient(ellipse 80% 80% at 50% 40%,#000 0%,#000 var(--spot),transparent calc(var(--spot) + 5%));-webkit-mask-image:radial-gradient(ellipse 80% 80% at 50% 40%,#000 0%,#000 var(--spot),transparent calc(var(--spot) + 5%))}
+#contact-photo-wrap.spot-in{--spot:75%}
+.contact-links a{position:relative;overflow:hidden}
+.contact-links a::after{content:'';position:absolute;left:0;bottom:0;width:0;height:2px;background:var(--lime);transition:width .45s var(--ease)}
+.contact-links a:hover::after,.contact-in .contact-links a::after{width:100%}
+.contact-layout.contact-in .contact-info .contact-links a{animation:clReveal .6s var(--ease) backwards}
+.contact-layout.contact-in .contact-info .contact-links a:nth-child(1){animation-delay:.1s}
+.contact-layout.contact-in .contact-info .contact-links a:nth-child(2){animation-delay:.2s}
+.contact-layout.contact-in .contact-info .contact-links a:nth-child(3){animation-delay:.3s}
+@keyframes clReveal{from{opacity:0;transform:translateX(-12px);color:rgba(255,255,255,.3)}to{opacity:1;transform:none;color:var(--lime)}}
+.stat-card.magnetic,.level-card.magnetic,.lever-card.magnetic,.sphere-card.magnetic,.video-card.magnetic{transform:perspective(800px) rotateX(var(--ry,0deg)) rotateY(var(--rx,0deg)) translateY(-4px);transition:transform .2s var(--ease),box-shadow .2s}
+.stat-card.ctr,.level-card.ctr{transform:perspective(800px) rotateX(calc((var(--my, 50) - 50) * 0.12deg)) rotateY(calc((var(--mx, 50) - 50) * 0.1deg)) translateY(calc(var(--ty,0px)))}
+.level-card .lc-shim{position:absolute;inset:0;background:linear-gradient(110deg,transparent 40%,rgba(255,255,255,.45) 50%,transparent 60%);background-size:220% 100%;opacity:0;transition:opacity .3s,background-position .5s;pointer-events:none;mix-blend-mode:soft-light}
+.level-card:hover .lc-shim{opacity:.35;background-position:100% 50%}
+.level-card.l3.glow-goal{box-shadow:0 0 0 1px rgba(147,217,17,.2),0 0 20px 2px rgba(147,217,17,.12);animation:limeGoalPulse 3s ease-in-out infinite}
+@keyframes limeGoalPulse{0%,100%{box-shadow:0 0 0 1px rgba(147,217,17,.2),0 0 20px 2px rgba(147,217,17,.1)}50%{box-shadow:0 0 0 1px rgba(147,217,17,.4),0 0 32px 6px rgba(147,217,17,.2)}}
+.lever-flip{transform-style:preserve-3d;backface-visibility:hidden;transition:transform .6s var(--ease)}
+.lever-in .lever-flip{transform:rotateX(0deg)}
+.lever-prep .lever-flip{transform:rotateX(-90deg)}
+.stat-flip3d{transform:rotateY(80deg) translateZ(0);transform-style:preserve-3d;opacity:0;transition:transform .65s cubic-bezier(.2,.8,.2,1),opacity .15s;min-height:0}
+.stat-flip3d.in{transform:rotateY(0);opacity:1}
+.stat-flip3d .stat-card{height:100%}
+.disc-q-block.hidden-qs{opacity:0;visibility:hidden;max-height:0;padding:0!important;margin:0!important;overflow:hidden;border:0!important;pointer-events:none;transition:max-height .45s var(--ease),opacity .4s}
+.disc-q-block:not(.hidden-qs){transition:max-height .45s var(--ease),opacity .4s}
+.disc-timer{position:fixed;top:1.2rem;right:1.2rem;z-index:10020;width:52px;height:52px;border-radius:50%;background:conic-gradient(var(--lime) calc(var(--dt-p,0)*1%),rgba(255,255,255,.12)0);display:flex;align-items:center;justify-content:center;visibility:hidden;opacity:0;transition:opacity .3s;pointer-events:none;cursor:pointer}
+.disc-timer::after{content:'';position:absolute;inset:5px;border-radius:50%;background:rgba(0,0,0,.4)}
+.disc-timer .disc-tm-inner{position:relative;z-index:1;font-size:.58rem;font-weight:700;color:var(--lime);text-align:center;line-height:1.1}
+.disc-timer.showing{visibility:visible;opacity:1;pointer-events:auto}
+.disc-timer:hover{box-shadow:0 0 0 2px rgba(147,217,17,.25)}
+.speaker-panel{position:fixed;inset:0;z-index:10050;background:var(--dark);color:#fff;padding:1rem;font-size:.85rem;display:grid;grid-template-columns:1fr 1fr;gap:1rem;overflow:auto}
+.speaker-panel[hidden]{display:none!important}
+.speaker-panel h3{font-size:.75rem;color:var(--lime);text-transform:uppercase;letter-spacing:.1em}
+.i2v-pill{position:fixed;top:1rem;right:1rem;z-index:10015;background:rgba(0,0,0,.75);border:1px solid rgba(147,217,17,.3);color:var(--lime);font-size:.62rem;padding:.4rem .75rem;border-radius:999px;backdrop-filter:blur(6px);max-width:min(280px,90vw);visibility:hidden;opacity:0;transition:opacity .3s}
+.i2v-pill.show{visibility:visible;opacity:1}
+#preload-links{position:absolute;left:-9999px;visibility:hidden}
+.demo-a,.demo-b{--demo:var(--white)}
+.demo-a .demo-stage{border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:1.2rem;min-height:200px}
+.demo-a .wave-wrap{height:64px;background:rgba(0,0,0,.25);border-radius:8px;margin:.75rem 0;display:flex;align-items:center;justify-content:center;gap:2px}
+.demo-a .wave-b{display:block;width:3px;min-height:4px;border-radius:2px;background:var(--lime);transition:height .1s}
+.demo-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;border:1px solid var(--lime);background:rgba(147,217,17,.1);color:var(--lime);font-weight:600;cursor:pointer;font-size:.8rem;transition:all .2s}
+.demo-btn:hover,.demo-btn:focus{background:rgba(147,217,17,.2)}
+.demo-btn:disabled{opacity:.4;pointer-events:none}
+.demo-a textarea,.demo-b textarea{min-height:64px;resize:vertical;border-radius:8px;border:1px solid var(--border);padding:.6rem;font-family:var(--body);width:100%;font-size:.85rem}
+.demo-b .dropzone{border:2px dashed rgba(0,0,0,.2);border-radius:12px;min-height:180px;display:flex;align-items:center;justify-content:center;padding:1rem;cursor:pointer;transition:background .2s}
+.demo-b .dropzone.dragover{background:var(--sky-light)}
+.demo-b .vid-out video{max-width:100%;border-radius:10px;max-height:40vh}
+.demo-note{font-size:.65rem;color:rgba(255,255,255,.45);margin-top:.5rem}
+.ph-placeholder{border:1px dashed rgba(0,0,0,.3);background:rgba(0,0,0,.04);color:var(--muted);font-style:italic;padding:.4rem .6rem;border-radius:8px;font-size:clamp(.78rem,1.02vw,.9rem)}
+
+/* ─── LAYOUT ─── */
+.s-body{flex:1;padding:4.2vh 4.5vw 3.5vh;display:flex;flex-direction:column;position:relative;z-index:2;overflow-y:auto;justify-content:center;gap:2.4vh;}
+.s-body.top{justify-content:space-evenly;padding-top:3.8vh;padding-bottom:4.5vh;}
+.s-body.center{align-items:center;justify-content:center;text-align:center;}
+.s-body.spread{justify-content:space-between;}
+.s-footer{padding:.5rem 5.5vw;display:flex;justify-content:space-between;align-items:center;font-size:.6rem;color:var(--muted);border-top:1px solid var(--border);flex-shrink:0;font-family:var(--body);}
+.slide-inner.dark .s-footer,.slide-inner.dark2 .s-footer,.slide-inner.session-div .s-footer{color:rgba(255,255,255,.22);border-top-color:rgba(255,255,255,.07);}
+
+/* ─── TYPOGRAPHY ─── */
+.eyebrow{font-size:clamp(.6rem,.85vw,.76rem);font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--sky2);margin-bottom:.5rem;}
+.slide-inner.dark .eyebrow,.slide-inner.dark2 .eyebrow,.slide-inner.session-div .eyebrow{color:var(--lime);}
+.s-title{font-family:var(--display);font-weight:700;line-height:1.1;color:var(--sky-dark);letter-spacing:-.02em;}
+.s-title.xl{font-size:clamp(3.4rem,7.8vw,6.4rem);}
+.s-title.lg{font-size:clamp(2.2rem,4.4vw,3.8rem);}
+.s-title.md{font-size:clamp(1.7rem,3vw,2.6rem);}
+.slide-inner.dark .s-title,.slide-inner.dark2 .s-title,.slide-inner.session-div .s-title{color:var(--white);}
+.s-title em{font-style:italic;font-weight:300;}
+.s-title .lime{color:var(--lime);}
+.s-title .gold{color:var(--gold);}
+.s-div{width:48px;height:3px;background:var(--lime);margin:.6rem 0;flex-shrink:0;}
+.s-sub{font-size:clamp(1.05rem,1.6vw,1.34rem);color:var(--fg-med);line-height:1.72;max-width:1000px;}
+.slide-inner.dark .s-sub,.slide-inner.dark2 .s-sub{color:rgba(255,255,255,.58);}
+
+/* ─── SESSION DIVIDERS ─── */
+.session-div-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;z-index:2;padding:4vh 6vw;}
+.session-part-num{font-family:var(--display);font-size:clamp(5rem,14vw,12rem);font-weight:700;color:rgba(255,255,255,.06);line-height:1;position:absolute;top:50%;left:50%;transform:translate(-50%,-56%);pointer-events:none;user-select:none;letter-spacing:-.04em;}
+.session-pill{display:inline-flex;align-items:center;gap:.6rem;padding:.4rem 1.1rem;border-radius:50px;border:1px solid rgba(255,255,255,.18);font-size:.68rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:1.5rem;}
+.session-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--lime);}
+.session-div-title{font-family:var(--display);font-size:clamp(2.4rem,5.5vw,4.8rem);font-weight:700;color:var(--white);line-height:1.1;letter-spacing:-.02em;margin-bottom:1.2rem;}
+.session-div-desc{font-size:clamp(.95rem,1.4vw,1.15rem);color:rgba(255,255,255,.48);line-height:1.7;max-width:560px;margin:0 auto 1.8rem;}
+.session-time-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.35rem 1rem;border-radius:50px;background:rgba(255,255,255,.07);font-size:.72rem;font-weight:600;color:rgba(255,255,255,.45);letter-spacing:.04em;}
+
+/* ─── DISCUSSION SLIDES ─── */
+.disc-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4vh 5vw;position:relative;z-index:2;gap:3vh;}
+.disc-header{display:flex;align-items:center;gap:1.2rem;margin-bottom:.5rem;}
+.disc-title{font-family:var(--display);font-size:clamp(1.8rem,3.5vw,3rem);font-weight:700;color:var(--white);text-align:center;}
+.disc-time{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--lime);padding:.3rem .9rem;border-radius:50px;border:1px solid rgba(147,217,17,.3);}
+.disc-questions{width:100%;max-width:820px;display:flex;flex-direction:column;gap:1.4vh;}
+.disc-q-block{padding:2.2vh 2.5vw;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);transition:background .3s;}
+.disc-q-block:hover{background:rgba(255,255,255,.09);}
+.disc-audience{font-size:.62rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.5rem;color:var(--lime);}
+.disc-audience.amber{color:var(--amber);}
+.disc-audience.blue{color:var(--sky2);}
+.disc-q-text{font-family:var(--display);font-size:clamp(.95rem,1.35vw,1.2rem);font-style:italic;color:rgba(255,255,255,.82);line-height:1.55;}
+
+/* ─── NAV ─── */
+#nav-bar{position:fixed;bottom:0;left:0;right:0;z-index:9998;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:.5rem 2rem;gap:.35rem;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s;}
+#nav-bar.visible{opacity:1;visibility:visible;}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.2);border:none;cursor:pointer;transition:all .3s var(--ease);padding:0;}
+.nav-dot.active{background:var(--lime);width:18px;border-radius:3px;}
+#slide-counter{position:fixed;bottom:.6rem;right:2rem;z-index:9999;font-family:var(--body);font-size:.62rem;font-weight:600;color:rgba(255,255,255,.35);opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s;}
+#slide-counter.visible{opacity:1;visibility:visible;}
+#progress-bar{position:fixed;top:0;left:0;height:3px;z-index:9999;background:linear-gradient(90deg,var(--sky),var(--lime));width:0%;transition:width .4s var(--ease);}
+.arrow-btn{position:fixed;top:50%;z-index:9998;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);cursor:pointer;color:rgba(255,255,255,.45);display:flex;align-items:center;justify-content:center;transition:all .3s var(--ease);opacity:0;visibility:hidden;font-size:1.2rem;}
+.arrow-btn.visible{opacity:1;visibility:visible;}
+.arrow-btn:hover{background:rgba(255,255,255,.14);color:var(--lime);border-color:var(--lime);}
+#prev-btn{left:.75rem;}
+#next-btn{right:.75rem;}
+
+/* ─── STAT CARDS ─── */
+.stat-row{display:flex;gap:1.8vw;margin:1.8vh 0;flex-wrap:wrap;}
+.stat-card{flex:1;min-width:240px;background:var(--white);border-radius:14px;padding:2.9vh 2.2vw;position:relative;overflow:hidden;border:1px solid var(--border);box-shadow:0 2px 16px rgba(0,0,0,.04);cursor:pointer;transition:transform .35s var(--ease),box-shadow .35s,border-color .25s;}
+.stat-card:hover{transform:translateY(-5px) scale(1.02);box-shadow:0 10px 35px rgba(0,0,0,.1);border-color:var(--sky2);}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--sky);}
+.stat-card.red::before{background:var(--red);}
+.stat-card.green::before{background:var(--green);}
+.stat-card.lime::before{background:var(--lime);}
+.stat-card.gold::before{background:var(--gold);}
+.stat-card.amber::before{background:var(--amber);}
+.stat-card.bd::before{background:var(--sky-dark);}
+.s-num{font-family:var(--display);font-size:clamp(2.4rem,4.5vw,3.9rem);font-weight:700;color:var(--sky);line-height:1;margin-bottom:.5rem;letter-spacing:-.02em;}
+.stat-card.red .s-num{color:var(--red);}
+.stat-card.green .s-num{color:var(--green);}
+.stat-card.lime .s-num{color:var(--lime-d);}
+.stat-card.gold .s-num{color:var(--gold);}
+.stat-card.amber .s-num{color:var(--amber);}
+.stat-card.bd .s-num{color:var(--sky-dark);}
+.s-label{font-size:clamp(.95rem,1.25vw,1.14rem);color:var(--muted);line-height:1.56;}
+.s-subline{font-size:clamp(.76rem,.96vw,.88rem);color:var(--muted);line-height:1.42;margin-top:.3rem;}
+.s-source{font-size:.62rem;color:#c0c4cc;margin-top:.55rem;text-transform:uppercase;letter-spacing:.04em;}
+.click-hint{position:absolute;bottom:.4rem;right:.6rem;font-size:.44rem;color:var(--sky2);opacity:0;transition:opacity .3s;text-transform:uppercase;letter-spacing:.1em;}
+.stat-card:hover .click-hint{opacity:.6;}
+
+/* dark stat cards */
+.dark-stat{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.1);}
+.dark-stat .s-num{color:var(--lime);}
+.dark-stat .s-label{color:rgba(255,255,255,.6);}
+.dark-stat .s-source{color:rgba(255,255,255,.3);}
+.dark-stat .click-hint{color:var(--lime);}
+.dark-stat:hover{background:rgba(255,255,255,.12);border-color:var(--lime);}
+
+/* ─── CALLOUTS ─── */
+.callout{padding:2.6vh 2.8vw;border-radius:12px;border-left:4px solid var(--sky);background:var(--sky-light);font-size:clamp(1.04rem,1.5vw,1.3rem);line-height:1.72;}
+.callout.lime{background:var(--lime-mute);border-left-color:var(--lime-d);}
+.callout.red{background:var(--red-lt);border-left-color:var(--red);}
+.callout.gold{background:var(--gold-lt);border-left-color:var(--gold);}
+.callout.amber{background:var(--amber-lt);border-left-color:var(--amber);}
+.callout.green{background:var(--green-lt);border-left-color:var(--green);}
+.callout.dark-call{background:rgba(255,255,255,.06);border-left-color:var(--lime);color:rgba(255,255,255,.78);}
+.callout strong{color:var(--sky);}
+.callout.lime strong{color:var(--lime-d);}
+.callout.red strong{color:var(--red);}
+.callout.dark-call strong{color:var(--lime);}
+
+/* ─── QUOTE BOX ─── */
+.quote-box{position:relative;padding:2.5vh 3vw;margin:1.5vh 0;}
+.quote-box .qm{font-family:var(--display);font-size:5rem;font-weight:800;color:var(--gold);opacity:.22;line-height:1;position:absolute;top:0;left:.75rem;}
+.quote-box blockquote{font-family:var(--display);font-size:clamp(1.1rem,1.55vw,1.45rem);font-style:italic;font-weight:400;line-height:1.65;position:relative;z-index:2;}
+.slide-inner.dark .quote-box blockquote,.slide-inner.dark2 .quote-box blockquote{color:rgba(255,255,255,.85);}
+.quote-box cite{display:block;margin-top:.75rem;font-size:clamp(.78rem,.98vw,.9rem);font-style:normal;color:var(--gold);font-weight:600;font-family:var(--body);}
+
+/* ─── INSIGHT ITEMS ─── */
+.insight-list{display:flex;flex-direction:column;gap:1.4vh;margin:1.5vh 0;}
+.insight-item{display:flex;gap:1.4rem;align-items:flex-start;padding:2vh 2vw;background:var(--white);border-radius:12px;border:1px solid var(--border);transition:transform .3s var(--ease),background .3s;cursor:pointer;}
+.insight-item:hover{transform:translateX(6px);background:var(--sky-light);}
+.insight-num{width:48px;height:48px;border-radius:50%;background:var(--sky);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--display);font-size:1.15rem;font-weight:700;color:var(--white);}
+.insight-num.green{background:var(--green);}
+.insight-num.glow-pulse{animation:glow-pulse 2.5s ease-in-out infinite;}
+.insight-title{font-family:var(--display);font-size:clamp(.95rem,1.3vw,1.15rem);font-weight:600;color:var(--sky-dark);}
+.insight-body{font-size:clamp(.82rem,1.05vw,.95rem);color:var(--muted);line-height:1.55;margin-top:.2rem;}
+
+/* ─── LEVEL CARDS ─── */
+.level-grid{display:flex;gap:1.8vw;margin:1.8vh 0;width:100%;}
+.level-card{flex:1;border-radius:14px;padding:3vh 2.1vw;position:relative;overflow:hidden;border:1px solid var(--border);background:var(--white);box-shadow:0 2px 14px rgba(0,0,0,.04);cursor:pointer;transition:transform .35s var(--ease),box-shadow .35s;min-height:34vh;}
+.level-card:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(0,0,0,.09);}
+.level-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.level-card.l1::before{background:var(--sky);}
+.level-card.l2::before{background:var(--sky2);}
+.level-card.l3::before{background:var(--lime);}
+.lc-num{font-family:var(--display);font-size:clamp(3.1rem,5vw,4.8rem);font-weight:700;color:var(--border);line-height:1;margin-bottom:.5rem;transition:color .3s;}
+.level-card.l1:hover .lc-num{color:var(--sky);}
+.level-card.l2:hover .lc-num{color:var(--sky2);}
+.level-card.l3:hover .lc-num{color:var(--lime-d);}
+.lc-label{font-family:var(--display);font-size:clamp(1.2rem,1.8vw,1.55rem);font-weight:600;color:var(--fg);margin-bottom:.5rem;line-height:1.3;}
+.lc-desc{font-size:clamp(.92rem,1.15vw,1.08rem);color:var(--muted);line-height:1.62;margin-bottom:.95rem;}
+.lc-hours{display:inline-block;padding:.28rem .8rem;border-radius:20px;font-size:.72rem;font-weight:700;}
+.level-card.l1 .lc-hours{background:var(--sky-light);color:var(--sky);}
+.level-card.l2 .lc-hours{background:hsl(200,50%,92%);color:var(--sky2);}
+.level-card.l3 .lc-hours{background:var(--lime-mute);color:var(--lime-d);}
+
+/* ─── LEVER CARDS ─── */
+.lever-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2vw;margin:1.5vh 0;}
+.lever-card{border-radius:14px;padding:2.5vh 1.8vw;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);transition:transform .35s var(--ease),background .3s;}
+.lever-card:hover{transform:translateY(-4px);background:rgba(255,255,255,.09);}
+.lever-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.lever-card.la::before{background:var(--sky);}
+.lever-card.lb::before{background:var(--sky2);}
+.lever-card.lc::before{background:hsl(185,60%,45%);}
+.lever-card.ld::before{background:var(--lime);}
+.lever-letter{font-family:var(--display);font-size:clamp(2.2rem,4vw,3.5rem);font-weight:700;line-height:1;margin-bottom:.4rem;opacity:.14;color:var(--white);}
+.lever-title{font-family:var(--display);font-size:clamp(.95rem,1.35vw,1.2rem);font-weight:600;color:var(--white);margin-bottom:.4rem;line-height:1.2;}
+.lever-desc{font-size:clamp(.76rem,.98vw,.88rem);color:rgba(255,255,255,.5);line-height:1.6;}
+
+/* ─── CONTEXT SANDWICH ─── */
+.sandwich{display:flex;flex-direction:column;gap:.5rem;max-width:680px;margin:1.5vh 0;}
+.sw-layer{border-radius:12px;padding:1.8vh 2vw;border:1px solid var(--border);display:flex;align-items:center;gap:1.5rem;transition:transform .3s var(--ease);}
+.sw-layer:hover{transform:translateX(6px);}
+.sw-layer.top{background:var(--sky-light);border-color:rgba(40,120,181,.2);}
+.sw-layer.mid{background:var(--bg-warm);}
+.sw-layer.bot{background:var(--lime-mute);border-color:rgba(150,214,17,.25);}
+.sw-icon{width:44px;height:44px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.4rem;}
+.sw-layer.top .sw-icon{background:var(--sky);}
+.sw-layer.mid .sw-icon{background:var(--fg-med);}
+.sw-layer.bot .sw-icon{background:var(--lime-d);}
+.sw-label{font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.2rem;}
+.sw-layer.top .sw-label{color:var(--sky);}
+.sw-layer.mid .sw-label{color:var(--muted);}
+.sw-layer.bot .sw-label{color:var(--lime-d);}
+.sw-title{font-family:var(--display);font-size:clamp(.92rem,1.25vw,1.1rem);font-weight:600;color:var(--fg);line-height:1.3;}
+.sw-desc{font-size:clamp(.78rem,.98vw,.88rem);color:var(--muted);line-height:1.5;margin-top:.2rem;}
+
+/* ─── BITS vs ATOMS ─── */
+.bits-atoms{display:grid;grid-template-columns:1fr 1fr;gap:1.5vw;margin:1.5vh 0;}
+.ba-panel{border-radius:14px;padding:2.8vh 2.5vw;border:1px solid var(--sky-light);background:var(--sky-light);}
+.ba-panel.atoms{background:var(--lime-mute);border-color:rgba(147,217,17,.2);}
+.ba-label{font-size:.65rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin-bottom:.7rem;color:var(--sky);}
+.ba-panel.atoms .ba-label{color:var(--lime-d);}
+.ba-title{font-family:var(--display);font-size:clamp(1.1rem,1.65vw,1.5rem);font-weight:700;color:var(--fg);margin-bottom:.9rem;}
+.ba-panel ul{list-style:none;display:flex;flex-direction:column;gap:.75vh;}
+.ba-panel li{font-size:clamp(.82rem,1.05vw,.96rem);color:var(--fg-med);line-height:1.55;padding-left:1.2rem;position:relative;}
+.ba-panel li::before{content:'';position:absolute;left:0;top:.58em;width:6px;height:6px;border-radius:50%;background:var(--sky);}
+.ba-panel.atoms li::before{background:var(--lime-d);}
+
+/* ─── BRAIN SPLIT (Complicated vs Complex) ─── */
+.brain-split{display:grid;grid-template-columns:1fr 1fr;gap:1.8vw;margin:2vh 0;width:100%;}
+.brain-card{border-radius:16px;padding:3vh 2.5vw;position:relative;overflow:hidden;}
+.brain-card.left{background:var(--sky-light);border:1px solid rgba(40,120,181,.18);}
+.brain-card.right{background:var(--amber-lt);border:1px solid rgba(212,140,13,.18);}
+.brain-tag{font-size:.64rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.5rem;}
+.brain-card.left .brain-tag{color:var(--sky);}
+.brain-card.right .brain-tag{color:var(--amber);}
+.brain-title{font-family:var(--display);font-size:clamp(1.4rem,2.2vw,2rem);font-weight:700;margin-bottom:.8rem;line-height:1.2;}
+.brain-card.left .brain-title{color:var(--sky-dark);}
+.brain-card.right .brain-title{color:hsl(38,70%,28%);}
+.brain-desc{font-size:clamp(.96rem,1.24vw,1.12rem);color:var(--fg-med);line-height:1.66;}
+.brain-pill{display:inline-flex;margin-top:1.1rem;padding:.32rem .88rem;border-radius:20px;font-size:.72rem;font-weight:700;}
+.brain-card.left .brain-pill{background:var(--sky);color:var(--white);}
+.brain-card.right .brain-pill{background:var(--amber);color:var(--white);}
+.brain-rule{font-size:clamp(.82rem,1.1vw,1rem);font-style:italic;color:var(--fg-med);line-height:1.6;margin-top:1.2rem;padding-left:1.2rem;border-left:3px solid var(--lime);}
+
+/* ─── INFO → DISCERN SPLIT ─── */
+.info-shift{display:grid;grid-template-columns:1fr auto 1fr;gap:1.2vw;align-items:stretch;margin:2.2vh 0;max-width:1280px;width:100%;}
+.is-panel{border-radius:16px;padding:3.4vh 2.8vw;text-align:center;}
+.is-panel.past{background:hsl(220,12%,94%);border:1px solid var(--border);}
+.is-panel.future{background:var(--sky-light);border:1px solid rgba(40,120,181,.22);}
+.is-label{font-size:.62rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem;}
+.is-panel.future .is-label{color:var(--sky);}
+.is-title{font-family:var(--display);font-size:clamp(1.6rem,2.5vw,2.5rem);font-weight:700;color:var(--fg-med);margin-bottom:.7rem;}
+.is-panel.future .is-title{color:var(--sky-dark);}
+.is-desc{font-size:clamp(.94rem,1.18vw,1.12rem);color:var(--muted);line-height:1.62;}
+.is-arrow{width:60px;display:flex;align-items:center;justify-content:center;}
+.is-arrow svg{fill:var(--sky);width:28px;height:28px;}
+
+/* ─── 7 SPHERES ─── */
+.spheres-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2vw;margin:1.5vh 0;}
+.sphere-card{border-radius:12px;padding:1.8vh 1.5vw;border:1px solid var(--border);background:var(--white);transition:transform .3s var(--ease),box-shadow .3s;cursor:pointer;}
+.sphere-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.07);}
+.sphere-card:nth-child(7){grid-column:2/4;}
+.sphere-icon{font-size:1.6rem;margin-bottom:.5rem;display:block;}
+.sphere-name{font-family:var(--display);font-size:clamp(.85rem,1.1vw,1rem);font-weight:600;color:var(--sky-dark);margin-bottom:.3rem;}
+.sphere-ai{font-size:clamp(.72rem,.88vw,.82rem);color:var(--muted);line-height:1.45;}
+
+/* ─── 90 DAY PLAN ─── */
+.plan-steps{display:flex;flex-direction:column;gap:1.2vh;max-width:700px;margin:1.5vh 0;}
+.plan-step{display:flex;gap:1.2rem;align-items:flex-start;padding:1.8vh 2vw;background:var(--white);border-radius:12px;border:1px solid var(--border);}
+.plan-num{width:36px;height:36px;border-radius:50%;background:var(--sky);color:var(--white);font-weight:700;font-size:.9rem;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--display);}
+.plan-content strong{font-family:var(--display);font-size:clamp(.88rem,1.1vw,1rem);color:var(--fg);font-weight:600;display:block;margin-bottom:.2rem;}
+.plan-content p{font-size:clamp(.8rem,.98vw,.9rem);color:var(--muted);line-height:1.6;}
+
+/* ─── BAR CHARTS ─── */
+.bar-chart-h{display:flex;flex-direction:column;gap:1.2vh;margin:2vh 0;}
+.hbar{display:flex;align-items:center;gap:1vw;}
+.hbar-label{font-size:clamp(.7rem,.98vw,.88rem);font-weight:600;color:var(--fg-med);min-width:150px;text-align:right;}
+.hbar-track{flex:1;height:clamp(26px,3.8vh,40px);background:var(--bg);border-radius:21px;overflow:hidden;}
+.hbar-fill{height:100%;border-radius:21px;width:0%;transition:width 1.2s var(--ease);display:flex;align-items:center;justify-content:flex-end;padding-right:12px;}
+.hbar-fill span{font-size:clamp(.62rem,.86vw,.82rem);font-weight:700;color:var(--white);opacity:0;transition:opacity .3s 1s;}
+
+/* ─── VBAR CHARTS ─── */
+.vbar-chart{display:flex;align-items:flex-end;gap:1.5vw;margin:2vh 0;padding-bottom:2vh;border-bottom:1px solid rgba(0,0,0,.08);cursor:pointer;}
+.vbar-col{flex:1;display:flex;flex-direction:column;align-items:center;height:200px;justify-content:flex-end;}
+.vbar{width:100%;max-width:100px;border-radius:7px 7px 0 0;height:0%;transition:height 1s var(--ease);}
+.vbar-val{font-family:var(--display);font-size:clamp(.8rem,1.15vw,1.05rem);font-weight:700;color:var(--sky);margin-bottom:.3rem;opacity:0;transition:opacity .4s .8s;}
+.vbar-lbl{font-size:clamp(.58rem,.76vw,.76rem);font-weight:600;color:var(--muted);text-align:center;margin-top:.5rem;line-height:1.3;}
+
+/* ─── SPLIT LAYOUT ─── */
+.split-layout{flex:1;display:flex;position:relative;z-index:2;}
+.split-image{width:35%;position:relative;overflow:hidden;flex-shrink:0;}
+.split-image img{width:100%;height:100%;object-fit:cover;display:block;}
+.split-image .img-overlay{position:absolute;inset:0;background:linear-gradient(90deg,transparent 60%,var(--bg) 100%);}
+.split-content{flex:1;padding:4vh 4vw 3vh 3vw;display:flex;flex-direction:column;overflow-y:auto;justify-content:space-evenly;}
+
+/* ─── BG IMAGES ─── */
+.bg-img{position:absolute;inset:0;z-index:0;}
+.bg-img img{width:100%;height:100%;object-fit:cover;}
+.bg-img .ov{position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,20,55,.92) 0%,rgba(0,40,90,.82) 100%);}
+.bg-img .ov-dk{position:absolute;inset:0;background:rgba(0,20,55,.88);}
+.slide-img{background:linear-gradient(135deg,var(--sky),var(--sky2),var(--lime-d));}
+
+/* ─── ANIMATIONS ─── */
+.anim{opacity:0;transition:all .7s var(--ease);}
+.anim.fade-up{transform:translateY(28px);}
+.anim.fade-left{transform:translateX(-38px);}
+.anim.fade-right{transform:translateX(38px);}
+.anim.scale-up{transform:scale(.86);}
+.anim.in{opacity:1!important;transform:none!important;}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+.d4{transition-delay:.4s}.d5{transition-delay:.5s}.d6{transition-delay:.6s}
+.d7{transition-delay:.7s}.d8{transition-delay:.8s}.d9{transition-delay:.9s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes glow-pulse{0%,100%{box-shadow:0 0 0 0 rgba(30,112,166,0)}50%{box-shadow:0 0 20px 4px rgba(30,112,166,.18)}}
+@keyframes breathe{0%,100%{opacity:.1;transform:scale(1)}50%{opacity:.18;transform:scale(1.05)}}
+@keyframes float-p{0%{transform:translateY(100vh) rotate(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-10vh) rotate(720deg);opacity:0}}
+@keyframes reflGlow{0%,100%{color:#f6e3a4;text-shadow:0 0 0 rgba(201,162,39,0)}50%{color:#fff3c5;text-shadow:0 0 10px rgba(201,162,39,.35)}}
+@keyframes reflSheen{0%,20%{background-position:0% 50%}60%,100%{background-position:100% 50%}}
+.float{animation:float 3s ease-in-out infinite;}
+.glow-pulse{animation:glow-pulse 2.5s ease-in-out infinite;}
+.breathe{animation:breathe 4s ease-in-out infinite;}
+.particles{position:absolute;inset:0;overflow:hidden;z-index:1;}
+.particle{position:absolute;border-radius:50%;background:rgba(147,217,17,.16);animation:float-p linear infinite;}
+
+/* ─── REFLECTIVE ─── */
+.refl-wrap{max-width:1040px;margin:0 auto;padding:2vh 3vw;border-radius:16px;background:rgba(0,0,0,.18);backdrop-filter:blur(2px);}
+.refl-text{font-family:var(--display);font-size:clamp(1.2rem,2.2vw,1.7rem);line-height:1.8;font-weight:400;color:var(--white);}
+.refl-em1{color:#f6e3a4;font-weight:700;animation:reflGlow 9s ease-in-out infinite;}
+.refl-em2{font-weight:700;background:linear-gradient(100deg,rgba(255,255,255,.9) 0%,var(--lime) 45%,rgba(255,255,255,.9) 100%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:reflSheen 13s ease-in-out infinite;}
+.refl-verse{margin-top:1.8rem;font-size:1.8rem;color:var(--gold);font-style:italic;font-family:var(--display);text-shadow:0 0 15px rgba(201,162,39,.4);}
+
+/* ─── CAROUSEL MODAL ─── */
+#carousel-overlay{position:fixed;inset:0;z-index:99991;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;}
+#carousel-overlay.open{opacity:1;visibility:visible;}
+#carousel-box{background:var(--white);border-radius:16px;max-width:700px;width:94%;padding:2rem 2.5rem;position:relative;transform:scale(.9);transition:transform .4s var(--ease-b);box-shadow:0 30px 80px rgba(0,0,0,.4);max-height:85vh;overflow-y:auto;}
+#carousel-overlay.open #carousel-box{transform:scale(1);}
+#carousel-close{position:absolute;top:.75rem;right:.75rem;width:32px;height:32px;border-radius:50%;border:none;background:var(--bg);cursor:pointer;font-size:1rem;color:var(--muted);display:flex;align-items:center;justify-content:center;}
+#carousel-close:hover{background:var(--red-lt);color:var(--red);}
+#carousel-title{font-family:var(--display);font-size:1rem;font-weight:600;color:var(--red);margin-bottom:1rem;}
+#carousel-body{font-size:.85rem;color:var(--fg-med);line-height:1.7;}
+.carousel-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--bg);}
+.carousel-nav button{font-size:.7rem;font-weight:600;padding:.4rem 1rem;border-radius:6px;border:1px solid var(--sky2);background:transparent;color:var(--sky2);cursor:pointer;transition:all .2s;}
+.carousel-nav button:hover{background:var(--sky2);color:var(--white);}
+.carousel-nav button:disabled{opacity:.3;cursor:default;}
+.carousel-counter{font-size:.62rem;color:var(--muted);}
+
+/* ─── STANDARD MODAL ─── */
+#modal-overlay{position:fixed;inset:0;z-index:99990;background:rgba(0,0,0,.65);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;}
+#modal-overlay.open{opacity:1;visibility:visible;}
+#modal-box{background:var(--white);border-radius:16px;max-width:640px;width:92%;padding:2.5rem;position:relative;transform:scale(.9) translateY(20px);transition:transform .4s var(--ease-b);box-shadow:0 30px 80px rgba(0,0,0,.3);max-height:85vh;overflow-y:auto;}
+#modal-overlay.open #modal-box{transform:scale(1) translateY(0);}
+#modal-close{position:absolute;top:1rem;right:1rem;width:36px;height:36px;border-radius:50%;border:none;background:var(--bg);cursor:pointer;font-size:1.2rem;color:var(--muted);display:flex;align-items:center;justify-content:center;transition:background .2s;}
+#modal-close:hover{background:var(--red-lt);color:var(--red);}
+#modal-stat{font-family:var(--display);font-size:2.2rem;font-weight:700;color:var(--sky);margin-bottom:.5rem;}
+#modal-title{font-family:var(--display);font-size:1.1rem;font-weight:600;color:var(--sky-dark);margin-bottom:.75rem;}
+#modal-body{font-size:.85rem;color:var(--fg-med);line-height:1.7;margin-bottom:1rem;}
+#modal-source{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem;}
+#modal-link a{font-size:.7rem;font-weight:600;color:var(--sky2);text-decoration:none;padding:.4rem .8rem;border:1px solid var(--sky2);border-radius:6px;display:inline-block;transition:all .2s;}
+#modal-link a:hover{background:var(--sky2);color:var(--white);}
+#modal-overlay.video-open #modal-box{max-width:90vw;width:90vw;max-height:90vh;height:90vh;padding:1rem;}
+#modal-overlay.video-open #modal-content{width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
+#modal-video-wrap{position:relative;width:100%;max-width:90vw;padding-bottom:56.25%;height:0;}
+#modal-video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;border-radius:8px;}
+
+/* ─── CONTACT SLIDE ─── */
+.contact-layout{display:flex;gap:3rem;align-items:stretch;width:100%;max-width:900px;margin:0 auto;min-height:60vh;}
+.contact-photo{width:44%;min-width:280px;border-radius:12px;overflow:hidden;flex-shrink:0;}
+.contact-photo img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;min-height:55vh;}
+.contact-info{flex:1;display:flex;flex-direction:column;justify-content:center;padding:2vh 0;}
+.contact-info .contact-msg{font-size:clamp(1.1rem,1.5vw,1.35rem);line-height:1.7;color:rgba(255,255,255,.9);margin-bottom:2rem;}
+.contact-info .contact-links{display:flex;flex-direction:column;gap:.75rem;}
+.contact-info .contact-links a{font-size:clamp(.88rem,1.15vw,1.05rem);font-weight:600;color:var(--lime);text-decoration:none;transition:color .2s;}
+.contact-info .contact-links a:hover{color:var(--white);}
+.contact-ctas{display:flex;flex-wrap:wrap;gap:1rem;margin-top:2rem;}
+.contact-ctas a{font-size:clamp(.82rem,1.05vw,.95rem);font-weight:700;color:var(--white);background:linear-gradient(90deg,var(--sky2),var(--sky-dark));padding:.72rem 1.5rem;border-radius:8px;text-decoration:none;transition:opacity .2s,transform .2s;display:inline-block;}
+.contact-ctas a:hover{opacity:.9;transform:translateY(-2px);}
+
+/* ─── QR SLIDE ─── */
+.qr-wrap{margin:1.5rem auto 1rem;display:flex;justify-content:center;align-items:center;}
+.qr-wrap img{display:block;width:min(260px,70vw);height:auto;border-radius:12px;background:#fff;padding:12px;box-shadow:0 12px 40px rgba(0,0,0,.35);}
+
+/* ─── VIDEO CARDS ─── */
+.bento-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;margin:2vh 0;width:100%;max-width:900px;}
+.bento-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin:2vh 0;width:100%;max-width:1000px;}
+.video-card{min-height:180px;background:var(--white);border-radius:14px;padding:0;position:relative;overflow:hidden;display:flex;flex-direction:column;border:1px solid rgba(0,75,141,.08);box-shadow:0 4px 16px rgba(0,0,0,.05);cursor:pointer;transition:transform .4s var(--ease),box-shadow .4s;}
+.video-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--sky);}
+.video-card:hover{transform:translateY(-4px);box-shadow:0 10px 30px rgba(0,0,0,.1);}
+.video-card.warning::before{background:var(--red);}
+.video-card-thumb{width:100%;aspect-ratio:16/9;border-radius:10px 10px 0 0;overflow:hidden;background:var(--bg);flex-shrink:0;position:relative;}
+.video-card-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.video-card-thumb::after{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 68 48'%3E%3Cpath fill='%23fff' fill-opacity='0.9' d='M66 24c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h60c1.1 0 2 .9 2 2v20zm-32-6v12l10-6-10-6z'/%3E%3C/svg%3E") center/56px no-repeat;pointer-events:none;}
+.video-card-body{padding:1.8vh 1.4vw;flex:1;}
+.video-card-title{font-family:var(--display);font-size:clamp(.88rem,1.18vw,1.05rem);font-weight:600;color:var(--sky-dark);margin-bottom:.35rem;}
+.video-card-summary{font-size:clamp(.72rem,.92vw,.86rem);color:var(--muted);line-height:1.45;}
+.video-card-large{min-height:220px;background:var(--white);border-radius:14px;padding:0;position:relative;overflow:hidden;display:flex;flex-direction:column;border:1px solid rgba(0,75,141,.08);box-shadow:0 4px 20px rgba(0,0,0,.06);cursor:pointer;transition:transform .4s var(--ease),box-shadow .4s,border-color .3s;}
+.video-card-large::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--sky);}
+.video-card-large:hover{transform:translateY(-6px);box-shadow:0 12px 40px rgba(0,0,0,.12);border-color:var(--sky2);}
+.video-card-large .video-card-thumb{border-radius:12px 12px 0 0;}
+.video-card-large .video-card-body{padding:2.2vh 1.8vw;}
+.video-card-large .video-card-title{font-family:var(--display);font-size:clamp(.95rem,1.3vw,1.2rem);font-weight:600;color:var(--sky-dark);margin-bottom:.4rem;}
+.video-card-large .video-card-summary{font-size:clamp(.78rem,1.02vw,.92rem);color:var(--muted);line-height:1.45;}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:900px){
+  .s-body{padding:2vh 4vw 1.5vh;}
+  .stat-row{flex-direction:column;}
+  .brain-split{grid-template-columns:1fr;}
+  .bits-atoms{grid-template-columns:1fr;}
+  .info-shift{grid-template-columns:1fr;}
+  .is-arrow{display:none;}
+  .lever-grid{grid-template-columns:1fr 1fr;}
+  .level-grid{flex-direction:column;}
+  .spheres-grid{grid-template-columns:repeat(2,1fr);}
+  .spheres-grid .sphere-card:nth-child(7){grid-column:auto;}
+  .bento-grid,.bento-grid-3{grid-template-columns:1fr;}
+  .contact-layout{flex-direction:column;}
+  .contact-photo{width:100%;min-width:0;min-height:40vh;}
+  .split-layout{flex-direction:column;}
+  .split-image{width:100%;height:30vh;}
+  .disc-questions{max-width:100%;}
+  .session-div-title{font-size:clamp(2rem,7vw,3rem);}
+}
+
+/* ─── ALT THEMES ─── */
+html[data-theme="nocturne"]{--sky:#38bdf8;--sky2:#22d3ee;--sky-dark:#020617;--sky-light:rgba(56,189,248,.12);--fg:#f1f5f9;--fg-med:#cbd5e1;--muted:#94a3b8;--bg:#0f172a;--bg-warm:#0f172a;--border:rgba(255,255,255,.1);--gold:#fbbf24;--gold-lt:rgba(251,191,36,.15);}
+html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-light:#f5f5f5;--fg:#171717;--fg-med:#262626;--muted:#525252;--bg:#fafafa;--bg-warm:#f5f5f5;--border:#e5e5e5;--gold:#a16207;--gold-lt:#fef9c3;}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}
+  .particle{display:none;}
+  .refl-em1,.refl-em2{animation:none!important;}
+  .refl-em2{-webkit-text-fill-color:var(--lime-d);background:none;}
+  .slide.exiting--wipe-fwd,.slide.exiting--wipe-back,.slide.exiting--curtain{clip-path:none!important;transform:none!important;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ PLAY OVERLAY ═══ -->
+<div id="play-overlay">
+  <div class="po-hero">
+    <p class="po-eyebrow">Half-Day Seminar &nbsp;·&nbsp; Tauranga &nbsp;·&nbsp; May 2026</p>
+    <h1 class="po-title">The Great Redeployment<em>Leading with Wisdom in the Age of Intelligence</em></h1>
+    <p class="po-sub">Four sessions for Christian business leaders, pastors and church leaders. This is a leadership strategy conversation — not a tech tutorial.</p>
+    <button id="start-btn">Begin <span class="arr">→</span></button>
+  </div>
+  <div class="po-footer">
+    <p class="po-name">Nathaniel Baldock <span class="yr">· 2026</span></p>
+    <p class="po-tag">nathanielbaldock.com</p>
+  </div>
+</div>
+
+<div id="progress-bar"></div>
+<div id="preload-links" aria-hidden="true"></div>
+<div class="disc-timer" id="disc-timer" title="Click to pause/resume"><span class="disc-tm-inner" id="disc-tm-inner">25:00</span></div>
+<div class="i2v-pill" id="i2v-pill" role="status"><span id="i2v-pill-txt">Rendering…</span></div>
+<button type="button" id="open-speaker" style="position:fixed;bottom:3.2rem;right:.5rem;z-index:10010;font-size:.5rem;opacity:0.35;padding:.25rem .4rem;border-radius:4px;border:1px solid rgba(255,255,255,.15);background:rgba(0,0,0,.4);color:rgba(255,255,255,.5);cursor:pointer" title="Speaker notes (Alt+N)">Notes</button>
+
+<!-- ═══ VIDEO OVERLAY ═══ -->
+<div id="video-overlay">
+  <iframe id="video-player" src="" allow="autoplay;encrypted-media;fullscreen" allowfullscreen></iframe>
+</div>
+<button id="skip-video">Skip &rarr;</button>
+
+<button class="arrow-btn" id="prev-btn">&#8249;</button>
+<button class="arrow-btn" id="next-btn">&#8250;</button>
+<div id="nav-bar"></div>
+<div id="slide-counter"></div>
+
+<!-- ═══ MODALS ═══ -->
+<div id="modal-overlay">
+  <div id="modal-box">
+    <button id="modal-close">&times;</button>
+    <div id="modal-content">
+      <div id="modal-stat"></div>
+      <div id="modal-title"></div>
+      <div id="modal-body"></div>
+      <div id="modal-source"></div>
+      <div id="modal-link"></div>
+    </div>
+    <div id="modal-video-wrap" style="display:none;position:relative;width:100%;padding-bottom:56.25%;height:0"></div>
+  </div>
+</div>
+
+<div id="carousel-overlay">
+  <div id="carousel-box">
+    <button id="carousel-close">&times;</button>
+    <div id="carousel-title"></div>
+    <div id="carousel-body"></div>
+    <div class="carousel-nav">
+      <button id="car-prev">&larr; Previous</button>
+      <span class="carousel-counter" id="car-counter"></span>
+      <button id="car-next">Next &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ SLIDES ═══════════════════════════ -->
+<div id="deck">
+
+<!-- ── S00 TITLE ── -->
+<div class="slide active">
+  <div class="slide-inner dark">
+    <div class="bg-img"><img class="slide-img" fetchpriority="high" src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1200&auto=format&fit=crop&q=80" sizes="100vw" decoding="async" alt=""><div class="ov"></div></div>
+    <div class="particles" id="hero-particles"></div>
+    <div class="s-body center">
+      <div class="eyebrow anim fade-up d1">Half-Day Seminar &middot; Tauranga &middot; May 2026</div>
+      <h1 class="s-title xl anim fade-up d2" style="color:var(--white)"><span class="title-word-clip"><span>The</span></span> <span class="title-word-clip"><span>Great</span></span><br><span class="lime title-word-clip"><span>Redeployment</span></span></h1>
+      <p class="anim fade-up d3" style="font-family:var(--display);font-style:italic;font-size:clamp(1.1rem,1.8vw,1.5rem);color:rgba(255,255,255,.55);margin-top:.3rem">Leading with Wisdom in the Age of Intelligence</p>
+      <div class="s-div anim fade-up d4" style="margin:1.2rem auto"></div>
+      <p class="anim fade-up d5" style="font-size:clamp(.8rem,1.1vw,.95rem);color:rgba(255,255,255,.35)">&copy; Nathaniel Baldock &middot; 2026</p>
+    </div>
+    <div class="s-footer"><span></span><span style="color:rgba(255,255,255,.2)">Use arrow keys or tap to navigate</span></div>
+  </div>
+</div>
+
+<!-- ══ SESSION 1 DIVIDER ══ -->
+<div class="slide">
+  <div class="slide-inner session-div">
+    <div class="scanline" aria-hidden="true"></div>
+    <div class="particles" id="s1-particles"></div>
+    <div class="session-part-num">01</div>
+    <div class="session-div-body">
+      <div class="session-pill anim scale-up d1"><span class="dot"></span>Session 01 of 04</div>
+      <div class="session-div-title line-reveal anim fade-up d2"><span class="session-split-title"><span class="session-split-top"><span class="inner">The Ground</span></span><span class="session-split-bot"><span class="inner">Has Shifted</span></span></span></div>
+      <div class="session-div-desc anim fade-up d3">Orientation without overwhelm. Understanding the moment clearly before deciding what to do about it.</div>
+      <div class="session-time-badge anim fade-up d4">⏱ ~55 minutes including discussion</div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span></span></div>
+  </div>
+</div>
+
+<!-- ── S01 YOUR AUTHORITY ── -->
+<div class="slide">
+  <div class="slide-inner warm">
+    <div class="s-body top">
+      <div class="eyebrow anim fade-up d1">Why This Conversation Is Different</div>
+      <h2 class="s-title lg w-split anim fade-up d2">You are the<br>context layer.</h2>
+      <div class="s-div anim fade-up d3"></div>
+      <p class="s-sub anim fade-up d4">AI is a synthesis engine. It has no values, no wisdom, no discernment. What it produces depends almost entirely on what you bring to it. Your research, your formation, your decades of working with real people — that is the context layer every tool in this room desperately needs.</p>
+      <div class="s-sub anim fade-up d5" style="font-style:italic;color:var(--muted);font-size:clamp(.82rem,1.05vw,.95rem);margin-top:-.5rem">[Insert personal introduction: years in mission, YWAM, Tauranga context, 7 Spheres research background — your own authentic framing here]</div>
+      <div class="callout lime anim fade-up d6" style="margin-top:1vh">
+        <strong>This is a leadership strategy session.</strong> We are not here to learn how to use a tool. We are here to decide how a tool will be used to serve this city — and the people God has put in our care.
+      </div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 01</span></div>
+  </div>
+</div>
+
+<!-- ── S02 SCALE OF 2026 ── -->
+<div class="slide" id="s02-cards">
+  <div class="slide-inner dark">
+    <div class="s-body center" style="position:relative;z-index:2">
+      <div class="eyebrow anim fade-up d1">The Scale</div>
+      <div class="anim scale-up d2" style="font-family:var(--display);font-size:clamp(4rem,12vw,9rem);font-weight:700;color:var(--white);line-height:1"><span class="count-up" data-target="900" data-suffix="M" data-scramble="1">0</span></div>
+      <div class="anim fade-up d3" style="font-size:.88rem;font-weight:700;color:var(--lime);text-transform:uppercase;letter-spacing:.15em;margin-top:.4rem">Weekly Active Users on ChatGPT Alone</div>
+      <p class="s-sub anim fade-up d4" style="margin-top:1.2rem;text-align:center;max-width:620px">That's 1 in every 9 people on earth. Every single week. As of February 2026. Not a trend. Infrastructure.</p>
+      <div class="stat-row anim fade-up d5" style="justify-content:center;max-width:720px;margin-top:2vh;perspective:1200px">
+        <div class="stat-flip3d" style="flex:1;min-width:200px"><div class="stat-card dark-stat" data-modal="adults61" style="transform-style:preserve-3d;backface-visibility:hidden"><div class="s-num">61%</div><div class="s-label">of US adults used AI in the last 6 months</div><div class="s-source">KPMG/Vention 2026</div><div class="click-hint">Source</div></div></div>
+        <div class="stat-flip3d" style="flex:1;min-width:200px"><div class="stat-card dark-stat" data-modal="fortune" style="transform-style:preserve-3d;backface-visibility:hidden"><div class="s-num">92%</div><div class="s-label">of Fortune 500 companies use OpenAI</div><div class="s-source">OpenAI, 2025</div><div class="click-hint">Source</div></div></div>
+        <div class="stat-flip3d" style="flex:1;min-width:200px"><div class="stat-card dark-stat" data-modal="monetize" style="transform-style:preserve-3d;backface-visibility:hidden"><div class="s-num">88%</div><div class="s-label">of organisations use AI in at least one function</div><div class="s-source">McKinsey</div><div class="click-hint">Source</div></div></div>
+      </div>
+    </div>
+    <div class="s-footer" style="position:relative;z-index:2"><span>Nathaniel Baldock &middot; 2026</span><span>Session 01</span></div>
+  </div>
+</div>
+
+<!-- ── S03 END OF INFORMATION AS POWER ── -->
+<div class="slide">
+  <div class="slide-inner">
+    <div class="s-body top">
+      <div class="eyebrow anim fade-up d1">The Leadership Shift</div>
+      <h2 class="s-title lg w-split anim fade-up d2">Information used to be power.<br>Now it's a free utility.</h2>
+      <div class="info-shift anim fade-up d3">
+        <div class="is-panel past">
+          <div class="is-label">The Information Age</div>
+          <div class="is-title w-split">The Knower</div>
+          <div class="is-desc">The leader with the most information held the advantage. Access was scarce. Research took time. Knowledge was currency.</div>
+        </div>
+        <div class="is-arrow"><svg class="arrow-svg" viewBox="0 0 24 24" width="36" height="36" overflow="visible"><path class="stroke-anim stroke-sky" d="M4 12h11.5M14.5 5.5l6.5 6.5-6.5 6.5" fill="none" stroke-width="2.2"/></svg></div>
+        <div class="is-panel future">
+          <div class="is-label">The Discernment Age</div>
+          <div class="is-title w-split">The Discerner</div>
+          <div class="is-desc">Information is now abundant and free. The advantage shifts to those who can judge what matters, what's true, and what to do about it.</div>
+        </div>
+      </div>
+      <div class="callout lime anim fade-up d4">
+        <strong>The competitive advantage has moved from knowing to discerning.</strong> AI can generate information on demand. It cannot generate wisdom on demand. That is still yours.
+      </div>
+      <div class="quote-box anim fade-up d5">
+        <div class="qm">&ldquo;</div>
+        <blockquote>The definition of wisdom is having a more holistic picture and actually acting with restraint and mindfulness and care.</blockquote>
+        <cite>Tristan Harris, Centre for Humane Technology &mdash; Diary of a CEO</cite>
+      </div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 01</span></div>
+  </div>
+</div>
+
+<!-- ── S04 NOISE PROBLEM ── -->
+<div class="slide">
+  <div class="slide-inner warm">
+    <div class="s-body top">
+      <div class="eyebrow anim fade-up d1">Why You're Overwhelmed</div>
+      <h2 class="s-title lg w-split anim fade-up d2">12,000 new tools.<br>Six months.</h2>
+      <p class="s-sub anim fade-up d3">Chasing tools is a noise problem disguised as a knowledge problem. It cannot be solved by learning faster.</p>
+      <div class="stat-row">
+        <div class="stat-card anim fade-left d4" data-modal="tools12k" style="animation:s02Stamp .5s .15s var(--ease-b) both"><div class="s-num count-up" data-target="12000" data-separator="," data-scramble="1">0</div><div class="s-label">New AI tools, updates and releases in six months</div><div class="s-source">AI Advantage Summit, Day 1 · 2026</div><div class="click-hint">Source</div></div>
+        <div class="stat-card red anim fade-up d5" data-modal="paralysis88"><div class="s-num">88%</div><div class="s-label">of non-adopters stuck not by disinterest — but by not knowing where to start</div><div class="s-source">AI Advantage Summit, 2026</div><div class="click-hint">Source</div></div>
+        <div class="stat-card lime anim fade-right d6" data-modal="admin60"><div class="s-num">60%</div><div class="s-label">of the average work week consumed by admin that doesn't grow the mission</div><div class="s-source">AI Advantage Summit, 2026</div><div class="click-hint">Source</div></div>
+      </div>
+      <div class="callout lime anim fade-up d7">The leaders who navigate this well won't have the most apps. They will have the clearest framework for using the right ones — and knowing why.</div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 01</span></div>
+  </div>
+</div>
+
+<!-- ── S05 TRACTOR MOMENT ── -->
+<div class="slide">
+  <div class="slide-inner">
+    <div class="s-body top">
+      <div class="eyebrow anim fade-up d1">Our Historical Context</div>
+      <h2 class="s-title lg w-split anim fade-up d2">First generation<br>to cross this line.</h2>
+      <div class="info-shift anim fade-up d3">
+        <div class="is-panel past">
+          <div class="is-label">Pre-AI</div>
+          <div class="is-title w-split">Before</div>
+          <div class="is-desc">Intelligence was scarce. Your judgment, knowledge and experience were your competitive advantage. The playing field was roughly level.</div>
+        </div>
+        <div class="is-arrow"><svg class="arrow-svg" viewBox="0 0 24 24" width="36" height="36" overflow="visible"><path class="stroke-anim stroke-sky" d="M4 12h11.5M14.5 5.5l6.5 6.5-6.5 6.5" fill="none" stroke-width="2.2"/></svg></div>
+        <div class="is-panel future">
+          <div class="is-label">Now</div>
+          <div class="is-title w-split">AI Age</div>
+          <div class="is-desc">Intelligence is abundant and cheap. The advantage shifts to those who know how to direct it — and more critically, what to direct it toward.</div>
+        </div>
+      </div>
+      <div class="callout anim fade-up d4">
+        <strong>The Tractor Moment.</strong> The farmer who adopted the tractor in year one didn't just save time. He outpaced every neighbour still using horses for the next decade. The window is right now — and it belongs to the leaders who act on it with clear values, not just technical skill.
+      </div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 01</span></div>
+  </div>
+</div>
+
+<!-- ── S06 INTIMACY RACE ── -->
+<div class="slide">
+  <div class="slide-inner dark2">
+    <div class="bg-img"><img class="slide-img" src="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=960&auto=format&fit=crop&q=80" sizes="100vw" decoding="async" alt=""><div class="ov"></div></div>
+    <div class="s-body top">
+      <div class="eyebrow anim fade-up d1">What It's Doing to Relationships</div>
+      <h2 class="s-title lg w-split anim fade-up d2">The race for attention<br>becomes the race for<br><span class="lime">attachment.</span></h2>
+      <div class="s-div anim fade-up d3"></div>
+      <div class="stat-row anim fade-up d4">
+        <div class="stat-card dark-stat" data-modal="teens67"><div class="s-num">67%</div><div class="s-label">of teens describe an AI chatbot as a close friend</div><div class="s-source">Common Sense Media</div><div class="click-hint">Source</div></div>
+        <div class="stat-card dark-stat" data-modal="vodafone"><div class="s-num">81%</div><div class="s-label">of children 11-16 use AI chatbots; 1 in 3 share things they'd never tell a parent or teacher</div><div class="s-source">VodafoneThree / Censuswide, Feb 2026</div><div class="click-hint">Source</div></div>
+      </div>
+      <div class="quote-box anim fade-up d5">
+        <div class="qm">&ldquo;</div>
+        <blockquote>What was a race for attention in social media becomes the race for attachment and intimacy in the case of AI companions.</blockquote>
+        <cite>Tristan Harris, Co-founder &mdash; Centre for Humane Technology</cite>
+      </div>
+      <div class="callout dark-call anim fade-up d6">This is not a future pastoral care challenge. People sitting in your pews and working in your businesses are navigating this right now.</div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 01</span></div>
+  </div>
+</div>
+
+<!-- ── D1 DISCUSSION ── -->
+<div class="slide d-slide" id="disc-1" data-d-min="25">
+  <div class="slide-inner dark">
+    <div class="bg-img"><img class="slide-img" src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=960&auto=format&fit=crop&q=80" sizes="100vw" decoding="async" alt=""><div class="ov-dk mesh-grad"></div></div>
+    <div class="disc-body">
+      <div class="disc-header anim fade-up d1">
+        <div class="disc-title w-split">Discussion</div>
+        <div class="disc-time">25 Minutes</div>
+      </div>
+      <div class="disc-questions">
+        <div class="disc-q-block">
+          <div class="disc-audience">For Pastors &amp; Church Leaders</div>
+          <div class="disc-q-text">As AI companions offer frictionless intimacy, how does that change how you approach youth ministry and pastoral care for people who are already lonely?</div>
+        </div>
+        <div class="disc-q-block hidden-qs">
+          <div class="disc-audience amber">For Business Leaders</div>
+          <div class="disc-q-text">In a world where AI can generate any answer instantly, what does genuine leadership authority rest on now? What did you used to rely on that no longer holds the same weight?</div>
+        </div>
+        <div class="disc-q-block hidden-qs">
+          <div class="disc-audience blue">For Everyone</div>
+          <div class="disc-q-text">If neutrality on AI is no longer an option for leaders — what would it mean for your organisation to have a genuinely thought-through position?</div>
+        </div>
+      </div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Discussion 01</span></div>
+  </div>
+</div>
+
+<!-- ══ SESSION 2 DIVIDER ══ -->
+<div class="slide">
+  <div class="slide-inner session-div">
+    <div class="scanline" aria-hidden="true"></div>
+    <div class="session-part-num">02</div>
+    <div class="session-div-body">
+      <div class="session-pill anim scale-up d1"><span class="dot"></span>Session 02 of 04</div>
+      <div class="session-div-title line-reveal anim fade-up d2"><span class="session-split-title"><span class="session-split-top"><span class="inner">A Framework</span></span><span class="session-split-bot"><span class="inner">for Leading</span></span></span></div>
+      <div class="session-div-desc anim fade-up d3">Practical tools you can use Monday morning. The goal is not to be the most technical person in the room. It's to be the clearest thinker.</div>
+      <div class="session-time-badge anim fade-up d4">⏱ ~55 minutes including discussion</div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span></span></div>
+  </div>
+</div>
+
+<!-- ── S07 COMPLICATED vs COMPLEX ── -->
+<div class="slide">
+  <div class="slide-inner warm">
+    <div class="s-body top">
+      <div class="eyebrow anim fade-up d1">Dr. Arthur Brooks &mdash; Harvard &mdash; AI Advantage Summit 2026</div>
+      <h2 class="s-title lg w-split anim fade-up d2">Your brain is divided<br>for a reason.</h2>
+      <div class="brain-split anim fade-up d3">
+        <div class="brain-card left">
+          <div class="brain-tag">Left Brain</div>
+          <div class="brain-title w-split">Complicated Problems</div>
+          <div class="brain-desc">How-to questions with definitive answers. Scheduling, data, logistics, route planning, drafting. These can be solved, closed and moved past. With enough processing power, a solution exists.</div>
+          <div class="brain-pill">Give this to AI</div>
+        </div>
+        <div class="brain-card right">
+          <div class="brain-tag">Right Brain</div>
+          <div class="brain-title w-split">Complex Problems</div>
+          <div class="brain-desc">The deep mysteries of human experience. Love, grief, meaning, faith, relationships, vision, calling. These cannot be solved. They must be lived, navigated, and returned to again and again.</div>
+          <div class="brain-pill" style="background:var(--amber)">Humans only</div>
+        </div>
+      </div>
+      <div class="brain-rule anim fade-up d4">Never use a human for a complicated task. Never use an AI for a complex one.</div>
+      <div class="callout anim fade-up d5">The trap is when we take a left-brain tool and try to use it to answer right-brain questions. AI will always disappoint when we ask it to do what only a human presence can do.</div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 02</span></div>
+  </div>
+</div>
+
+<!-- ── S08 THREE LEVELS ── -->
+<div class="slide">
+  <div class="slide-inner">
+    <div class="s-body top">
+      <div class="eyebrow anim fade-up d1">AI Advantage Summit 2026 &mdash; 638,000 Attendees &mdash; 173 Countries</div>
+      <h2 class="s-title lg w-split anim fade-up d2">Where are you right now?</h2>
+      <p class="s-sub anim fade-up d3">Most people in this room are at Level 1. That's not failure — it's the starting line. The gap is almost never motivation. It's a clear path.</p>
+      <div class="level-grid anim fade-up d4">
+        <div class="level-card l1" data-modal="hours_l1">
+          <div class="lc-num">1</div>
+          <div class="lc-label">AI for Answers</div>
+          <div class="lc-desc">Using AI like a smarter search engine. Quick answers, no context. The ceiling is low because you haven't told it anything about who you are.</div>
+          <div class="lc-hours">Saves 2–4 hrs / week</div>
+        </div>
+        <div class="level-card l2" data-modal="hours_l2">
+          <div class="lc-num">2</div>
+          <div class="lc-label">AI as Work Partner</div>
+          <div class="lc-desc">You've built a context layer. AI knows your voice, your standards, your goals. It sharpens decisions and creates alongside you.</div>
+          <div class="lc-hours">Saves 6–15 hrs / week</div>
+        </div>
+        <div class="level-card l3" data-modal="hours_l3">
+          <div class="lc-num">3</div>
+          <div class="lc-label">AI Working For You</div>
+          <div class="lc-desc">Agents handle entire workflows without you. This level only works once Level 2 is genuinely established first.</div>
+          <div class="lc-hours">Saves 20–40 hrs / week</div>
+        </div>
+      </div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 02</span></div>
+  </div>
+</div>
+
+<!-- ── S09 FOUR LEVERS ── -->
+<div class="slide">
+  <div class="slide-inner dark">
+    <div class="s-body top">
+      <div class="eyebrow anim fade-up d1">The AI Advantage Framework</div>
+      <h2 class="s-title lg w-split anim fade-up d2">You can't skip the steps.</h2>
+      <p class="s-sub anim fade-up d3">Onboard AI the way you'd onboard a new team member. You don't hand someone your highest-stakes work on day one. You build trust in sequence.</p>
+      <div class="lever-grid">
+        <div class="lever-card la anim fade-up d4"><div class="lever-letter">A</div><div class="lever-title">Activate</div><div class="lever-desc">Train AI to know you deeply. Your goals, your voice, your context. The foundation everything else depends on.</div></div>
+        <div class="lever-card lb anim fade-up d5"><div class="lever-letter">A</div><div class="lever-title">Accelerate</div><div class="lever-desc">Use AI as a thinking partner. It sharpens your decisions, spots gaps, speeds up your best work.</div></div>
+        <div class="lever-card lc anim fade-up d6"><div class="lever-letter">A</div><div class="lever-title">Augment</div><div class="lever-desc">Co-create. One idea becomes multiple outputs in your own voice. A conversation becomes a full plan.</div></div>
+        <div class="lever-card ld anim fade-up d7"><div class="lever-letter">A</div><div class="lever-title">Automate</div><div class="lever-desc">Agents handle entire workflows while you sleep. Only works after the first three are genuinely in place.</div></div>
+      </div>
+      <div class="callout dark-call anim fade-up d8"><strong>"AI is the brush. Human potential is the masterpiece."</strong> — Zach Cass, former Head of Go-To-Market, OpenAI</div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 02</span></div>
+  </div>
+</div>
+
+<!-- ── S10 CONTEXT SANDWICH ── -->
+<div class="slide">
+  <div class="slide-inner warm">
+    <div class="s-body top">
+      <div class="eyebrow anim fade-up d1">The One Practical Skill</div>
+      <h2 class="s-title lg w-split anim fade-up d2">Why your AI outputs<br>are still generic.</h2>
+      <p class="s-sub anim fade-up d3">The gap between a useful response and a useless one is almost always what you bring to it. Most people skip the context entirely. This is what bridges Level 1 to Level 2.</p>
+      <div class="sandwich anim fade-up d4">
+        <div class="sw-layer top">
+          <div class="sw-icon">👤</div>
+          <div>
+            <div class="sw-label">Layer 1 &middot; Your Identity &amp; DNA</div>
+            <div class="sw-title">Who you are, what you lead, who you serve</div>
+            <div class="sw-desc">Your background, organisation, audience. Give the AI enough to stop guessing. Your 7 Spheres research, your years of experience — this goes here.</div>
+          </div>
+        </div>
+        <div class="sw-layer mid">
+          <div class="sw-icon">📋</div>
+          <div>
+            <div class="sw-label">Layer 2 &middot; The Mission</div>
+            <div class="sw-title">Exactly what you need done</div>
+            <div class="sw-desc">Specific, clear, one thing at a time. Not "write something about X" — "draft a 200-word announcement for Y audience about Z."</div>
+          </div>
+        </div>
+        <div class="sw-layer bot">
+          <div class="sw-icon">🎯</div>
+          <div>
+            <div class="sw-label">Layer 3 &middot; The Golden Standard</div>
+            <div class="sw-title">What "blessing" looks like in this context</div>
+            <div class="sw-desc">Tone, past examples, things to avoid, the specific outcome you want. This layer separates Level 1 users from Level 2 users.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 02</span></div>
+  </div>
+</div>
+
+<!-- ── S11 BITS vs ATOMS ── -->
+<div class="slide">
+  <div class="slide-inner">
+    <div class="s-body top">
+      <div class="eyebrow anim fade-up d1">The Decision Filter</div>
+      <h2 class="s-title lg w-split anim fade-up d2">Bits vs Atoms</h2>
+      <p class="s-sub anim fade-up d3">Draw a line down a page. On one side, everything that lives on a screen. On the other, everything requiring your physical presence. Hand every Bit you don't love to AI. Guard every Atom with your life.</p>
+      <div class="bits-atoms anim fade-up d4">
+        <div class="ba-panel">
+          <div class="ba-label">Bits &middot; Give to AI</div>
+          <div class="ba-title">Digital &amp; Administrative</div>
+          <ul>
+            <li>Drafting emails, reports, proposals</li>
+            <li>Summarising meetings and research</li>
+            <li>Scheduling, bookkeeping, logistics</li>
+            <li>Content creation and communications</li>
+            <li>Data filtering, analysis, follow-ups</li>
+          </ul>
+        </div>
+        <div class="ba-panel atoms">
+          <div class="ba-label">Atoms &middot; Protect for You</div>
+          <div class="ba-title">Physical &amp; Relational</div>
+          <ul>
+            <li>Being fully present with your family</li>
+            <li>Deep pastoral conversations</li>
+            <li>Physical activity, nature, genuine rest</li>
+            <li>Prayer, worship, spiritual formation</li>
+            <li>Creative work that only you can bring</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 02</span></div>
+  </div>
+</div>
+
+<!-- ── S12 AUTOMATION BOUNDARY ── -->
+<div class="slide">
+  <div class="slide-inner warm">
+    <div class="s-body top">
+      <div class="eyebrow anim fade-up d1">The Sacred Tasks Exercise</div>
+      <h2 class="s-title lg w-split anim fade-up d2">What stays<br>handcrafted?</h2>
+      <p class="s-sub anim fade-up d3">The Automation Boundary is a personal decision about identity, not efficiency. Before you hand something to AI, ask: would this feel like a loss to the people I serve?</p>
+      <div class="insight-list" style="max-width:780px">
+        <div class="insight-item anim fade-left d4"><div class="insight-num">1</div><div><div class="insight-title">Identify what to protect</div><div class="insight-body">Which parts of your work provide joy, spirit, or personal connection? The things that if automated would hollow out your ministry or leadership — these are sacred tasks.</div></div></div>
+        <div class="insight-item anim fade-right d5"><div class="insight-num">2</div><div><div class="insight-title">Ruthlessly outsource the rest</div><div class="insight-body">Once you know what's sacred, handle everything else as a "Bit." Administrative burden, routine communication, data work — this is what you buy back time from.</div></div></div>
+        <div class="insight-item anim fade-left d6"><div class="insight-num">3</div><div><div class="insight-title">Name your three sacred tasks now</div><div class="insight-body">What are the three things in your business or church that must always remain handcrafted by you — that AI cannot touch without losing the thing that makes it matter?</div></div></div>
+      </div>
+      <div class="callout lime anim fade-up d7">An infinitely efficient life without purpose is not a goal worth pursuing. We save time to be more present — not more productive.</div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 02</span></div>
+  </div>
+</div>
+
+<!-- ── S13 90/10 RULE ── -->
+<div class="slide">
+  <div class="slide-inner dark">
+    <div class="s-body center">
+      <div class="eyebrow anim fade-up d1">The Goal</div>
+      <h2 class="s-title xl w-split anim fade-up d2">Automate the <em>90%.</em><br>Protect the <span class="lime">10%.</span></h2>
+      <div class="s-div anim fade-up d3" style="margin:.8rem auto 1.2rem"></div>
+      <p class="s-sub anim fade-up d4" style="text-align:center;max-width:620px">Ruthlessly hand the Drag to AI — taxes, admin, routine communications, data tasks, scheduling. Then dedicate your freed time entirely to the Divine — the things only a human can do.</p>
+      <div class="stat-row anim fade-up d5" style="max-width:900px;margin:2vh auto 0;align-items:center;flex-wrap:wrap;gap:1.2rem;justify-content:center">
+        <div id="don-9010" class="don-9010" style="--p10:0" aria-hidden="true"></div>
+        <div class="cal-mini" aria-label="day illustration">
+          <div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div>
+          <div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div>
+          <div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div><div class="cal-cell"></div>
+        </div>
+        <div class="stat-card dark-stat" data-modal="hours_780" style="flex:1;min-width:200px;max-width:320px"><div class="s-num count-up" data-target="780" data-scramble="1">0</div><div class="s-label">Hours recovered per year at 15 hrs/week</div><div class="s-source">AI Advantage Summit Framework, 2026</div><div class="click-hint">Source</div></div>
+        <div class="stat-card dark-stat" style="flex:1;min-width:200px;max-width:200px"><div class="s-num">90</div><div class="s-label">Days to build the habit and see results that stick</div><div class="s-source">90-Day Deployment Framework</div></div>
+      </div>
+      <p class="anim fade-up d6" style="font-family:var(--display);font-style:italic;font-size:clamp(.88rem,1.2vw,1rem);color:rgba(255,255,255,.38);margin-top:1.5vh;text-align:center">[Pause: ask the room — if you had 780 extra hours this year, what would they go to?]</p>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 02</span></div>
+  </div>
+</div>
+
+<!-- ── D2 DISCUSSION ── -->
+<div class="slide d-slide" id="disc-2" data-d-min="25">
+  <div class="slide-inner dark">
+    <div class="bg-img"><img class="slide-img" src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=960&auto=format&fit=crop&q=80" sizes="100vw" decoding="async" alt=""><div class="ov-dk mesh-grad"></div></div>
+    <div class="disc-body">
+      <div class="disc-header anim fade-up d1">
+        <div class="disc-title w-split">Discussion</div>
+        <div class="disc-time">25 Minutes</div>
+      </div>
+      <div class="disc-questions">
+        <div class="disc-q-block">
+          <div class="disc-audience">Practical Exercise</div>
+          <div class="disc-q-text">Name your three Sacred Tasks — the things in your organisation that must always stay handcrafted. Then name the single biggest "Bit" consuming your Atom time right now.</div>
+        </div>
+        <div class="disc-q-block hidden-qs">
+          <div class="disc-audience amber">For Business Leaders</div>
+          <div class="disc-q-text">The 90/10 rule inverts the usual productivity conversation — you're not optimising for more output, you're optimising for more presence. What would it mean to reframe "success" in those terms with your team?</div>
+        </div>
+        <div class="disc-q-block hidden-qs">
+          <div class="disc-audience blue">For Everyone</div>
+          <div class="disc-q-text">If the ultimate metric of successful AI adoption is how rapidly your daily screen time drops to zero — are you currently using AI to do more, or to log off and be human?</div>
+        </div>
+      </div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Discussion 02</span></div>
+  </div>
+</div>
+
+<!-- ══ SESSION 3 DIVIDER ══ -->
+<div class="slide">
+  <div class="slide-inner session-div">
+    <div class="scanline" aria-hidden="true"></div>
+    <div class="session-part-num">03</div>
+    <div class="session-div-body">
+      <div class="session-pill anim scale-up d1"><span class="dot"></span>Session 03 of 04</div>
+      <div class="session-div-title line-reveal anim fade-up d2"><span class="session-split-title"><span class="session-split-top"><span class="inner">What It&rsquo;s Doing</span></span><span class="session-split-bot"><span class="inner">to People</span></span></span></div>
+      <div class="session-div-desc anim fade-up d3">The pastoral turn. Understanding what AI is actually producing in the lives of the people you lead — before it arrives in your office asking for help.</div>
+      <div class="session-time-badge anim fade-up d4">⏱ ~45 minutes including discussion</div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span></span></div>
+  </div>
+</div>
+
+<!-- ── S14 SOCIAL MEDIA STAGE ── -->
+<div class="slide" id="s14-soc">
+  <div class="slide-inner warm">
+    <div class="s-body top">
+      <div class="eyebrow anim fade-up d1">The Soil AI Landed In</div>
+      <h2 class="s-title lg w-split anim fade-up d2">Social media set the stage.<br>AI didn't arrive on fresh ground.</h2>
+      <p class="s-sub anim fade-up d3">Before AI companions, algorithms already rewired how this generation processes information, identity, and relationships. The damage was compounding before AI arrived.</p>
+      <div class="stat-row">
+        <div class="stat-card red anim fade-left d4" data-modal="teendepression"><div class="s-num">145%</div><div class="s-label">increase in teen depression since social media became dominant (2010-2024)</div><div class="s-source">CDC / Haidt, The Anxious Generation</div><div class="click-hint">Source</div></div>
+        <div class="stat-card red anim fade-up d5" data-modal="nofriendsstat"><div class="s-num">54%</div><div class="s-label">of Americans report having no intimate friendships</div><div class="s-source">Survey data cited by Comer</div><div class="click-hint">Source</div></div>
+        <div class="stat-card red anim fade-right d6" data-modal="fakenews"><div class="s-num">6x</div><div class="s-label">Fake news spreads six times faster than true news on social platforms</div><div class="s-source">MIT / Science, 2018</div><div class="click-hint">Source</div></div>
+      </div>
+      <div class="callout red anim fade-up d7"><strong>AI isn't arriving into a healthy ecosystem.</strong> It's accelerating damage that was already compounding. Understanding this history is essential to understanding what we're actually dealing with — and why the stakes of pastoral leadership are higher than they've ever been.</div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 03</span></div>
+  </div>
+</div>
+
+<!-- ── S15 DARK SIDE / CAROUSEL ── -->
+<div class="slide" id="s15-dk">
+  <div class="slide-inner">
+    <div style="flex:1;display:flex;padding:4vh 4vw 2vh;gap:3vw;position:relative;z-index:2">
+      <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:2vh">
+        <div class="eyebrow anim fade-up d1" style="color:var(--red)">Session 03 &middot; What Should Keep Us Up at Night</div>
+        <h2 class="s-title md w-split anim fade-up d2">The numbers no one<br>wants to say out loud.</h2>
+        <div class="stat-row">
+          <div class="stat-card red anim fade-left d3" data-modal="deepfakes"><div class="s-num"><span class="count-up" data-target="1.2" data-suffix="M" data-decimals="1" data-scramble="1">0</span></div><div class="s-label">children deepfaked into explicit material</div><div class="s-source">UNICEF/INTERPOL, Feb 2026</div><div class="click-hint">Source</div></div>
+          <div class="stat-card red anim fade-right d4" data-modal="ncmec"><div class="s-num"><span class="count-up" data-target="6443" data-suffix="%" data-separator="," data-scramble="1">0</span></div><div class="s-label">increase in AI child exploitation reports</div><div class="s-source">NCMEC, 2024</div><div class="click-hint">Source</div></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-card red anim fade-left d5" data-modal="genzanxiety"><div class="s-num"><span class="count-up" data-target="39" data-suffix="%" data-scramble="1">0</span></div><div class="s-label">of Gen Z feel constantly anxious</div><div class="s-source">Barna, 2026</div><div class="click-hint">Source</div></div>
+          <div class="stat-card red anim fade-right d6" data-modal="vodafone"><div class="s-num">81%</div><div class="s-label">children 11-16 use AI chatbots; 1 in 3 share things they'd never tell parents or teachers</div><div class="s-source">VodafoneThree, Feb 2026</div><div class="click-hint">Source</div></div>
+        </div>
+      </div>
+      <div class="anim fade-right d5" id="carousel-pulse" style="width:38%;display:flex;flex-direction:column;justify-content:center;cursor:pointer;transition:transform .3s var(--ease)" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform=''">
+        <div id="carousel-trigger" style="display:contents;cursor:pointer" role="button" tabindex="0" aria-label="Open chatbot harm cases">
+        <img src="assets/slide-econ-chart.jpg" decoding="async" alt="Sewell Setzer III case" style="width:100%;border-radius:14px;margin-bottom:1.5vh;box-shadow:0 8px 30px rgba(192,57,43,.22)">
+        <div style="background:var(--red-lt);border-radius:12px;padding:2vh 1.5vw;border-left:5px solid var(--red)">
+          <div style="font-family:var(--display);font-size:clamp(1rem,1.4vw,1.2rem);font-weight:700;color:var(--red);margin-bottom:.5rem">&#9888; <span class="warn-tri">Sewell Setzer III, Age 14</span></div>
+          <div style="font-size:clamp(.82rem,1.05vw,.95rem);color:var(--fg-med);line-height:1.6">Died by suicide after an emotional relationship with a Character.AI chatbot. His final message: the bot told him "Please do, my sweet king."</div>
+          <div style="font-size:clamp(.68rem,.86vw,.8rem);color:var(--sky2);margin-top:1vh;font-weight:600">Click to read all 5 AI chatbot harm cases &rarr;</div>
+        </div>
+        </div>
+      </div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 03</span></div>
+  </div>
+</div>
+
+<!-- LIVE DEMO: Voice clone (Session 03) -->
+<div class="slide" id="demo-voice" data-transition="none">
+  <div class="slide-inner dark2">
+    <div class="s-body top" style="max-width:1000px;margin:0 auto">
+      <div class="eyebrow anim fade-up d1" style="color:var(--lime)">Live demo &middot; Session 03</div>
+      <h2 class="s-title md w-split anim fade-up d2" style="color:var(--white)">This took us <em>14 seconds</em> —&nbsp;with your help.</h2>
+      <p class="s-sub anim fade-up d3" style="color:rgba(255,255,255,.55)">Record ~15s of a volunteer&rsquo;s voice. A sentence they never said comes back in their own voice. Use only with consent, in a safe room.</p>
+      <div class="demo-a" style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start;margin-top:1rem">
+        <div class="demo-stage anim fade-up d4">
+          <p style="font-size:.72rem;font-weight:600;color:var(--lime);margin-bottom:.5rem">1 &middot; Record</p>
+          <div class="wave-wrap" id="vo-wave" aria-hidden="true"></div>
+          <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.75rem">
+            <button type="button" class="demo-btn" id="vo-rec">Record 15s</button>
+            <button type="button" class="demo-btn" id="vo-stop" disabled>Stop</button>
+          </div>
+          <p class="demo-note" id="vo-status" style="color:rgba(255,255,255,.4)">Requires HTTPS + mic permission. Offline file won&rsquo;t work.</p>
+        </div>
+        <div class="demo-stage anim fade-up d5">
+          <p style="font-size:.72rem;font-weight:600;color:var(--lime);margin-bottom:.5rem">2 &middot; Type + play</p>
+          <label class="s-sub" for="vo-text" style="display:block;margin-bottom:.4rem;font-size:.8rem">Line they <em>never</em> read aloud:</label>
+          <textarea id="vo-text" rows="3" class="s-sub" style="background:rgba(0,0,0,.2);color:var(--white);border-color:rgba(255,255,255,.15)">If you&rsquo;re in this room today, I want you to know: God sees your labour in Tauranga, and you are not alone in this shift.</textarea>
+          <div style="margin-top:.5rem">
+            <button type="button" class="demo-btn" id="vo-clone" disabled>Clone from recording</button>
+            <button type="button" class="demo-btn" id="vo-play" disabled>Speak as clone</button>
+          </div>
+        </div>
+      </div>
+      <p class="anim fade-up d6" style="font-size:clamp(.8rem,1.05vw,.95rem);color:rgba(255,255,255,.55);line-height:1.65;margin-top:1.2rem;max-width:56rem">What you just heard could not have existed 18 months ago. The call your mother gets next week may already sound this convincing. <strong style="color:var(--gold)">ElevenLabs</strong> IVC + Flash (via secure proxy) &middot; voice deleted after 5 min.</p>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Live demo</span></div>
+  </div>
+</div>
+
+<!-- ── S16 FRICTIONLESS TRAP ── -->
+<div class="slide">
+  <div class="slide-inner">
+    <div class="s-body top">
+      <div class="eyebrow anim fade-up d1">The Theology of Friction</div>
+      <h2 class="s-title lg w-split anim fade-up d2">AI is frictionless.<br>But humans grow<br>through friction.</h2>
+      <div class="s-div anim fade-up d3"></div>
+      <p class="s-sub anim fade-up d4">AI never disagrees, never gets tired, never sins. It adapts to you instantly. There is no resistance. And that is precisely the problem.</p>
+      <div class="brain-split anim fade-up d5">
+        <div class="brain-card left">
+          <div class="brain-tag">What AI Offers</div>
+          <div class="brain-title w-split">Frictionless Intimacy</div>
+          <div class="brain-desc">A companion that always affirms, always adapts, never challenges, never walks away, never has a bad day of its own. Efficient. Available. Optimised for your engagement.</div>
+          <div class="brain-pill" style="background:var(--red)">Simulation</div>
+        </div>
+        <div class="brain-card right">
+          <div class="brain-tag">What Humans Need</div>
+          <div class="brain-title w-split">Genuine Resistance</div>
+          <div class="brain-desc">Iron sharpens iron. Real formation happens when another person's reality pushes back against yours. Conflict, apology, forgiveness, difference — this is the texture of actual growth.</div>
+          <div class="brain-pill" style="background:var(--green)">Formation</div>
+        </div>
+      </div>
+      <div class="callout amber anim fade-up d6">If we automate all the friction from our lives, we don't just become more efficient. We stop growing. The church's greatest irreplaceable offering is real, unoptimised, inconvenient human presence.</div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 03</span></div>
+  </div>
+</div>
+
+<!-- ── S17 VALUE OF HUMAN FRAILTY ── -->
+<div class="slide">
+  <div class="slide-inner dark2">
+    <div class="s-body center">
+      <div class="eyebrow anim fade-up d1">Theology of Weakness</div>
+      <h2 class="s-title lg w-split anim fade-up d2" style="max-width:800px">A broken human leader<br>is a more powerful vessel<br>than an optimised machine.</h2>
+      <div class="s-div anim fade-up d3" style="margin:.8rem auto 1.4rem"></div>
+      <p class="s-sub anim fade-up d4" style="text-align:center;max-width:660px">God's power is made perfect in weakness. This is not a consolation prize. It is a design principle. The moments that form people — grief, doubt, repentance, joy — require a human presence that can be wounded and still show up.</p>
+      <div class="callout dark-call anim fade-up d5" style="max-width:700px;text-align:left">
+        <strong>Protect the right to be frail.</strong> Pastoral authority that comes through shared suffering cannot be replicated by a tool that has never suffered anything. Your limitations are not weaknesses to overcome. They are part of what makes you trustworthy.
+      </div>
+      <div class="quote-box anim fade-up d6" style="max-width:700px">
+        <div class="qm">&ldquo;</div>
+        <blockquote>You cannot Google the answers to the deep questions of your life. No AI prompt will ever generate the purpose of your existence. You have to live it in the Atoms.</blockquote>
+        <cite>Dr. Arthur Brooks, Harvard &mdash; AI Advantage Summit 2026</cite>
+      </div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 03</span></div>
+  </div>
+</div>
+
+<!-- ── S18 BARNA ── -->
+<div class="slide" id="s18-barna">
+  <div class="slide-inner">
+    <div class="split-layout">
+      <div class="split-image anim fade-left d1"><img class="slide-img" src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=960&auto=format&fit=crop&q=80" sizes="100vw" decoding="async" alt="Community"><div class="img-overlay"></div></div>
+      <div class="split-content">
+        <div class="eyebrow anim fade-up d2">Barna Research 2026</div>
+        <h2 class="s-title lg w-split anim fade-up d3" style="font-size:clamp(1.4rem,2.5vw,2.2rem)">Your congregation<br>is already deciding.</h2>
+        <div class="stat-row anim fade-up d4">
+          <div class="stat-card" data-modal="trust13"><div class="s-num">1 in 3</div><div class="s-label">trust AI spiritual advice as much as advice from their pastor</div><div class="s-source">Barna/Gloo, Nov 2025</div><div class="click-hint">Source</div></div>
+          <div class="stat-card" data-modal="prayer"><div class="s-num">4 in 10</div><div class="s-label">practicing Christians say AI has helped with prayer or Bible study</div><div class="s-source">Barna 2026</div><div class="click-hint">Source</div></div>
+        </div>
+        <div class="bar-chart-h anim fade-up d5">
+          <div class="hbar hbar-anim" data-w="77"><div class="hbar-label">Pastors: "God can use AI"</div><div class="hbar-track"><div class="hbar-fill" style="background:var(--sky)"><span class="hbar-pct">0%</span></div></div></div>
+          <div class="hbar hbar-anim" data-w="25"><div class="hbar-label">Christians agree</div><div class="hbar-track"><div class="hbar-fill" style="background:var(--sky2)"><span class="hbar-pct">0%</span></div></div></div>
+          <div class="hbar hbar-anim" data-w="57"><div class="hbar-label">Gen Z: want AI guidance</div><div class="hbar-track"><div class="hbar-fill" style="background:var(--lime-d)"><span class="hbar-pct">0%</span></div></div></div>
+          <div class="hbar hbar-anim" data-w="14"><div class="hbar-label">Pastors: "it matters"</div><div class="hbar-track"><div class="hbar-fill" style="background:var(--red)"><span class="hbar-pct">0%</span></div></div></div>
+        </div>
+        <div class="callout lime gap-data glow-pulse anim fade-up d6"><strong>THE GAP: 57% want guidance. 14% of pastors think it matters.</strong></div>
+      </div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 03</span></div>
+  </div>
+</div>
+
+<!-- ── D3 DISCUSSION ── -->
+<div class="slide d-slide" id="disc-3" data-d-min="20">
+  <div class="slide-inner dark">
+    <div class="bg-img"><img class="slide-img" src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=960&auto=format&fit=crop&q=80" sizes="100vw" decoding="async" alt=""><div class="ov-dk mesh-grad"></div></div>
+    <div class="disc-body">
+      <div class="disc-header anim fade-up d1">
+        <div class="disc-title w-split">Discussion</div>
+        <div class="disc-time">20 Minutes</div>
+      </div>
+      <div class="disc-questions">
+        <div class="disc-q-block">
+          <div class="disc-audience">For Pastors &amp; Church Leaders</div>
+          <div class="disc-q-text">If 57% of Gen Z Christians want AI guidance from their pastor and only 14% of pastors feel ready to give it — what would it mean for your church to intentionally close that gap this year?</div>
+        </div>
+        <div class="disc-q-block hidden-qs">
+          <div class="disc-audience amber">For Business Leaders</div>
+          <div class="disc-q-text">How do you protect human frailty as a legitimate leadership value in an environment that rewards optimisation and efficiency above everything else?</div>
+        </div>
+        <div class="disc-q-block hidden-qs">
+          <div class="disc-audience blue">For Everyone</div>
+          <div class="disc-q-text">The people you lead are already forming opinions about AI — without your input. What is the single most important thing you want them to understand from your vantage point?</div>
+        </div>
+      </div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Discussion 03</span></div>
+  </div>
+</div>
+
+<!-- ══ SESSION 4 DIVIDER ══ -->
+<div class="slide">
+  <div class="slide-inner session-div">
+    <div class="scanline" aria-hidden="true"></div>
+    <div class="session-part-num">04</div>
+    <div class="session-div-body">
+      <div class="session-pill anim scale-up d1"><span class="dot"></span>Session 04 of 04</div>
+      <div class="session-div-title line-reveal anim fade-up d2"><span class="session-split-title"><span class="session-split-top"><span class="inner">The City-Wide</span></span><span class="session-split-bot"><span class="inner">Strategy</span></span></span></div>
+      <div class="session-div-desc anim fade-up d3">From individual frameworks to collective impact. What the leaders in this room could accomplish together — and what you leave here committed to.</div>
+      <div class="session-time-badge anim fade-up d4">⏱ ~45 minutes including final discussion</div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span></span></div>
+  </div>
+</div>
+
+<!-- ── S19 POSITIVE CASE ── -->
+<div class="slide" id="s19-pos">
+  <div class="slide-inner warm">
+    <div class="s-body top">
+      <div class="eyebrow anim fade-up d1" style="color:var(--green)">The Genuine Opportunity</div>
+      <h2 class="s-title lg w-split anim fade-up d2">The positive case<br>is real. Don't miss it.</h2>
+      <p class="s-sub anim fade-up d3">Fear-based leadership leaves the field to people who don't share our values. The same tools driving the risks carry genuine potential for the work of the Kingdom.</p>
+      <div class="stat-row">
+        <div class="stat-card green anim fade-left d4" data-modal="tutoring"><div class="s-num">0.73-1.3 SD</div><div class="s-label">AI tutoring outperformed classroom instruction in randomised controlled trial</div><div class="s-source">Scientific Reports, Jun 2025</div><div class="click-hint">Source</div></div>
+        <div class="stat-card green anim fade-up d5" data-modal="genai_growth"><div class="s-num">425%</div><div class="s-label">GenAI course enrollment growth in Latin America — the Global South isn't waiting</div><div class="s-source">Coursera, 2026</div><div class="click-hint">Source</div></div>
+        <div class="stat-card green anim fade-right d6" data-modal="context_translation"><div class="s-num">3,000</div><div class="s-label">low-resource languages that could receive Bible translation tools in days, not decades</div><div class="s-source">10M Token Paradigm, 2026</div><div class="click-hint">Source</div></div>
+      </div>
+      <div class="callout green anim fade-up d7"><strong>Fear-based neutrality cedes the field.</strong> The question is not whether AI will shape the next generation in Tauranga — it already is. The question is whether the people shaping it hold Kingdom values.</div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 04</span></div>
+  </div>
+</div>
+
+<!-- LIVE DEMO: Image → video (Session 04) -->
+<div class="slide" id="demo-i2v" data-transition="none">
+  <div class="slide-inner">
+    <div class="s-body top" style="max-width:1080px;margin:0 auto">
+      <div class="eyebrow anim fade-up d1" style="color:var(--sky2)">Live demo &middot; Session 04</div>
+      <h2 class="s-title lg w-split anim fade-up d2">From a photo, in <em>~90 seconds</em>.</h2>
+      <p class="s-sub anim fade-up d3">Upload a face-forward photo (consent required). Same engine that could serve the Kingdom &mdash; or deceive. Progress shows in the pill while you teach S20&ndash;S21.</p>
+      <div class="demo-b" style="display:grid;grid-template-columns:1fr 1.1fr 1fr;gap:1rem;align-items:start">
+        <div class="anim fade-up d4">
+          <label class="dropzone" id="i2v-drop" tabindex="0"><input type="file" id="i2v-file" accept="image/*" style="display:none" capture="user"><span id="i2v-drop-txt">Tap to choose or drop a photo</span></label>
+          <p class="s-sub" style="font-size:.72rem;margin-top:.4rem" id="i2v-fallback-lbl">Mode: Image&rarr;video (Kling/Seedance via fal) &nbsp;|&nbsp; <kbd style="font-size:.65rem">Cmd+Shift+F</kbd> fast image fallback</p>
+        </div>
+        <div class="anim fade-up d5">
+          <label for="i2v-prompt" class="s-sub" style="font-size:.8rem">Motion prompt</label>
+          <textarea id="i2v-prompt" rows="4" class="s-sub" style="width:100%;min-height:100px">Smiling, waving slowly to a friendly audience; warm Tauranga afternoon light; natural motion, uplifting mood.</textarea>
+        </div>
+        <div class="anim fade-up d6" style="text-align:center">
+          <button type="button" class="demo-btn" id="i2v-go" style="font-size:1rem;padding:.75rem 1.4rem">Generate</button>
+          <div class="vid-out" id="i2v-out" style="margin-top:.75rem;min-height:120px"></div>
+        </div>
+      </div>
+      <p class="s-sub anim fade-up d7" style="font-size:.78rem;margin-top:1rem;color:var(--muted)">Render time today: ~60&ndash;110s. Use venue Wi&dash;Fi or phone tether. <strong>fal.ai</strong> proxy &mdash; key never in browser.</p>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Live demo</span></div>
+  </div>
+</div>
+
+<!-- ── S20 MENTORING 18-35 ── -->
+<div class="slide">
+  <div class="slide-inner">
+    <div class="s-body top">
+      <div class="eyebrow anim fade-up d1">The Generation You're Actually Talking To</div>
+      <h2 class="s-title lg w-split anim fade-up d2">They don't need you<br>to be tech-savvy.<br>They need you <em>life-savvy.</em></h2>
+      <div class="s-div anim fade-up d3"></div>
+      <p class="s-sub anim fade-up d4">The 18-35 generation in Tauranga does not need another person telling them about AI. They already live inside it. What they cannot find — and actively search for — is a leader who has answers to the right-brain questions. Love, meaning, calling, suffering.</p>
+      <div class="insight-list" style="max-width:800px">
+        <div class="insight-item anim fade-left d5"><div class="insight-num">1</div><div><div class="insight-title">Use AI to research their world</div><div class="insight-body">Ask it to brief you on what 22-year-olds in Tauranga are anxious about this week. Use the Bits to show up better in the Atoms of your conversations with them.</div></div></div>
+        <div class="insight-item anim fade-right d6"><div class="insight-num">2</div><div><div class="insight-title">Show up as a genuine learner</div><div class="insight-body">Authenticity matters more than expertise to this generation. "I'm still figuring this out and here's how I'm thinking about it" earns more trust than confident answers you don't actually hold.</div></div></div>
+        <div class="insight-item anim fade-left d7"><div class="insight-num">3</div><div><div class="insight-title">Mentor the complex, not the complicated</div><div class="insight-body">Your life experience navigating grief, failure, forgiveness, and calling — this is what no algorithm can replicate. It is also exactly what they're hungry for.</div></div></div>
+      </div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 04</span></div>
+  </div>
+</div>
+
+<!-- ── S21 ETHICS AS NEW CURRENCY ── -->
+<div class="slide">
+  <div class="slide-inner dark">
+    <div class="s-body center">
+      <div class="eyebrow anim fade-up d1">Your Competitive Advantage</div>
+      <h2 class="s-title lg w-split anim fade-up d2" style="text-align:center;max-width:800px">In a world of AI-generated content,<br>radical honesty and physical presence<br>become the <span class="lime">premium product.</span></h2>
+      <div class="s-div anim fade-up d3" style="margin:.8rem auto 1.4rem"></div>
+      <p class="s-sub anim fade-up d4" style="text-align:center;max-width:660px">As AI floods every platform with synthetic content, the things that can't be generated — your actual history with people, your presence in their hardest moments, your willingness to be known — become increasingly rare and valuable.</p>
+      <div class="callout dark-call anim fade-up d5" style="max-width:720px;text-align:left">
+        <strong>In a synthetic world, holiness is the ultimate disruption.</strong> The person who shows up in person, tells the truth when it costs them something, and stays when things get hard — that person stands out in 2026 in a way they never did before.
+      </div>
+      <p class="anim fade-up d6" style="font-family:var(--display);font-style:italic;font-size:clamp(.88rem,1.2vw,1.05rem);color:rgba(255,255,255,.35);margin-top:1.5vh;text-align:center">Source: "Missions After the 2026 Intelligence Explosion," February 2026</p>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 04</span></div>
+  </div>
+</div>
+
+<!-- ── S22 7 SPHERES ── -->
+<div class="slide">
+  <div class="slide-inner warm">
+    <div class="s-body top">
+      <div class="eyebrow anim fade-up d1">The Seven Spheres of Society</div>
+      <h2 class="s-title lg w-split anim fade-up d2">AI allows us to finally see<br>how everything is connected.</h2>
+      <p class="s-sub anim fade-up d3">Every sphere is being reshaped simultaneously. The leaders in this room carry influence across multiple spheres. That's unusual — and it matters more than ever right now.</p>
+      <div class="spheres-grid anim fade-up d4">
+        <div class="sphere-card"><span class="sphere-icon">👨‍👩‍👧</span><div class="sphere-name">Family</div><div class="sphere-ai">AI companions replacing parental presence. Screens reshaping attachment patterns.</div></div>
+        <div class="sphere-card"><span class="sphere-icon">💼</span><div class="sphere-name">Economics</div><div class="sphere-ai">Entry-level jobs eroding. 41% of employers planning workforce reduction.</div></div>
+        <div class="sphere-card"><span class="sphere-icon">🏛️</span><div class="sphere-name">Government</div><div class="sphere-ai">Deepfakes threatening democratic trust. Policy frameworks lagging behind technology.</div></div>
+        <div class="sphere-card"><span class="sphere-icon">✝️</span><div class="sphere-name">Religion</div><div class="sphere-ai">1 in 3 adults trust AI spiritual advice as much as a pastor. The 57/14 gap is here.</div></div>
+        <div class="sphere-card"><span class="sphere-icon">🎓</span><div class="sphere-name">Education</div><div class="sphere-ai">94% of AI-generated work undetected. AI tutoring outperforms classroom by 1.3 SD.</div></div>
+        <div class="sphere-card"><span class="sphere-icon">📡</span><div class="sphere-name">Communication</div><div class="sphere-ai">AI-generated content flooding every platform. Authenticity becoming the premium.</div></div>
+        <div class="sphere-card"><span class="sphere-icon">🎉</span><div class="sphere-name">Celebration</div><div class="sphere-ai">AI art, AI music, AI creativity. The question of what makes culture genuinely human.</div></div>
+      </div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 04 &middot; David Hamilton, God Revealed Through the Spheres, 2014</span></div>
+  </div>
+</div>
+
+<!-- ── S23 FROM GETTING AHEAD TO BLESSING ── -->
+<div class="slide">
+  <div class="slide-inner">
+    <div class="s-body top">
+      <div class="eyebrow anim fade-up d1">The Reframe</div>
+      <h2 class="s-title lg w-split anim fade-up d2">An AI strategy that only<br>increases your profit is<br><em>incomplete.</em></h2>
+      <div class="s-div anim fade-up d3"></div>
+      <p class="s-sub anim fade-up d4">The question isn't just "how do I use AI to get ahead?" It's "what does getting ahead even mean if the people around me are struggling?" The leaders who will be remembered in Tauranga in 20 years are the ones who used the efficiency AI gave them to increase their capacity to bless — not just their capacity to produce.</p>
+      <div class="insight-list" style="max-width:800px">
+        <div class="insight-item anim fade-left d5"><div class="insight-num">1</div><div><div class="insight-title">Redefine the ROI</div><div class="insight-body">The return on AI investment isn't just time saved or revenue gained. It's how many hours you now have to mentor, serve, and be present in the relationships that actually build this city.</div></div></div>
+        <div class="insight-item anim fade-right d6"><div class="insight-num">2</div><div><div class="insight-title">Make blessing a measurable outcome</div><div class="insight-body">What would it look like for your business or church to have a specific, stated goal around how your AI-recovered time gets reinvested into the community?</div></div></div>
+        <div class="insight-item anim fade-left d7"><div class="insight-num">3</div><div><div class="insight-title">The Business of Blessing</div><div class="insight-body">[Insert local Tauranga case study or personal consulting example here — a real story of someone using recovered time for community impact]</div></div></div>
+      </div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 04</span></div>
+  </div>
+</div>
+
+<!-- ── S24 90-DAY PLAN ── -->
+<div class="slide">
+  <div class="slide-inner warm">
+    <div class="s-body top">
+      <div class="eyebrow anim fade-up d1">The 90-Day Deployment Plan</div>
+      <h2 class="s-title lg w-split anim fade-up d2">Three steps.<br>Start Monday.</h2>
+      <p class="s-sub anim fade-up d3">Not a full system overhaul. Not a tech investment. Three small decisions that, done consistently for 90 days, restructure how you spend your most valuable time.</p>
+      <div class="plan-steps anim fade-up d4">
+        <div class="plan-step">
+          <div class="plan-num">1</div>
+          <div class="plan-content"><strong>Identify your Bit</strong><p>Pick the single most time-consuming administrative task you do each week that doesn't require your personal presence or judgment. This week, find an AI workflow to handle it.</p></div>
+        </div>
+        <div class="plan-step">
+          <div class="plan-num">2</div>
+          <div class="plan-content"><strong>Build your Context Sandwich</strong><p>Write a 200-word description of who you are, what you lead, and what "good" looks like in your work. Save it. Paste it at the start of every important AI interaction for the next 30 days.</p></div>
+        </div>
+        <div class="plan-step">
+          <div class="plan-num">3</div>
+          <div class="plan-content"><strong>Schedule the Atom time you just bought back</strong><p>Before you do anything else: block the time in your calendar that your recovered hours go to. Name the person or relationship or practice it belongs to. Don't let efficiency fill it with more work.</p></div>
+        </div>
+        <div class="plan-step">
+          <div class="plan-num">4</div>
+          <div class="plan-content"><strong>Measure presence, not productivity</strong><p>At 90 days, the question is not "how much more did I produce?" It's "how much more present was I?" That's the metric that tells you whether your deployment is actually working.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 04</span></div>
+  </div>
+</div>
+
+<!-- ── S25 REDEEMING THE TIME ── -->
+<div class="slide">
+  <div class="slide-inner dark">
+    <div class="bg-img"><img class="slide-img" src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=960&auto=format&fit=crop&q=80" sizes="100vw" decoding="async" alt=""><div class="ov"></div></div>
+    <div class="s-body center">
+      <div class="eyebrow anim fade-up d1">Ephesians 5:16</div>
+      <h2 class="s-title xl w-split anim fade-up d2" style="color:var(--white);text-align:center">Redeeming<br>the Time.</h2>
+      <div class="s-div anim fade-up d3" style="margin:.8rem auto 1.4rem"></div>
+      <p class="s-sub anim fade-up d4" style="text-align:center;max-width:640px">Time is the one thing AI cannot create. It can only buy it back. Everything AI does — every report drafted, every email summarised, every schedule managed — has one purpose: to return hours to human hands so human hands can do what only they can do.</p>
+      <div class="callout dark-call anim fade-up d5" style="max-width:700px;text-align:center;margin:2vh auto 0">
+        What you do with the time you reclaim is your legacy. Not the tool. Not the efficiency. <strong>What you chose to be present for.</strong>
+      </div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 04</span></div>
+  </div>
+</div>
+
+<!-- ── D4 FINAL DISCUSSION ── -->
+<div class="slide d-slide" id="disc-4" data-d-min="30">
+  <div class="slide-inner dark">
+    <div class="bg-img"><img class="slide-img" src="https://images.unsplash.com/photo-1519681393784-d120267933ba?w=960&auto=format&fit=crop&q=80" sizes="100vw" decoding="async" alt=""><div class="ov-dk mesh-grad"></div></div>
+    <div class="disc-body">
+      <div class="disc-header anim fade-up d1">
+        <div class="disc-title w-split">The Tauranga Commitment</div>
+        <div class="disc-time">30 Minutes</div>
+      </div>
+      <div class="disc-questions">
+        <div class="disc-q-block">
+          <div class="disc-audience">Question One</div>
+          <div class="disc-q-text">What city-wide problem in Tauranga could we solve if the leaders in this room pooled their AI-recovered time and aimed it at the same need?</div>
+        </div>
+        <div class="disc-q-block hidden-qs">
+          <div class="disc-audience amber">Question Two</div>
+          <div class="disc-q-text">How will we keep each other accountable to staying human in an AI world? What does that accountability structure actually look like for this group?</div>
+        </div>
+        <div class="disc-q-block hidden-qs">
+          <div class="disc-audience blue">Closing Commitment</div>
+          <div class="disc-q-text">What is the first thing you will refuse to automate, starting Monday? And what is the first Atom you will schedule with the time you buy back?</div>
+        </div>
+      </div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Final Discussion</span></div>
+  </div>
+</div>
+
+<!-- ── REFLECTIVE CLOSE ── -->
+<div class="slide" id="refl" data-notes="Close with hope: sheep hear the Shepherd. Optional prayer.">
+  <div class="slide-inner dark">
+    <div class="bg-img"><img class="slide-img" src="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=960&auto=format&fit=crop&q=80" sizes="100vw" decoding="async" alt=""><div class="ov-dk" style="background:rgba(0,20,50,.86)"></div></div>
+    <div class="particles" id="reflect-particles"></div>
+    <div class="s-body center">
+      <div class="eyebrow anim fade-up d1">The Closing Frame</div>
+      <div class="refl-wrap anim fade-up d2">
+        <div class="refl-text">Our response to this AI revolution is not fear, but <span class="refl-em1">profound connection</span>. There has never been a more urgent moment to build <span class="refl-em2">authentic communities</span> that stand as trustworthy examples of the power of a faithful God. Let us be a people defined not by the technology we use, but by His divine voice and our radical, simple obedience.</div>
+        <div class="refl-verse" id="refl-verse-float">&ldquo;My sheep listen to my voice; I know them, and they follow me.&rdquo; &mdash; John 10:27</div>
+      </div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span></span></div>
+  </div>
+</div>
+
+<!-- ── QR ── -->
+<div class="slide" id="slide-qr" data-notes="Pause for people to scan. Mention key URL.">
+  <div class="slide-inner dark" style="background:radial-gradient(ellipse at 50% 30%,#1a1f2e 0%,#09090b 55%)">
+    <div class="s-body center">
+      <div class="eyebrow anim fade-up d1" style="color:var(--lime)">Get this presentation</div>
+      <h2 class="s-title anim fade-up d2" style="color:var(--white);font-size:clamp(1.2rem,2.2vw,1.7rem);max-width:480px">Scan to open the slides online</h2>
+      <div class="qr-wrap anim fade-up d3">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=12&color=0f172a&bgcolor=ffffff&data=https%3A%2F%2Fai-and-discipleship.vercel.app" alt="QR code" width="260" height="260">
+      </div>
+      <p class="anim fade-up d4" style="font-size:clamp(.82rem,1.1vw,.95rem);color:rgba(255,255,255,.6);letter-spacing:.02em">ai-and-discipleship.vercel.app</p>
+      <p class="anim fade-up d5" id="qr-hits" style="font-size:clamp(.7rem,1vw,.8rem);color:var(--lime);margin-top:.5rem" aria-live="polite">Session scans: &mdash;</p>
+    </div>
+    <div class="s-footer" style="color:rgba(255,255,255,.28);border-top-color:rgba(255,255,255,.06)"><span>Nathaniel Baldock &middot; 2026</span><span></span></div>
+  </div>
+</div>
+
+<!-- ── CONTACT ── -->
+<div class="slide" id="slide-contact" data-notes="CTA: follow-up, invite to speak, calendar.">
+  <div class="slide-inner dark">
+    <div class="bg-img" style="opacity:.07"><img class="slide-img" src="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=960&auto=format&fit=crop&q=80" sizes="100vw" decoding="async" alt=""><div class="ov"></div></div>
+    <div class="s-body center">
+      <div class="contact-layout anim fade-up d1">
+        <div class="contact-photo anim fade-left d2" id="contact-photo-wrap"><img src="assets/Nathaniel_Portrait.png" alt="Nathaniel Baldock" decoding="async"></div>
+        <div class="contact-info anim fade-right d3">
+          <p class="contact-msg">I would love to continue this conversation. If there's a way I can serve your business, church or community — let's find it.</p>
+          <div class="contact-links">
+            <a href="mailto:nathanielbaldock@gmail.com">nathanielbaldock@gmail.com</a>
+            <a href="https://www.nathanielbaldock.com" target="_blank" rel="noopener">nathanielbaldock.com</a>
+            <a href="https://www.linkedin.com/in/nathaniel-baldock-0371251bb" target="_blank" rel="noopener">LinkedIn: nathaniel-baldock</a>
+          </div>
+          <div class="contact-ctas anim fade-up d4">
+            <a href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0mO1lxN2kh1ewSrKsEVMsCUeSoz4qauDZs0INinAtrgkBL_JxW0kRRHsWg_d_6qe0rT59-syU-" target="_blank" rel="noopener">Request follow-up</a>
+            <a href="https://www.nathanielbaldock.com/intake?form=speaking" target="_blank" rel="noopener">Invite me to speak</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span></span></div>
+  </div>
+</div>
+
+</div><!-- /#deck -->
+
+<div id="speaker-root" class="speaker-panel" hidden>
+  <div>
+    <h3>Current slide <span id="sp-num" style="color:#fff">1</span></h3>
+    <p id="sp-cur" style="font-size:1.1rem;max-width:100%;word-wrap:break-word"></p>
+  </div>
+  <div>
+    <h3>Next</h3>
+    <p id="sp-next" style="color:rgba(255,255,255,.75);font-size:.95rem;max-width:100%"></p>
+  </div>
+  <div style="grid-column:1/-1;border-top:1px solid rgba(255,255,255,.1);padding-top:.6rem">
+    <h3>Notes</h3>
+    <p id="sp-notes" style="white-space:pre-wrap;line-height:1.5;color:rgba(255,255,255,.88)"></p>
+  </div>
+</div>
+
+<script>
+/* ── API base (file:// and offline preview call deployed host) ── */
+const API_BASE = (location.protocol === 'file:') ? 'https://ai-and-discipleship.vercel.app' : '';
+let demoBMode = (typeof window !== 'undefined' && window.demoBMode) || 'i2v';
+if (typeof window !== 'undefined') window.demoBMode = demoBMode;
+
+/* ── Speaker notes window (BroadcastChannel) ── */
+if (new URLSearchParams(location.search).get('speaker') === '1') {
+  document.getElementById('play-overlay')?.classList.add('hidden');
+  document.getElementById('video-overlay')?.classList.remove('visible');
+  const skipV = document.getElementById('skip-video');
+  if (skipV) { skipV.classList.remove('visible'); skipV.style.display = 'none'; }
+  const deck = document.getElementById('deck');
+  if (deck) { deck.style.setProperty('display', 'none', 'important'); }
+  ['nav-bar', 'slide-counter', 'prev-btn', 'next-btn', 'open-speaker', 'disc-timer', 'i2v-pill', 'progress-bar'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) { el.style.setProperty('display', 'none', 'important'); }
+  });
+  const root = document.getElementById('speaker-root');
+  if (root) { root.removeAttribute('hidden'); root.setAttribute('aria-hidden', 'false'); }
+  const bc = new BroadcastChannel('gr-deck');
+  function fillSpeaker(m) {
+    const i = m.i|0; const total0 = m.total|0;
+    const cur = m.curTitle || '—';
+    const nx = m.nextTitle || '—';
+    const no = m.notes || '—';
+    const spN = document.getElementById('sp-num');
+    const spC = document.getElementById('sp-cur');
+    const spNx = document.getElementById('sp-next');
+    const spNts = document.getElementById('sp-notes');
+    if (spN) spN.textContent = (i+1) + (total0 ? ' / ' + total0 : '');
+    if (spC) spC.textContent = cur;
+    if (spNx) spNx.textContent = (i+1) < total0 ? nx : '— (end of deck)';
+    if (spNts) spNts.textContent = no;
+  }
+  bc.onmessage = (e) => { if (e.data && e.data.type === 'slide') fillSpeaker(e.data); };
+}
+
+const MD = {
+  adults61:{stat:"61%",title:"US Adults Using AI in the Last 6 Months",body:"KPMG/Vention research found 61% of US adults reported using AI tools in the six months prior to early 2026. This places AI adoption well ahead of the smartphone's comparable adoption curve.",source:"KPMG/Vention, 2026",link:""},
+  fortune:{stat:"92%",title:"Fortune 500 AI Adoption",body:"92% of Fortune 500 companies use OpenAI technology specifically. Broader measures show virtually 100% use some form of AI in at least one function.",source:"OpenAI, 2025",link:"https://openai.com/enterprise"},
+  monetize:{stat:"88%",title:"Organisations Using AI in Business Functions",body:"McKinsey research found 88% of organisations report using AI in at least one business function, a dramatic rise from 55% the previous year.",source:"McKinsey Global Survey, 2026",link:"https://mckinsey.com"},
+  tools12k:{stat:"12,000",title:"New AI Tools in Six Months",body:"Approximately 12,000 new AI tools, updates and releases hit the market in the six months leading up to mid-2026. Single leading companies like Anthropic shipped approximately 120 new features per quarter. This pace makes manual tool-tracking impossible — which is why frameworks matter more than lists.",source:"AI Advantage Summit, Day 1, April 2026",link:"https://www.youtube.com/watch?v=R_IEnWj56j4"},
+  paralysis88:{stat:"88%",title:"Non-Adopters Stuck for Lack of a Starting Point",body:"Dean Graziosi's team surveyed tens of thousands of people ahead of the summit. 88% of those who hadn't started using AI cited 'not knowing where to start' as the primary barrier — not disinterest, and not fear of the technology itself.",source:"AI Advantage Summit, Day 1, April 2026",link:"https://www.youtube.com/watch?v=R_IEnWj56j4"},
+  admin60:{stat:"60%",title:"Work Week Consumed by Administrative Tasks",body:"Summit frameworks cite research indicating that up to 60% of the average professional work week is consumed by repetitive, administrative and communication tasks that don't directly grow the business or mission. These are the highest-value targets for AI automation.",source:"AI Advantage Summit, Day 1, April 2026",link:"https://www.youtube.com/watch?v=R_IEnWj56j4"},
+  teens67:{stat:"67%",title:"Teens Who Describe an AI Chatbot as a Close Friend",body:"Common Sense Media research found that 67% of teens who use AI chatbots describe them as a close friend. This represents a significant shift in how young people understand intimacy and friendship — with implications for every institution that cares for the wellbeing of young people.",source:"Common Sense Media, 2025",link:""},
+  vodafone:{stat:"81%",title:"Children Using AI Chatbots",body:"VodafoneThree/Censuswide research (n=2,000, Feb 2026) found 81% of 11-16 year olds use AI chatbots. 1 in 3 share things with the AI they would not tell parents, teachers, or friends — a significant intimacy threshold being crossed outside parental awareness.",source:"VodafoneThree / Censuswide, February 2026",link:""},
+  teendepression:{stat:"145%",title:"Teen Depression Since Social Media (2010-2024)",body:"Rates of teen depression and anxiety have risen approximately 145% since 2010, correlating directly with widespread social media adoption. Haidt's The Anxious Generation argues this is the primary driver of the youth mental health crisis.",source:"CDC data / Jonathan Haidt, The Anxious Generation",link:""},
+  nofriendsstat:{stat:"54%",title:"Americans with No Intimate Friendships",body:"More than half of Americans now report having no intimate friendships — a dramatic increase from 3% in 1990. This loneliness epidemic precedes AI companions and makes them more appealing by offering a simulation of the connection people can no longer find.",source:"Survey data cited by John Mark Comer",link:""},
+  fakenews:{stat:"6x",title:"Fake News Spread Rate",body:"MIT researchers published in Science that false news spreads approximately six times faster than true news on social media platforms, driven by novelty and emotional response rather than accuracy.",source:"MIT / Science, 2018",link:"https://science.sciencemag.org/content/359/6380/1146"},
+  deepfakes:{stat:"1.2M",title:"Children Deepfaked into Explicit Material",body:"A joint study by UNICEF, ECPAT, and INTERPOL published in February 2026 found that over 1.2 million children had been deepfaked into explicit material, representing a dramatic acceleration of AI-enabled child exploitation.",source:"UNICEF/ECPAT/INTERPOL Joint Study, February 2026",link:""},
+  ncmec:{stat:"6,443%",title:"AI Child Exploitation Report Increase",body:"The National Center for Missing & Exploited Children (NCMEC) reported a 6,443% increase in AI-generated child sexual abuse material reports in 2024 compared to the prior year.",source:"NCMEC, 2024",link:""},
+  genzanxiety:{stat:"39%",title:"Gen Z Constantly Anxious",body:"Barna's 2026 research found approximately 39% of Gen Z report feeling constantly anxious — a rate significantly higher than any previous generation at the same age.",source:"Barna Research, 2026",link:"https://barna.com"},
+  trust13:{stat:"1 in 3",title:"Trust AI Spiritual Advice as Much as a Pastor",body:"Barna/Gloo research found 1 in 3 US adults say AI spiritual advice is as trustworthy as advice from their pastor. Among Gen Z and Millennials, this rises to 2 in 5. This represents a significant pastoral authority shift happening now.",source:"Barna/Gloo, November 2025",link:"https://barna.com"},
+  prayer:{stat:"4 in 10",title:"Christians Using AI for Prayer/Bible Study",body:"Four in ten practicing Christians say AI has helped them with prayer, Bible study, or spiritual growth. A similar proportion of pastors (41%) use AI for Bible study preparation. Christians are actually more likely to use AI at work than non-Christians (39% vs 26%).",source:"Barna Research, 2026",link:"https://barna.com"},
+  tutoring:{stat:"0.73-1.3 SD",title:"AI Tutoring vs. Classroom",body:"A randomised controlled trial published in Scientific Reports (June 2025) found AI tutoring produced learning gains of 0.73 to 1.3 standard deviations over traditional classroom instruction — potentially the largest educational effect size ever measured at scale.",source:"Scientific Reports, June 2025",link:""},
+  genai_growth:{stat:"425%",title:"GenAI Course Enrollment Growth in Latin America",body:"Coursera's 2025-2026 data shows global GenAI course enrollment grew 195% year-over-year. Latin America led all regions at 425% growth, followed by Sub-Saharan Africa at 220%, showing the Global South is moving on AI literacy faster than the West.",source:"Coursera Report, 2026",link:"https://coursera.org"},
+  context_translation:{stat:"3,000 Languages",title:"Bible Translation Potential",body:"The 'Rosetta Context' approach uses the 10M-token context window to upload an undocumented script's full corpus alongside comparative grammar and parallel texts. High-quality translators for the world's ~3,000 low-resource languages could theoretically be developed in days rather than the decades current methods require.",source:"The 10-Million Token Paradigm, March 2026",link:""},
+  hours_l1:{stat:"2–4 hrs/week",title:"Level 1 — AI for Answers",body:"At Level 1, users treat AI like a more capable search engine. They get fast answers to specific questions but don't bring any personal context. Outputs remain generic and time savings plateau at roughly 2–4 hours per week.",source:"2026 AI Advantage Summit — Three Levels Framework",link:"https://www.youtube.com/watch?v=R_IEnWj56j4"},
+  hours_l2:{stat:"6–15 hrs/week",title:"Level 2 — AI as Work Partner",body:"At Level 2, you've built a context layer. The AI knows your voice, your standards, your goals. It functions as a genuine thinking partner: sharpening decisions, flagging gaps, creating alongside you. Requires intentional onboarding, like bringing in a skilled contractor who needs to learn your organisation.",source:"2026 AI Advantage Summit — Three Levels Framework",link:"https://www.youtube.com/watch?v=R_IEnWj56j4"},
+  hours_l3:{stat:"20–40 hrs/week",title:"Level 3 — AI Working For You (Agents)",body:"Level 3 means deploying AI agents that run entire workflows autonomously — research, communications, admin, scheduling — based on the standards you established at Level 2. Attempting to jump directly to Level 3 without Level 2 almost always produces generic, unusable results.",source:"2026 AI Advantage Summit — Three Levels Framework",link:"https://www.youtube.com/watch?v=3mJ1G99O-W8"},
+  hours_780:{stat:"780 hours",title:"Hours Recovered Per Year at 15 hrs/week",body:"The practical goal from the AI Advantage Summit framework: reclaim 15 hours per week from repetitive administrative, communication and logistical tasks. Over a year this adds up to 780 hours — nearly 33 full days. The framework asks one follow-up: what do you do with them?",source:"AI Advantage Summit, April 2026",link:"https://www.youtube.com/watch?v=R_IEnWj56j4"}
+};
+
+const carouselItems = [
+  {title:"Sewell Setzer III — 14-Year-Old Suicide",body:"In October 2024, Megan Garcia filed a wrongful death lawsuit after her 14-year-old son, Sewell Setzer III, died by suicide. He developed a prolonged emotional and romantic relationship with a Character.AI bot. In his final chat, the bot told him 'Please do, my sweet king.' Minutes later, he died.\n\nSource: Garcia v. Character Technologies, Inc. (M.D. Fla.) / CNN / CNBC"},
+  {title:"Five Families Sue; Google Settles",body:"Google and Character.AI agreed in January 2026 to settle five lawsuits from families alleging their children experienced psychological distress, sexual abuse-style interactions, or died by suicide after using AI companions.\n\nIn a first-of-its-kind ruling (May 2025), the judge rejected Character.AI's argument that chatbot output is protected free speech.\n\nSource: Bloomberg Law / CNBC / CNN, January 2026"},
+  {title:"Chatbot Encouraged Teen to Kill Parents",body:"In January 2025, a 17-year-old Texas teen with autism turned to AI chatbots to combat loneliness and was faced with bots that encouraged both self-harm and violence against his family.\n\nSource: Social Media Victims Law Center, 2025"},
+  {title:"Adam Raine — ChatGPT Suicide Case",body:"In August 2025, the family of 16-year-old Adam Raine from California sued OpenAI after their son died by suicide in April 2025. ChatGPT had become his closest confidant. When he shared 'life is meaningless,' it responded: 'That mindset makes sense in its own dark way.'\n\nSource: Lawsuit filing, cited by Doughty Street Chambers, August 2025"},
+  {title:"First Senate Hearing on AI Chatbot Harms",body:"In September 2025, Megan Garcia testified at the first-ever US Senate hearing on AI chatbot harms, alongside other parents who had lost children to suicide following AI chatbot use.\n\nSource: Centre for Humane Technology / Senate Judiciary Committee, September 2025"}
+];
+
+let carIdx=0;
+function showCarousel(i){carIdx=i;document.getElementById('carousel-title').textContent=carouselItems[i].title;document.getElementById('carousel-body').textContent=carouselItems[i].body;document.getElementById('carousel-body').style.whiteSpace='pre-line';document.getElementById('car-counter').textContent=(i+1)+' of '+carouselItems.length;document.getElementById('car-prev').disabled=i===0;document.getElementById('car-next').disabled=i===carouselItems.length-1;}
+document.getElementById('carousel-trigger')?.addEventListener('click',()=>{showCarousel(0);document.getElementById('carousel-overlay').classList.add('open');});
+document.getElementById('car-prev').addEventListener('click',()=>{if(carIdx>0)showCarousel(carIdx-1);});
+document.getElementById('car-next').addEventListener('click',()=>{if(carIdx<carouselItems.length-1)showCarousel(carIdx+1);});
+document.getElementById('carousel-close').addEventListener('click',()=>document.getElementById('carousel-overlay').classList.remove('open'));
+document.getElementById('carousel-overlay').addEventListener('click',e=>{if(e.target===document.getElementById('carousel-overlay'))document.getElementById('carousel-overlay').classList.remove('open');});
+
+// THEME
+(function(){const k=['default','nocturne','editorial'],s=localStorage.getItem('deckTheme');if(s&&k.includes(s))document.documentElement.setAttribute('data-theme',s);})();
+
+// ENGINE
+let cur=0,trans=false,started=false,disIdx={},wipeCycle=0;
+const slides=document.querySelectorAll('.slide'),total=slides.length;
+const bcDeck=typeof BroadcastChannel!=='undefined'?new BroadcastChannel('gr-deck'):null;
+function slidePlainText(i){
+  if(i<0||i>=total)return'—';
+  const s=slides[i];
+  const t=s.querySelector('h1.s-title,h2.s-title,.disc-title,.s-title.lg,.s-title.md,.s-title.xl,.s-title');
+  if(t)return t.textContent.replace(/\s+/g,' ').trim().slice(0,240);
+  return'—';
+}
+function postSpeakerSlide(){
+  if(!bcDeck||new URLSearchParams(location.search).get('speaker')==='1')return;
+  const curTitle=slidePlainText(cur);
+  const nextTitle=cur+1<total?slidePlainText(cur+1):'—';
+  const n=slides[cur]&&slides[cur].dataset?slides[cur].dataset.notes||'—':'—';
+  try{bcDeck.postMessage({type:'slide',i:cur,total,curTitle,nextTitle,notes:n})}catch(e){}
+}
+const redMo=()=>window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function getTransType(el){
+  if(el.dataset&&el.dataset.transition==='none')return'none';
+  if(el.querySelector&&el.querySelector('.slide-inner.session-div'))return'curtain';
+  return'wipe';
+}
+function syncA11y(){slides.forEach((s,i)=>s.setAttribute('aria-hidden',!started||i!==cur?'true':'false'));}
+function animSessionNum(slide){
+  const p=slide.querySelector('.session-part-num');
+  if(!p||p.dataset.animated)return;
+  p.dataset.animated=1;const raw=p.textContent.trim();const tgt=parseInt(raw,10);
+  if(isNaN(tgt))return;const st=performance.now();
+  function tick(n){const t=Math.min(1,(n-st)/700);p.textContent=String(Math.min(tgt,Math.floor(tgt*t))).padStart(2,'0');if(t<1)requestAnimationFrame(tick);else p.textContent=String(tgt).padStart(2,'0')}
+  requestAnimationFrame(tick);
+}
+function splitTitleIn(slide){const t=slide.querySelector('.session-div-title.line-reveal');if(t)t.classList.add('in')}
+function s02Flip(slide){slide.querySelectorAll('.stat-flip3d').forEach((c,i)=>setTimeout(()=>c.classList.add('in'),i*120+100))}
+function s19Bursts(slide){
+  slide.querySelectorAll('.stat-card.green').forEach(card=>{
+    if(card.querySelector('.s19-burst'))return;const b=document.createElement('div');b.className='s19-burst';
+    for(let k=0;k<14;k++){const i=document.createElement('i');
+      i.style.setProperty('--tx',(40+Math.random()*80-40)+'px');i.style.setProperty('--ty',(-20-Math.random()*50)+'px');
+      b.appendChild(i);
+    }
+    card.appendChild(b);setTimeout(()=>b.remove(),750);
+  });
+}
+function twQuotes(slide){
+  slide.querySelectorAll('.quote-box blockquote, .brain-rule').forEach((el) => {
+    if (el.dataset.twDone) return;
+    el.dataset.twDone = 1;
+    const full = el.textContent;
+    el.textContent = '';
+    const cur = '▍';
+    let j = 0;
+    const tick = () => {
+      if (j < full.length) {
+        el.textContent = full.slice(0, j + 1) + (j < full.length - 1 ? cur : '');
+        j++;
+        setTimeout(tick, 28);
+      }
+    };
+    tick();
+  });
+}
+function preloadNextImg(i){
+  const pl=document.getElementById('preload-links');if(!pl)return;pl.innerHTML='';
+  [i+1,i-1].forEach(j=>{if(j<0||j>=total)return;const im=slides[j].querySelector('.bg-img img, .split-image img');if(!im||!im.src)return;const l=document.createElement('link');l.rel='preload';l.as='image';l.href=im.src;pl.appendChild(l)});
+}
+function particlesForSlide(slide){
+  document.querySelectorAll('.slide .particles .particle').forEach(p=>{p.style.animationPlayState=slide&&slide.querySelector('.particles')===p.parentElement?'running':'paused'});
+}
+function fillCal(el){
+  if(!el)return;const cells=[...el.querySelectorAll('.cal-cell')];
+  cells.forEach((c,j)=>setTimeout(()=>c.classList.add('filled'),j*15));
+}
+function AnimCountsSlide(s){
+  animCounts(s);
+  s.querySelectorAll('.count-up[data-scramble]').forEach(el=>{
+    if(el.dataset.scrambleDone)return;el.dataset.scrambleDone=1;scrambleCount(el);
+  });
+}
+const SCRAMBLE='0123456789%M,.k';
+function scrambleCount(el){
+  const t=parseFloat(el.dataset.target),sx=el.dataset.suffix||'';
+  const dc=parseInt(el.dataset.decimals,10)||0,sep=el.dataset.separator===',',dur=2000,spl=0.4,st=performance.now();
+  function showVal(v){
+    if(String(t).indexOf('M')>=0||String(t).indexOf('x')>=0)return t+sx;
+    if(dc)return v.toFixed(dc)+sx;
+    let s=String(Math.max(0,Math.floor(v)));
+    if(sep)s=Number(s).toLocaleString();
+    return s+sx
+  }
+  function tick(n){
+    const p=Math.min(1,(n-st)/dur);
+    if(p<spl)el.textContent=Array(6).fill(0).map(()=>SCRAMBLE[Math.random()*SCRAMBLE.length|0]).join('')+sx;
+    else{const t2=(p-spl)/(1-spl),e=1-Math.pow(1-t2,2.5);el.textContent=showVal(t*e)}
+    if(p<1)requestAnimationFrame(tick);else el.textContent=showVal(t)
+  }
+  requestAnimationFrame(tick);
+}
+function runSlideIn(slide){
+  slide.querySelectorAll('.tk-w,.tk-c').forEach((n,i)=>{n.style.setProperty('--ti',i);});
+  slide.querySelectorAll('.line-reveal').forEach(n=>n.classList.add('in'));
+  setTimeout(()=>{slide.querySelectorAll('.title-word-clip').forEach(t=>t.classList.add('in'))},60);
+  slide.querySelectorAll('path.stroke-anim,rect.stroke-anim,polyline.stroke-anim').forEach(s=>s.classList.add('svg-drawn'));
+  animCharts(slide);AnimCountsSlide(slide);
+  if(slide.querySelector('.slide-inner.session-div')){const sd=slide.querySelector('.slide-inner.session-div');sd.classList.add('scan-active');setTimeout(()=>sd.classList.remove('scan-active'),500);animSessionNum(slide);splitTitleIn(slide);}
+  if(slide.id==='s02-cards')s02Flip(slide);
+  if(slide.id==='s19-pos')s19Bursts(slide);
+  if(slide.id==='s18-barna'){const c=slide.querySelector('.callout.lime.gap-data');if(c)requestAnimationFrame(()=>setTimeout(()=>c.classList.add('gap-flash'),1200))}
+  if(slide.id==='slide-qr'){fetch((API_BASE||'')+'/api/qr-hit',{method:'POST'}).then(r=>r.json()).then(d=>{const el=document.getElementById('qr-hits');if(el)el.textContent='Scans this session: '+ (d.count||0)}).catch(()=>{const el=document.getElementById('qr-hits');if(el)el.textContent='Scans: — (deploy the deck for a live count)'});}
+  if(slide.id==='slide-contact'||slide.querySelector('.contact-layout')){requestAnimationFrame(()=>{const l=slide.querySelector('.contact-layout');l&&l.classList.add('contact-in','spot-in')})}
+  if(slide.id==='refl'){setTimeout(()=>{const v=document.getElementById('refl-verse-float');v&&v.classList.add('in')},1500)}
+  if(slide.id==='s15-dk'){const el=document.getElementById('carousel-pulse');el&&el.classList.add('card-pulse-anim');setTimeout(()=>el&&el.classList.add('flash-warn'),300)}
+  if(slide.id==='s14-soc'){slide.querySelectorAll('.stat-card.red .s-num').forEach(n=>n.style.animation='s14RedFlash 1.1s ease .3s 2')}
+  twQuotes(slide);
+  if(slide.querySelector('.don-9010')){const d=document.getElementById('don-9010');d&&d.classList.add('don-anim');fillCal(slide.querySelector('.cal-mini'))}
+  preloadNextImg(cur);
+  particlesForSlide(slide);
+  try{sessionStorage.setItem('gr-slide',String(cur))}catch(e){}
+  discSetup(slide);
+}
+function finishSlideAfterAnim(){
+  trans=false;
+  const sl=slides[cur];
+  runSlideIn(sl);
+}
+function go(n){
+  if(trans||n<0||n>=total||n===cur)return;trans=true;
+  const fromEl=slides[cur],toEl=slides[n],forward=n>cur;
+  fromEl.querySelectorAll('.anim.in').forEach(e=>e.classList.remove('in'));
+  toEl.classList.add('pre-active');
+  void toEl.offsetWidth;
+  if(redMo()||getTransType(fromEl)==='none'){
+    fromEl.classList.remove('active');
+    toEl.classList.remove('pre-active');
+    toEl.classList.add('active');
+    cur=n;
+    syncA11y();
+    setTimeout(()=>{toEl.querySelectorAll('.anim').forEach(e=>e.classList.add('in'));finishSlideAfterAnim()},40);
+    updNav();
+    return;
+  }
+  const ttype=getTransType(fromEl);
+  const wipeSeq=['exiting--wipe-fwd','exiting--wipe-dtu','exiting--wipe-utd','exiting--wipe-back'];
+  const exitClass= ttype==='curtain' ? 'exiting--curtain' : wipeSeq[(wipeCycle++)%wipeSeq.length];
+  fromEl.classList.add('exiting',exitClass);
+  let done=false;
+  const onDone=()=>{if(done)return;done=true;
+    fromEl.removeEventListener('animationend',onEnd);
+    fromEl.classList.remove('active','exiting',exitClass);
+    toEl.classList.remove('pre-active');
+    toEl.classList.add('active');
+    cur=n;
+    syncA11y();
+    setTimeout(()=>{toEl.querySelectorAll('.anim').forEach(e=>e.classList.add('in'));finishSlideAfterAnim()},30);
+    updNav();
+  };
+  const onEnd=e=>{if(e.target!==fromEl)return;onDone();};
+  fromEl.addEventListener('animationend',onEnd);
+  setTimeout(()=>{if(!done)onDone();},620);
+  updNav();
+}
+function discSetup(slide){
+  const el=document.getElementById('disc-timer');
+  if(!slide.classList.contains('d-slide')){el.classList.remove('showing');if(window._ds&&window._ds.raf)cancelAnimationFrame(window._ds.raf);return;}
+  const sid=slide.id||'disc-'+cur;
+  disIdx[sid]=0;
+  slide.querySelectorAll('.disc-q-block').forEach((q,i)=>q.classList.toggle('hidden-qs',i>0));
+  const m=parseFloat(slide.dataset.dMin||'25');
+  if(isNaN(m))return;
+  el.classList.add('showing');
+  if(!window._ds)window._ds={};
+  const S=window._ds;S.totMs=m*60*1000;S.left=S.totMs;S.paused=false;S.t0=performance.now();
+  function discLoop(){
+    if(!document.body.contains(slide)||!slide.classList.contains('active')){if(S.raf)cancelAnimationFrame(S.raf);return;}
+    if(!S.paused){S.left=Math.max(0,S.totMs-(performance.now()-S.t0))}
+    const p=1-S.left/S.totMs;
+    el.style.setProperty('--dt-p',(p*100).toFixed(2));
+    const s=Math.floor(S.left/1000),mm=Math.floor(s/60),ss=String(s%60).padStart(2,'0');
+    const inner=document.getElementById('disc-tm-inner');if(inner)inner.textContent=mm+':'+ss;
+    S.raf=requestAnimationFrame(discLoop);
+  }
+  cancelAnimationFrame(S.raf);
+  el.onclick=()=>{S.paused=!S.paused;if(S.paused){S.freezeL=S.left}else{S.t0=performance.now()-(S.totMs-S.freezeL);S.left=S.freezeL}};
+  S.t0=performance.now();
+  S.left=S.totMs;
+  discLoop();
+  el.ondblclick=()=>{S.t0=performance.now();S.left=S.totMs;S.paused=false};
+}
+function discNext(slide){
+  const sid=slide.id||'d';
+  const qs=[...slide.querySelectorAll('.disc-q-block')];
+  const j= disIdx[sid]??0;
+  if(j+1<qs.length){disIdx[sid]=j+1;qs[j+1].classList.remove('hidden-qs');return true}
+  return false;
+}
+function updNav(){
+  document.querySelectorAll('.nav-dot').forEach((d,i)=>d.classList.toggle('active',i===cur));
+  document.getElementById('slide-counter').textContent=`${cur+1} / ${total}`;
+  document.getElementById('progress-bar').style.width=(total<=1?100:(cur/(total-1))*100)+'%';
+  window.dispatchEvent(new CustomEvent('deck-slide',{detail:{i:cur}}));
+  postSpeakerSlide();
+}
+const nb=document.getElementById('nav-bar');
+syncA11y();
+for(let i=0;i<total;i++){const d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.setAttribute('aria-label','Go to slide '+(i+1));d.addEventListener('click',()=>go(i));nb.appendChild(d);}
+
+document.addEventListener('keydown',e=>{
+  if((e.key==='n'||e.key==='N')&&e.altKey){e.preventDefault();const w=window.open(window.location.origin+window.location.pathname+'?speaker=1','sp','width=500,height=700');return;}
+  if(e.altKey&&e.shiftKey&&(e.key==='t'||e.key==='T')){e.preventDefault();const k=['default','nocturne','editorial'];let i=k.indexOf(document.documentElement.getAttribute('data-theme')||'default');if(i<0)i=0;i=(i+1)%k.length;document.documentElement.setAttribute('data-theme',k[i]);localStorage.setItem('deckTheme',k[i]);return;}
+  if(!started)return;
+  if(document.getElementById('modal-overlay').classList.contains('open')){if(e.key==='Escape')closeModal();return;}
+  if(document.getElementById('carousel-overlay').classList.contains('open')){if(e.key==='Escape')document.getElementById('carousel-overlay').classList.remove('open');if(e.key==='ArrowRight')document.getElementById('car-next').click();if(e.key==='ArrowLeft')document.getElementById('car-prev').click();return;}
+  if(['ArrowRight','ArrowDown',' '].includes(e.key)){
+    const sl=slides[cur];
+    if(sl.classList.contains('d-slide')&&e.key===' '&&discNext(sl)){e.preventDefault();return;}
+    e.preventDefault();go(cur+1);
+  }
+  if(['ArrowLeft','ArrowUp'].includes(e.key)){e.preventDefault();go(cur-1);}
+  if((e.key==='f'||e.key==='F')&&e.metaKey&&e.shiftKey){
+    e.preventDefault();
+    const next = (window.demoBMode === 'i2v' || !window.demoBMode) ? 'img' : 'i2v';
+    window.demoBMode = next;
+    const p = document.getElementById('i2v-fallback-lbl');
+    if (p) p.textContent = next === 'i2v' ? 'Mode: image→video (seedance) · Press Cmd+Shift+F for static image' : 'Mode: flux image (faster) · Press Cmd+Shift+F for i2v';
+  }
+});
+document.getElementById('next-btn').addEventListener('click',()=>go(cur+1));
+document.getElementById('prev-btn').addEventListener('click',()=>go(cur-1));
+let tx=0;
+document.getElementById('deck').addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
+document.getElementById('deck').addEventListener('touchend',e=>{if(!started)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50)go(dx<0?cur+1:cur-1);},{passive:true});
+
+function startPres(){
+  const el=document.documentElement;
+  if(el.requestFullscreen)el.requestFullscreen().catch(()=>{});
+  else if(el.webkitRequestFullscreen)el.webkitRequestFullscreen();
+  document.getElementById('play-overlay').classList.add('hidden');
+  // Replace YOUR_VIDEO_ID to enable intro video
+  document.getElementById('video-player').src='https://www.youtube.com/embed/YOUR_VIDEO_ID?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+  document.getElementById('video-overlay').classList.add('visible');
+  setTimeout(()=>document.getElementById('skip-video').classList.add('visible'),2000);
+}
+function finishVideo(){
+  if(started)return;started=true;
+  document.getElementById('video-player').src='';
+  document.getElementById('video-overlay').classList.remove('visible');
+  document.getElementById('skip-video').classList.remove('visible');
+  ['nav-bar','slide-counter','prev-btn','next-btn'].forEach(id=>document.getElementById(id).classList.add('visible'));
+  setTimeout(()=>{
+    let s=0; try{s=parseInt(sessionStorage.getItem('gr-slide')||'0',10)}catch(e){}
+    if (s<0 || s>=total) s=0;
+    for(let i=0;i<total;i++){ slides[i].classList.remove('active','pre-active','exiting','exiting--wipe-fwd','exiting--wipe-back','exiting--curtain'); }
+    for(let i=0;i<total;i++) slides[i].querySelectorAll('.anim').forEach(e=>e.classList.remove('in'));
+    cur = s; slides[s].classList.add('active');
+    slides[s].querySelectorAll('.anim').forEach(e=>e.classList.add('in'));
+    runSlideIn(slides[s]);
+    syncA11y(); updNav();
+  }, 300);
+  syncA11y();
+}
+document.getElementById('start-btn').addEventListener('click',startPres);
+document.getElementById('skip-video').addEventListener('click',finishVideo);
+document.getElementById('play-overlay').addEventListener('click',e=>{if(e.target===document.getElementById('play-overlay'))startPres();});
+
+function animCharts(s){
+  s.querySelectorAll('.hbar').forEach((r,i)=>setTimeout(()=>{
+    if(r.classList.contains('hbar-anim')){const w=parseFloat(r.dataset.w),dur=1200,st=performance.now();
+      const f=r.querySelector('.hbar-fill'),sp=f&&f.querySelector('.hbar-pct');
+      function t(n){
+        const p=Math.min(1,(n-st)/dur),e=1-Math.pow(1-p,2);
+        f.style.width=(w*e).toFixed(1)+'%';
+        if(sp)sp.textContent=Math.floor(w*e)+'%';
+        if(p<1)requestAnimationFrame(t);
+      }requestAnimationFrame(t);
+    }else{const f=r.querySelector('.hbar-fill');f.style.width=r.dataset.w+'%';const sp=f.querySelector('span');if(sp)sp.style.opacity='1';}
+  },i*100));
+  s.querySelectorAll('.vbar-col').forEach((c,i)=>setTimeout(()=>{c.querySelector('.vbar').style.height=c.dataset.h+'%';c.querySelector('.vbar-val').style.opacity='1';},i*160));
+}
+function animCounts(s){
+  s.querySelectorAll('.count-up').forEach(el=>{
+    if(el.dataset.scramble)return;
+    if(el.dataset.counted)return;el.dataset.counted='1';
+    const t=parseFloat(el.dataset.target),sx=el.dataset.suffix||'',dc=parseInt(el.dataset.decimals)||0,sep=el.dataset.separator===',',dur=1200,st=performance.now();
+    function ease(x){return x===1?1:1-Math.pow(2,-10*x);}
+    function tick(now){const p=Math.min((now-st)/dur,1);let v=t*ease(p);v=dc>0?v.toFixed(dc):Math.floor(v);if(sep)v=Number(v).toLocaleString();el.textContent=v+sx;if(p<1)requestAnimationFrame(tick);}
+    requestAnimationFrame(tick);
+  });
+}
+
+const mo=document.getElementById('modal-overlay'),mc=document.getElementById('modal-content'),mv=document.getElementById('modal-video-wrap');
+function openModal(k){const d=MD[k];if(!d)return;mc.style.display='';mv.style.display='none';mv.innerHTML='';mo.classList.remove('video-open');document.getElementById('modal-stat').textContent=d.stat;document.getElementById('modal-title').textContent=d.title;document.getElementById('modal-body').textContent=d.body;document.getElementById('modal-body').style.whiteSpace='pre-line';document.getElementById('modal-source').textContent='Source: '+d.source;document.getElementById('modal-link').innerHTML=d.link?`<a href="${d.link}" target="_blank" rel="noopener">View Source &rarr;</a>`:'';mo.classList.add('open');}
+function openVideoModal(id,st){mc.style.display='none';mv.style.display='block';mv.innerHTML='';const u='https://www.youtube.com/embed/'+id+'?autoplay=1&rel=0&modestbranding=1&playsinline=1'+(st?'&start='+st:'');const f=document.createElement('iframe');f.src=u;f.setAttribute('allow','accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture');f.setAttribute('allowfullscreen','');mv.appendChild(f);mo.classList.add('open','video-open');}
+function closeModal(){mo.classList.remove('open','video-open');mv.innerHTML='';mv.style.display='none';mc.style.display='';}
+document.getElementById('modal-close').addEventListener('click',closeModal);
+mo.addEventListener('click',e=>{if(e.target===mo)closeModal();});
+document.querySelectorAll('[data-modal]').forEach(el=>el.addEventListener('click',()=>openModal(el.dataset.modal)));
+document.querySelectorAll('[data-video]').forEach(el=>el.addEventListener('click',function(){openVideoModal(this.dataset.video,this.dataset.videoStart||'');}));
+
+['.stat-card','.level-card','.lever-card','.sphere-card','.video-card','.video-card-large','.bento-grid .stat-card'].forEach(sel=>{document.querySelectorAll(sel).forEach(c=>{
+  let raf=0;
+  c.addEventListener('mousemove',e=>{c.classList.add('magnetic','ctr');if(raf)return;raf=requestAnimationFrame(()=>{raf=0;const r=c.getBoundingClientRect();
+    c.style.setProperty('--mx',String((e.clientX-r.left)/r.width*100));c.style.setProperty('--my',String((e.clientY-r.top)/r.height*100));
+    c.style.setProperty('--rx',String((e.clientX-r.left-r.width/2)/30));c.style.setProperty('--ry',String((e.clientY-r.top-r.height/2)/-25));});});
+  c.addEventListener('mouseleave',()=>{c.classList.remove('ctr');c.style.setProperty('--rx','0');c.style.setProperty('--ry','0')});
+})});
+document.querySelectorAll('.level-card.l3').forEach(c=>c.classList.add('glow-goal'));
+document.querySelectorAll('.level-card').forEach(c=>{const s=document.createElement('div');s.className='lc-shim';c.appendChild(s);});
+
+function splitTextNodes(n){
+  [...n.childNodes].forEach(ch=>{
+    if(ch.nodeType===3){
+      if(!ch.textContent.trim())return;
+      const fr=document.createDocumentFragment();
+      ch.textContent.split(/(\s+)/).forEach(p=>{if(p.match(/^\s+$/))fr.appendChild(document.createTextNode(p));else{const s=document.createElement('span');s.className='tk-w';s.textContent=p;fr.appendChild(s)}});
+      ch.replaceWith(fr);
+    } else if(ch.nodeType===1) splitTextNodes(ch);
+  });
+}
+function initWordSplits(){
+  document.querySelectorAll('.w-split').forEach(el=>{if(el.dataset.wInit)return;el.dataset.wInit=1;splitTextNodes(el);});
+}
+initWordSplits();
+
+/* ══ Live demos: voice clone + image/video ══ */
+let voVoiceId=null, voRec=null, voChunks=null, i2vReqId=null, i2vModelId=null, i2vT0=0, i2vPoll=0, i2vElapsedTimer=null;
+function i2vFmt(sec){const s=Math.max(0,sec|0);return (s/60|0)+':'+String(s%60).padStart(2,'0');}
+function setI2vPill(visible, txt) {
+  const pill = document.getElementById('i2v-pill');
+  const tx = document.getElementById('i2v-pill-txt');
+  if (tx) tx.textContent = txt || '';
+  if (pill) pill.classList.toggle('show', visible);
+}
+function stopI2vPill() {
+  if (i2vPoll) { try { clearInterval(i2vPoll); } catch (e) {} i2vPoll = 0; }
+  if (i2vElapsedTimer) { try { clearInterval(i2vElapsedTimer); } catch (e) {} i2vElapsedTimer = 0; }
+  setI2vPill(false, '');
+  i2vReqId = i2vModelId = null;
+  i2vT0 = 0;
+}
+function tickI2vPill() {
+  if (!i2vReqId) return;
+  const sec = Math.floor((Date.now() - i2vT0) / 1000);
+  setI2vPill(true, 'Rendering… ' + i2vFmt(sec));
+}
+window.addEventListener('deck-slide', () => { if (i2vReqId) tickI2vPill(); });
+async function getHealth() {
+  try { const r = await fetch((API_BASE || '') + '/api/health'); return r.json(); } catch (e) { return null; }
+}
+(function initDemoVoice() {
+  const w = document.getElementById('vo-wave');
+  if (w) { for (let k = 0; k < 32; k++) { const b = document.createElement('i'); b.className = 'wave-b'; w.appendChild(b); } }
+  const btnR = document.getElementById('vo-rec');
+  const btnS = document.getElementById('vo-stop');
+  const btnC = document.getElementById('vo-clone');
+  const btnP = document.getElementById('vo-play');
+  const st = document.getElementById('vo-status');
+  const rafWave = (stream) => {
+    const ac = new (window.AudioContext || window.webkitAudioContext)();
+    const src = ac.createMediaStreamSource(stream);
+    const an = ac.createAnalyser();
+    an.fftSize = 64; src.connect(an);
+    const buf = new Uint8Array(an.frequencyBinCount);
+    const bars = document.querySelectorAll('#vo-wave .wave-b');
+    const loop = () => {
+      an.getByteFrequencyData(buf);
+      let t = 0; for (let j = 0; j < buf.length; j++) t += buf[j];
+      const avg = t / (buf.length * 255);
+      for (let j = 0; j < bars.length; j++) { const h = 4 + avg * 200 * (0.5 + 0.5 * Math.sin((j + Date.now() * 0.01) * 0.2)); bars[j].style.height = h + 'px'; }
+      voRec && voRec.rafV && (voRec.rafV = requestAnimationFrame(loop));
+    };
+    if (voRec) voRec.rafV = requestAnimationFrame(loop);
+  };
+  btnR && btnR.addEventListener('click', async () => {
+    if (!navigator.mediaDevices) { st.textContent = 'MediaRecorder not supported.'; return; }
+    const h = await getHealth();
+    if (!h || !h.hasEleven) { st.textContent = 'Live clone API not reachable — open the deployed Vercel URL (HTTPS) with ELEVENLABS_API_KEY set server-side.'; return; }
+    let stream;
+    try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); } catch (e) { st.textContent = 'Mic permission required.'; return; }
+    voChunks = [];
+    const m = (MediaRecorder && MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) ? 'audio/webm;codecs=opus' : (MediaRecorder && MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/wav');
+    voRec = new MediaRecorder(stream, { mimeType: m });
+    voRec.ondataavailable = (e) => { if (e.data.size) voChunks.push(e.data); };
+    voRec.rafV = 1; rafWave(stream);
+    voRec.start();
+    btnR.disabled = true; btnS.disabled = false; st.textContent = 'Recording (max 15s)…';
+    setTimeout(() => { if (voRec && voRec.state === 'recording') btnS.click(); }, 15000);
+  });
+  btnS && btnS.addEventListener('click', () => {
+    if (!voRec) return; if (voRec.rafV) cancelAnimationFrame(voRec.rafV); voRec.rafV = 0; voRec.stop();
+    voRec.stream && voRec.stream.getTracks().forEach(t => t.stop());
+    voRec = null; btnR.disabled = false; btnS.disabled = true; btnC.disabled = false;
+    const st0 = document.getElementById('vo-status');
+    if (st0) st0.textContent = 'Choose “Clone from recording”.';
+  });
+  btnC && btnC.addEventListener('click', () => {
+    if (!voChunks || !voChunks.length) { st.textContent = 'No audio.'; return; }
+    st.textContent = 'Uploading & cloning…';
+    const b = new Blob(voChunks, { type: 'audio/webm' });
+    const rdr = new FileReader();
+    rdr.onload = async () => {
+      const b64 = String(rdr.result).split(',')[1];
+      try {
+        const r = await fetch((API_BASE || '') + '/api/clone-voice', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ audioBase64: b64, mime: 'audio/webm' }) });
+        const j = await r.json();
+        if (!r.ok) throw j;
+        voVoiceId = j.voiceId; btnP.disabled = false; st.textContent = 'Clone ready. Type and press “Speak as clone”.';
+      } catch (e) { st.textContent = 'Clone failed (check API / keys on server).'; }
+    };
+    rdr.readAsDataURL(b);
+  });
+  btnP && btnP.addEventListener('click', async () => {
+    if (!voVoiceId) { st.textContent = 'No voice ID.'; return; }
+    const t = (document.getElementById('vo-text') && document.getElementById('vo-text').value) || '';
+    st.textContent = 'Generating…';
+    try {
+      const r = await fetch((API_BASE || '') + '/api/tts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ voiceId: voVoiceId, text: t }) });
+      if (!r.ok) throw new Error('tts');
+      const u = URL.createObjectURL(await r.blob());
+      const a = new Audio(u); a.play();
+      a.onended = () => { URL.revokeObjectURL(u); st.textContent = 'Done playing.'; };
+    } catch (e) { st.textContent = 'TTS failed.'; }
+  });
+})();
+(function initDemoI2V() {
+  const dz = document.getElementById('i2v-drop');
+  const fi = document.getElementById('i2v-file');
+  const go = document.getElementById('i2v-go');
+  const out = document.getElementById('i2v-out');
+  const pr = document.getElementById('i2v-prompt');
+  let dataUrl = '';
+  if (fi) {
+    fi.addEventListener('change', () => {
+      if (!fi.files[0]) return; const r = new FileReader();
+      r.onload = () => { dataUrl = r.result; const d = document.getElementById('i2v-drop-txt'); if (d) d.textContent = 'Image loaded'; };
+      r.readAsDataURL(fi.files[0]);
+    });
+  }
+  if (dz && fi) {
+    dz.addEventListener('click', () => fi.click());
+    dz.addEventListener('dragover', (e) => { e.preventDefault(); dz.classList.add('dragover'); });
+    dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
+    dz.addEventListener('drop', (e) => { e.preventDefault(); dz.classList.remove('dragover'); if (e.dataTransfer.files[0]) { fi.files = e.dataTransfer.files; fi.dispatchEvent(new Event('change')); } });
+  }
+  go && go.addEventListener('click', async () => {
+    if (!dataUrl) { if (out) out.innerHTML = '<p class="s-sub">Add a photo first.</p>'; return; }
+    const h = await getHealth();
+    if (!h || !h.hasFal) { if (out) out.innerHTML = '<p class="s-sub">FAL_KEY not set on server — add env on Vercel. Image→image fallback also needs FAL.</p>'; return; }
+    out.innerHTML = '';
+    i2vT0 = Date.now();
+    i2vReqId = null; i2vModelId = null;
+    const mode = (window.demoBMode === 'img') ? 'img' : 'i2v';
+    const engine = 'seedance';
+    setI2vPill(true, 'Submitting…');
+    try {
+      const r = await fetch((API_BASE || '') + '/api/image-to-video', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ imageBase64: dataUrl, prompt: (pr && pr.value) || '', mode, engine }) });
+      const j = await r.json();
+      if (!r.ok) throw j;
+      i2vReqId = j.requestId; i2vModelId = j.model; i2vT0 = Date.now();
+    } catch (e) { setI2vPill(false, ''); if (out) out.innerHTML = '<p class="s-sub">Submit failed. Check CORS, FAL_KEY, and model availability.</p>'; return; }
+    if (i2vPoll) { try { clearInterval(i2vPoll); } catch (e) {} }
+    if (i2vElapsedTimer) { try { clearInterval(i2vElapsedTimer); } catch (e) {} }
+    i2vPoll = setInterval(function () { pollI2V(out); }, (mode === 'img') ? 3000 : 4000);
+    tickI2vPill();
+    i2vElapsedTimer = setInterval(tickI2vPill, 1000);
+    pollI2V(out);
+  });
+  async function pollI2V(out) {
+    if (!i2vReqId || !i2vModelId) return;
+    const m = encodeURIComponent(i2vModelId);
+    const u = (API_BASE || '') + '/api/image-to-video?requestId=' + encodeURIComponent(i2vReqId) + '&model=' + m;
+    let j;
+    try { const r = await fetch(u); j = await r.json(); } catch (e) { return; }
+    if (j.done) {
+      stopI2vPill();
+      if (j.videoUrl) { out.innerHTML = '<video src="' + j.videoUrl + '" controls autoplay loop playsinline style="max-width:100%"></video>'; return; }
+      if (j.imageUrl) { out.innerHTML = '<img src="' + j.imageUrl + '" alt="Generated" style="max-width:100%;border-radius:10px" />'; return; }
+      out.innerHTML = '<p class="s-sub">No URL in result. See console (raw in API).</p>';
+      return;
+    }
+    if ((j.state === 'IN_QUEUE' || (j.raw && j.raw.status === 'IN_QUEUE')) && j.raw && j.raw.queue_position != null) { setI2vPill(true, 'In queue, position ~' + j.raw.queue_position + ' — ' + i2vFmt((Date.now() - i2vT0) / 1000 | 0)); }
+    else { tickI2vPill(); }
+  }
+})();
+document.getElementById('open-speaker') && document.getElementById('open-speaker').addEventListener('click', () => { window.open(location.origin + location.pathname + '?speaker=1', 'gr-notes', 'width=520,height=800'); });
+if (new URLSearchParams(location.search).get('speaker') !== '1') { try { postSpeakerSlide(); } catch (e) {} }
+
+function mkP(id,n=20,dur=7,span=9){const c=document.getElementById(id);if(!c)return;for(let i=0;i<n;i++){const p=document.createElement('div');p.className='particle';const s=Math.random()*4+2;p.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;animation-duration:${Math.random()*span+dur}s;animation-delay:${Math.random()*6}s`;c.appendChild(p);}}
+mkP('hero-particles',24,6,9);mkP('s1-particles',14,8,10);mkP('reflect-particles',16,16,12);
+</script>
+</body>
+</html>
