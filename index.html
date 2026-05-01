@@ -1892,10 +1892,12 @@ function startPres(){
   if(el.requestFullscreen)el.requestFullscreen().catch(()=>{});
   else if(el.webkitRequestFullscreen)el.webkitRequestFullscreen();
   document.getElementById('play-overlay').classList.add('hidden');
-  // Replace YOUR_VIDEO_ID to enable intro video
+  /* Intro video: uncomment and set YOUR_VIDEO_ID, then remove the finishVideo() call below.
   document.getElementById('video-player').src='https://www.youtube.com/embed/YOUR_VIDEO_ID?autoplay=1&rel=0&modestbranding=1&playsinline=1';
   document.getElementById('video-overlay').classList.add('visible');
   setTimeout(()=>document.getElementById('skip-video').classList.add('visible'),2000);
+  */
+  finishVideo();
 }
 function finishVideo(){
   if(started)return;started=true;
