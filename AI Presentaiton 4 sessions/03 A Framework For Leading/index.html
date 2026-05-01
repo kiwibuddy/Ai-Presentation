@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="default">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Part 3: A Framework For Leading — Nathaniel Baldock · Tauranga 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,300;1,9..144,400;1,9..144,600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sky:       hsl(207,58%,34%);
+  --sky2:      hsl(200,52%,44%);
+  --sky-dark:  hsl(213,62%,14%);
+  --sky-light: hsl(205,55%,93%);
+  --lime:      hsl(79,82%,50%);
+  --lime-d:    hsl(79,70%,34%);
+  --lime-mute: hsl(79,40%,93%);
+  --gold:      #C9A227;
+  --gold-lt:   #FFF8E1;
+  --red:       #C0392B;
+  --red-lt:    #FDE8E8;
+  --green:     #1e8a5a;
+  --green-lt:  #E8F8F0;
+  --amber:     hsl(38,88%,44%);
+  --amber-lt:  hsl(40,70%,95%);
+  --fg:        #0f1117;
+  --fg-med:    hsl(220,10%,28%);
+  --muted:     hsl(220,8%,47%);
+  --bg:        #f8f8f6;
+  --bg-warm:   hsl(40,25%,97%);
+  --border:    hsl(220,14%,88%);
+  --dark:      hsl(218,32%,9%);
+  --dark2:     hsl(218,28%,13%);
+  --white:     #ffffff;
+  --ease:      cubic-bezier(0.23,1,0.32,1);
+  --ease-b:    cubic-bezier(0.34,1.56,0.64,1);
+  --body:      'DM Sans', system-ui, sans-serif;
+  --display:   'Fraunces', Georgia, serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{overflow:hidden;height:100%;width:100%;}
+body{font-family:var(--body);color:var(--fg);background:#090c14;}
+
+/* ─── PLAY OVERLAY ─── */
+#play-overlay{
+  position:fixed;inset:0;z-index:99999;
+  background:var(--sky-dark);
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:space-between;
+  padding:clamp(1.5rem,5vw,3rem) 1.5rem clamp(1.5rem,4vw,2.5rem);
+  transition:opacity 0.6s var(--ease),visibility 0.6s;
+}
+#play-overlay::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--sky),var(--sky2) 55%,var(--lime));}
+#play-overlay.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+.po-hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;max-width:46rem;margin:0 auto;gap:0;}
+.po-eyebrow{font-size:clamp(.6rem,.88vw,.74rem);font-weight:700;letter-spacing:.26em;text-transform:uppercase;color:var(--lime);margin-bottom:1.5rem;}
+.po-title{font-family:var(--display);font-size:clamp(2rem,5vw,4rem);font-weight:700;color:var(--white);line-height:1.1;letter-spacing:-.02em;margin-bottom:.4rem;}
+.po-title em{font-style:italic;font-weight:300;color:rgba(255,255,255,.5);display:block;font-size:.6em;margin-top:.2em;}
+.po-sub{font-size:clamp(.85rem,1.2vw,.95rem);color:rgba(255,255,255,.42);line-height:1.65;margin-bottom:2.2rem;max-width:36rem;}
+#start-btn{display:inline-flex;align-items:center;gap:.7rem;padding:.82rem 2.2rem;border-radius:50px;background:transparent;border:1.5px solid rgba(255,255,255,.25);color:rgba(255,255,255,.78);font-family:var(--body);font-size:.86rem;font-weight:600;letter-spacing:.05em;cursor:pointer;transition:all .25s;}
+#start-btn:hover{background:rgba(147,217,17,.1);border-color:var(--lime);color:var(--lime);}
+#start-btn .arr{transition:transform .2s;}
+#start-btn:hover .arr{transform:translateX(4px);}
+.po-footer{display:flex;flex-direction:column;align-items:center;gap:.25rem;}
+.po-name{font-size:.78rem;font-weight:600;color:rgba(255,255,255,.72);letter-spacing:.02em;}
+.po-name .yr{font-weight:400;color:rgba(255,255,255,.32);}
+.po-tag{font-size:.6rem;color:rgba(255,255,255,.26);letter-spacing:.04em;}
+
+/* ─── VIDEO OVERLAY ─── */
+#video-overlay{position:fixed;inset:0;z-index:99998;background:#000;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .5s,visibility .5s;}
+#video-overlay.visible{opacity:1;visibility:visible;}
+#video-overlay iframe{width:100%;height:100%;border:none;}
+#skip-video{position:fixed;bottom:2rem;right:2rem;z-index:99999;font-size:.76rem;font-weight:600;color:rgba(255,255,255,.5);background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);padding:.5rem 1.3rem;border-radius:8px;cursor:pointer;transition:all .3s;opacity:0;visibility:hidden;}
+#skip-video.visible{opacity:1;visibility:visible;}
+#skip-video:hover{background:rgba(255,255,255,.16);color:#fff;}
+
+/* ─── DECK & SLIDES ─── */
+#deck{width:100vw;height:100vh;overflow:hidden;position:relative;}
+.slide{position:absolute;inset:0;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .45s var(--ease),visibility .45s;}
+.slide.active{opacity:1;visibility:visible;pointer-events:auto;}
+.slide-inner{width:100vw;height:100vh;background:var(--bg);position:relative;overflow:hidden;display:flex;flex-direction:column;}
+.slide-inner::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--sky),var(--sky2) 55%,var(--lime));z-index:10;}
+.slide-inner.dark{background:var(--dark);color:var(--white);}
+.slide-inner.dark2{background:var(--dark2);color:var(--white);}
+.slide-inner.warm{background:var(--bg-warm);}
+.slide-inner.session-div{background:var(--sky-dark);}
+
+/* ─── LAYOUT ─── */
+.s-body{flex:1;padding:5vh 5.5vw 3vh;display:flex;flex-direction:column;position:relative;z-index:2;overflow-y:auto;justify-content:center;gap:2vh;}
+.s-body.top{justify-content:flex-start;padding-top:5vh;}
+.s-body.center{align-items:center;justify-content:center;text-align:center;}
+.s-body.spread{justify-content:space-between;}
+.s-footer{padding:.5rem 5.5vw;display:flex;justify-content:space-between;align-items:center;font-size:.6rem;color:var(--muted);border-top:1px solid var(--border);flex-shrink:0;font-family:var(--body);}
+.slide-inner.dark .s-footer,.slide-inner.dark2 .s-footer,.slide-inner.session-div .s-footer{color:rgba(255,255,255,.22);border-top-color:rgba(255,255,255,.07);}
+
+/* ─── TYPOGRAPHY ─── */
+.eyebrow{font-size:clamp(.6rem,.85vw,.76rem);font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--sky2);margin-bottom:.5rem;}
+.slide-inner.dark .eyebrow,.slide-inner.dark2 .eyebrow,.slide-inner.session-div .eyebrow{color:var(--lime);}
+.s-title{font-family:var(--display);font-weight:700;line-height:1.1;color:var(--sky-dark);letter-spacing:-.02em;}
+.s-title.xl{font-size:clamp(2.8rem,6.5vw,5.2rem);}
+.s-title.lg{font-size:clamp(1.8rem,3.5vw,3rem);}
+.s-title.md{font-size:clamp(1.4rem,2.4vw,2rem);}
+.slide-inner.dark .s-title,.slide-inner.dark2 .s-title,.slide-inner.session-div .s-title{color:var(--white);}
+.s-title em{font-style:italic;font-weight:300;}
+.s-title .lime{color:var(--lime);}
+.s-title .gold{color:var(--gold);}
+.s-div{width:48px;height:3px;background:var(--lime);margin:.6rem 0;flex-shrink:0;}
+.s-sub{font-size:clamp(.95rem,1.4vw,1.18rem);color:var(--fg-med);line-height:1.75;max-width:760px;}
+.slide-inner.dark .s-sub,.slide-inner.dark2 .s-sub{color:rgba(255,255,255,.58);}
+
+/* ─── SESSION DIVIDERS ─── */
+.session-div-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;z-index:2;padding:4vh 6vw;}
+.session-part-num{font-family:var(--display);font-size:clamp(5rem,14vw,12rem);font-weight:700;color:rgba(255,255,255,.06);line-height:1;position:absolute;top:50%;left:50%;transform:translate(-50%,-56%);pointer-events:none;user-select:none;letter-spacing:-.04em;}
+.session-pill{display:inline-flex;align-items:center;gap:.6rem;padding:.4rem 1.1rem;border-radius:50px;border:1px solid rgba(255,255,255,.18);font-size:.68rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:1.5rem;}
+.session-pill .dot{width:6px;height:6px;border-radius:50%;background:var(--lime);}
+.session-div-title{font-family:var(--display);font-size:clamp(2.4rem,5.5vw,4.8rem);font-weight:700;color:var(--white);line-height:1.1;letter-spacing:-.02em;margin-bottom:1.2rem;}
+.session-div-desc{font-size:clamp(.95rem,1.4vw,1.15rem);color:rgba(255,255,255,.48);line-height:1.7;max-width:560px;margin:0 auto 1.8rem;}
+.session-time-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.35rem 1rem;border-radius:50px;background:rgba(255,255,255,.07);font-size:.72rem;font-weight:600;color:rgba(255,255,255,.45);letter-spacing:.04em;}
+
+/* ─── DISCUSSION SLIDES ─── */
+.disc-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4vh 5vw;position:relative;z-index:2;gap:3vh;}
+.disc-header{display:flex;align-items:center;gap:1.2rem;margin-bottom:.5rem;}
+.disc-title{font-family:var(--display);font-size:clamp(1.8rem,3.5vw,3rem);font-weight:700;color:var(--white);text-align:center;}
+.disc-time{font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--lime);padding:.3rem .9rem;border-radius:50px;border:1px solid rgba(147,217,17,.3);}
+.disc-questions{width:100%;max-width:820px;display:flex;flex-direction:column;gap:1.4vh;}
+.disc-q-block{padding:2.2vh 2.5vw;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);transition:background .3s;}
+.disc-q-block:hover{background:rgba(255,255,255,.09);}
+.disc-audience{font-size:.62rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.5rem;color:var(--lime);}
+.disc-audience.amber{color:var(--amber);}
+.disc-audience.blue{color:var(--sky2);}
+.disc-q-text{font-family:var(--display);font-size:clamp(.95rem,1.35vw,1.2rem);font-style:italic;color:rgba(255,255,255,.82);line-height:1.55;}
+
+/* ─── NAV ─── */
+#nav-bar{position:fixed;bottom:0;left:0;right:0;z-index:9998;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:.5rem 2rem;gap:.35rem;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s;}
+#nav-bar.visible{opacity:1;visibility:visible;}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.2);border:none;cursor:pointer;transition:all .3s var(--ease);padding:0;}
+.nav-dot.active{background:var(--lime);width:18px;border-radius:3px;}
+#slide-counter{position:fixed;bottom:.6rem;right:2rem;z-index:9999;font-family:var(--body);font-size:.62rem;font-weight:600;color:rgba(255,255,255,.35);opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s;}
+#slide-counter.visible{opacity:1;visibility:visible;}
+#progress-bar{position:fixed;top:0;left:0;height:3px;z-index:9999;background:linear-gradient(90deg,var(--sky),var(--lime));width:0%;transition:width .4s var(--ease);}
+.arrow-btn{position:fixed;top:50%;z-index:9998;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);cursor:pointer;color:rgba(255,255,255,.45);display:flex;align-items:center;justify-content:center;transition:all .3s var(--ease);opacity:0;visibility:hidden;font-size:1.2rem;}
+.arrow-btn.visible{opacity:1;visibility:visible;}
+.arrow-btn:hover{background:rgba(255,255,255,.14);color:var(--lime);border-color:var(--lime);}
+#prev-btn{left:.75rem;}
+#next-btn{right:.75rem;}
+
+/* ─── STAT CARDS ─── */
+.stat-row{display:flex;gap:1.5vw;margin:1.5vh 0;flex-wrap:wrap;}
+.stat-card{flex:1;min-width:200px;background:var(--white);border-radius:14px;padding:2.5vh 2vw;position:relative;overflow:hidden;border:1px solid var(--border);box-shadow:0 2px 16px rgba(0,0,0,.04);cursor:pointer;transition:transform .35s var(--ease),box-shadow .35s,border-color .25s;}
+.stat-card:hover{transform:translateY(-5px) scale(1.02);box-shadow:0 10px 35px rgba(0,0,0,.1);border-color:var(--sky2);}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--sky);}
+.stat-card.red::before{background:var(--red);}
+.stat-card.green::before{background:var(--green);}
+.stat-card.lime::before{background:var(--lime);}
+.stat-card.gold::before{background:var(--gold);}
+.stat-card.amber::before{background:var(--amber);}
+.stat-card.bd::before{background:var(--sky-dark);}
+.s-num{font-family:var(--display);font-size:clamp(2rem,3.8vw,3.2rem);font-weight:700;color:var(--sky);line-height:1;margin-bottom:.4rem;letter-spacing:-.02em;}
+.stat-card.red .s-num{color:var(--red);}
+.stat-card.green .s-num{color:var(--green);}
+.stat-card.lime .s-num{color:var(--lime-d);}
+.stat-card.gold .s-num{color:var(--gold);}
+.stat-card.amber .s-num{color:var(--amber);}
+.stat-card.bd .s-num{color:var(--sky-dark);}
+.s-label{font-size:clamp(.82rem,1.1vw,1rem);color:var(--muted);line-height:1.5;}
+.s-subline{font-size:clamp(.76rem,.96vw,.88rem);color:var(--muted);line-height:1.42;margin-top:.3rem;}
+.s-source{font-size:.62rem;color:#c0c4cc;margin-top:.55rem;text-transform:uppercase;letter-spacing:.04em;}
+.click-hint{position:absolute;bottom:.4rem;right:.6rem;font-size:.44rem;color:var(--sky2);opacity:0;transition:opacity .3s;text-transform:uppercase;letter-spacing:.1em;}
+.stat-card:hover .click-hint{opacity:.6;}
+
+/* dark stat cards */
+.dark-stat{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.1);}
+.dark-stat .s-num{color:var(--lime);}
+.dark-stat .s-label{color:rgba(255,255,255,.6);}
+.dark-stat .s-source{color:rgba(255,255,255,.3);}
+.dark-stat .click-hint{color:var(--lime);}
+.dark-stat:hover{background:rgba(255,255,255,.12);border-color:var(--lime);}
+
+/* ─── CALLOUTS ─── */
+.callout{padding:2.2vh 2.5vw;border-radius:12px;border-left:4px solid var(--sky);background:var(--sky-light);font-size:clamp(.95rem,1.35vw,1.1rem);line-height:1.72;}
+.callout.lime{background:var(--lime-mute);border-left-color:var(--lime-d);}
+.callout.red{background:var(--red-lt);border-left-color:var(--red);}
+.callout.gold{background:var(--gold-lt);border-left-color:var(--gold);}
+.callout.amber{background:var(--amber-lt);border-left-color:var(--amber);}
+.callout.green{background:var(--green-lt);border-left-color:var(--green);}
+.callout.dark-call{background:rgba(255,255,255,.06);border-left-color:var(--lime);color:rgba(255,255,255,.78);}
+.callout strong{color:var(--sky);}
+.callout.lime strong{color:var(--lime-d);}
+.callout.red strong{color:var(--red);}
+.callout.dark-call strong{color:var(--lime);}
+
+/* ─── QUOTE BOX ─── */
+.quote-box{position:relative;padding:2.5vh 3vw;margin:1.5vh 0;}
+.quote-box .qm{font-family:var(--display);font-size:5rem;font-weight:800;color:var(--gold);opacity:.22;line-height:1;position:absolute;top:0;left:.75rem;}
+.quote-box blockquote{font-family:var(--display);font-size:clamp(1.1rem,1.55vw,1.45rem);font-style:italic;font-weight:400;line-height:1.65;position:relative;z-index:2;}
+.slide-inner.dark .quote-box blockquote,.slide-inner.dark2 .quote-box blockquote{color:rgba(255,255,255,.85);}
+.quote-box cite{display:block;margin-top:.75rem;font-size:clamp(.78rem,.98vw,.9rem);font-style:normal;color:var(--gold);font-weight:600;font-family:var(--body);}
+
+/* ─── INSIGHT ITEMS ─── */
+.insight-list{display:flex;flex-direction:column;gap:1.4vh;margin:1.5vh 0;}
+.insight-item{display:flex;gap:1.4rem;align-items:flex-start;padding:2vh 2vw;background:var(--white);border-radius:12px;border:1px solid var(--border);transition:transform .3s var(--ease),background .3s;cursor:pointer;}
+.insight-item:hover{transform:translateX(6px);background:var(--sky-light);}
+.insight-num{width:48px;height:48px;border-radius:50%;background:var(--sky);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--display);font-size:1.15rem;font-weight:700;color:var(--white);}
+.insight-num.green{background:var(--green);}
+.insight-num.glow-pulse{animation:glow-pulse 2.5s ease-in-out infinite;}
+.insight-title{font-family:var(--display);font-size:clamp(.95rem,1.3vw,1.15rem);font-weight:600;color:var(--sky-dark);}
+.insight-body{font-size:clamp(.82rem,1.05vw,.95rem);color:var(--muted);line-height:1.55;margin-top:.2rem;}
+
+/* ─── LEVEL CARDS ─── */
+.level-grid{display:flex;gap:1.5vw;margin:1.5vh 0;}
+.level-card{flex:1;border-radius:14px;padding:2.5vh 2vw;position:relative;overflow:hidden;border:1px solid var(--border);background:var(--white);box-shadow:0 2px 14px rgba(0,0,0,.04);cursor:pointer;transition:transform .35s var(--ease),box-shadow .35s;}
+.level-card:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(0,0,0,.09);}
+.level-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.level-card.l1::before{background:var(--sky);}
+.level-card.l2::before{background:var(--sky2);}
+.level-card.l3::before{background:var(--lime);}
+.lc-num{font-family:var(--display);font-size:clamp(2.5rem,4vw,3.8rem);font-weight:700;color:var(--border);line-height:1;margin-bottom:.4rem;transition:color .3s;}
+.level-card.l1:hover .lc-num{color:var(--sky);}
+.level-card.l2:hover .lc-num{color:var(--sky2);}
+.level-card.l3:hover .lc-num{color:var(--lime-d);}
+.lc-label{font-family:var(--display);font-size:clamp(.95rem,1.35vw,1.2rem);font-weight:600;color:var(--fg);margin-bottom:.4rem;line-height:1.3;}
+.lc-desc{font-size:clamp(.78rem,.98vw,.9rem);color:var(--muted);line-height:1.55;margin-bottom:.75rem;}
+.lc-hours{display:inline-block;padding:.28rem .8rem;border-radius:20px;font-size:.72rem;font-weight:700;}
+.level-card.l1 .lc-hours{background:var(--sky-light);color:var(--sky);}
+.level-card.l2 .lc-hours{background:hsl(200,50%,92%);color:var(--sky2);}
+.level-card.l3 .lc-hours{background:var(--lime-mute);color:var(--lime-d);}
+
+/* ─── LEVER CARDS ─── */
+.lever-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2vw;margin:1.5vh 0;}
+.lever-card{border-radius:14px;padding:2.5vh 1.8vw;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);transition:transform .35s var(--ease),background .3s;}
+.lever-card:hover{transform:translateY(-4px);background:rgba(255,255,255,.09);}
+.lever-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.lever-card.la::before{background:var(--sky);}
+.lever-card.lb::before{background:var(--sky2);}
+.lever-card.lc::before{background:hsl(185,60%,45%);}
+.lever-card.ld::before{background:var(--lime);}
+.lever-letter{font-family:var(--display);font-size:clamp(2.2rem,4vw,3.5rem);font-weight:700;line-height:1;margin-bottom:.4rem;opacity:.14;color:var(--white);}
+.lever-title{font-family:var(--display);font-size:clamp(.95rem,1.35vw,1.2rem);font-weight:600;color:var(--white);margin-bottom:.4rem;line-height:1.2;}
+.lever-desc{font-size:clamp(.76rem,.98vw,.88rem);color:rgba(255,255,255,.5);line-height:1.6;}
+
+/* ─── CONTEXT SANDWICH ─── */
+.sandwich{display:flex;flex-direction:column;gap:.5rem;max-width:680px;margin:1.5vh 0;}
+.sw-layer{border-radius:12px;padding:1.8vh 2vw;border:1px solid var(--border);display:flex;align-items:center;gap:1.5rem;transition:transform .3s var(--ease);}
+.sw-layer:hover{transform:translateX(6px);}
+.sw-layer.top{background:var(--sky-light);border-color:rgba(40,120,181,.2);}
+.sw-layer.mid{background:var(--bg-warm);}
+.sw-layer.bot{background:var(--lime-mute);border-color:rgba(150,214,17,.25);}
+.sw-icon{width:44px;height:44px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.4rem;}
+.sw-layer.top .sw-icon{background:var(--sky);}
+.sw-layer.mid .sw-icon{background:var(--fg-med);}
+.sw-layer.bot .sw-icon{background:var(--lime-d);}
+.sw-label{font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin-bottom:.2rem;}
+.sw-layer.top .sw-label{color:var(--sky);}
+.sw-layer.mid .sw-label{color:var(--muted);}
+.sw-layer.bot .sw-label{color:var(--lime-d);}
+.sw-title{font-family:var(--display);font-size:clamp(.92rem,1.25vw,1.1rem);font-weight:600;color:var(--fg);line-height:1.3;}
+.sw-desc{font-size:clamp(.78rem,.98vw,.88rem);color:var(--muted);line-height:1.5;margin-top:.2rem;}
+
+/* ─── BITS vs ATOMS ─── */
+.bits-atoms{display:grid;grid-template-columns:1fr 1fr;gap:1.5vw;margin:1.5vh 0;}
+.ba-panel{border-radius:14px;padding:2.8vh 2.5vw;border:1px solid var(--sky-light);background:var(--sky-light);}
+.ba-panel.atoms{background:var(--lime-mute);border-color:rgba(147,217,17,.2);}
+.ba-label{font-size:.65rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;margin-bottom:.7rem;color:var(--sky);}
+.ba-panel.atoms .ba-label{color:var(--lime-d);}
+.ba-title{font-family:var(--display);font-size:clamp(1.1rem,1.65vw,1.5rem);font-weight:700;color:var(--fg);margin-bottom:.9rem;}
+.ba-panel ul{list-style:none;display:flex;flex-direction:column;gap:.75vh;}
+.ba-panel li{font-size:clamp(.82rem,1.05vw,.96rem);color:var(--fg-med);line-height:1.55;padding-left:1.2rem;position:relative;}
+.ba-panel li::before{content:'';position:absolute;left:0;top:.58em;width:6px;height:6px;border-radius:50%;background:var(--sky);}
+.ba-panel.atoms li::before{background:var(--lime-d);}
+
+/* ─── BRAIN SPLIT (Complicated vs Complex) ─── */
+.brain-split{display:grid;grid-template-columns:1fr 1fr;gap:1.5vw;margin:1.5vh 0;}
+.brain-card{border-radius:16px;padding:3vh 2.5vw;position:relative;overflow:hidden;}
+.brain-card.left{background:var(--sky-light);border:1px solid rgba(40,120,181,.18);}
+.brain-card.right{background:var(--amber-lt);border:1px solid rgba(212,140,13,.18);}
+.brain-tag{font-size:.64rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.5rem;}
+.brain-card.left .brain-tag{color:var(--sky);}
+.brain-card.right .brain-tag{color:var(--amber);}
+.brain-title{font-family:var(--display);font-size:clamp(1.1rem,1.75vw,1.55rem);font-weight:700;margin-bottom:.7rem;line-height:1.2;}
+.brain-card.left .brain-title{color:var(--sky-dark);}
+.brain-card.right .brain-title{color:hsl(38,70%,28%);}
+.brain-desc{font-size:clamp(.82rem,1.08vw,.98rem);color:var(--fg-med);line-height:1.65;}
+.brain-pill{display:inline-flex;margin-top:1.1rem;padding:.32rem .88rem;border-radius:20px;font-size:.72rem;font-weight:700;}
+.brain-card.left .brain-pill{background:var(--sky);color:var(--white);}
+.brain-card.right .brain-pill{background:var(--amber);color:var(--white);}
+.brain-rule{font-size:clamp(.82rem,1.1vw,1rem);font-style:italic;color:var(--fg-med);line-height:1.6;margin-top:1.2rem;padding-left:1.2rem;border-left:3px solid var(--lime);}
+
+/* ─── INFO → DISCERN SPLIT ─── */
+.info-shift{display:grid;grid-template-columns:1fr auto 1fr;gap:0;align-items:center;margin:2vh 0;max-width:860px;}
+.is-panel{border-radius:16px;padding:3vh 2.5vw;text-align:center;}
+.is-panel.past{background:hsl(220,12%,94%);border:1px solid var(--border);}
+.is-panel.future{background:var(--sky-light);border:1px solid rgba(40,120,181,.22);}
+.is-label{font-size:.62rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-bottom:.7rem;}
+.is-panel.future .is-label{color:var(--sky);}
+.is-title{font-family:var(--display);font-size:clamp(1.3rem,2vw,1.9rem);font-weight:700;color:var(--fg-med);margin-bottom:.5rem;}
+.is-panel.future .is-title{color:var(--sky-dark);}
+.is-desc{font-size:clamp(.78rem,.98vw,.9rem);color:var(--muted);line-height:1.55;}
+.is-arrow{width:60px;display:flex;align-items:center;justify-content:center;}
+.is-arrow svg{fill:var(--sky);width:28px;height:28px;}
+
+/* ─── 7 SPHERES ─── */
+.spheres-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2vw;margin:1.5vh 0;}
+.sphere-card{border-radius:12px;padding:1.8vh 1.5vw;border:1px solid var(--border);background:var(--white);transition:transform .3s var(--ease),box-shadow .3s;cursor:pointer;}
+.sphere-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.07);}
+.sphere-card:nth-child(7){grid-column:2/4;}
+.sphere-icon{font-size:1.6rem;margin-bottom:.5rem;display:block;}
+.sphere-name{font-family:var(--display);font-size:clamp(.85rem,1.1vw,1rem);font-weight:600;color:var(--sky-dark);margin-bottom:.3rem;}
+.sphere-ai{font-size:clamp(.72rem,.88vw,.82rem);color:var(--muted);line-height:1.45;}
+
+/* ─── 90 DAY PLAN ─── */
+.plan-steps{display:flex;flex-direction:column;gap:1.2vh;max-width:700px;margin:1.5vh 0;}
+.plan-step{display:flex;gap:1.2rem;align-items:flex-start;padding:1.8vh 2vw;background:var(--white);border-radius:12px;border:1px solid var(--border);}
+.plan-num{width:36px;height:36px;border-radius:50%;background:var(--sky);color:var(--white);font-weight:700;font-size:.9rem;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-family:var(--display);}
+.plan-content strong{font-family:var(--display);font-size:clamp(.88rem,1.1vw,1rem);color:var(--fg);font-weight:600;display:block;margin-bottom:.2rem;}
+.plan-content p{font-size:clamp(.8rem,.98vw,.9rem);color:var(--muted);line-height:1.6;}
+
+/* ─── BAR CHARTS ─── */
+.bar-chart-h{display:flex;flex-direction:column;gap:1.2vh;margin:2vh 0;}
+.hbar{display:flex;align-items:center;gap:1vw;}
+.hbar-label{font-size:clamp(.7rem,.98vw,.88rem);font-weight:600;color:var(--fg-med);min-width:150px;text-align:right;}
+.hbar-track{flex:1;height:clamp(26px,3.8vh,40px);background:var(--bg);border-radius:21px;overflow:hidden;}
+.hbar-fill{height:100%;border-radius:21px;width:0%;transition:width 1.2s var(--ease);display:flex;align-items:center;justify-content:flex-end;padding-right:12px;}
+.hbar-fill span{font-size:clamp(.62rem,.86vw,.82rem);font-weight:700;color:var(--white);opacity:0;transition:opacity .3s 1s;}
+
+/* ─── VBAR CHARTS ─── */
+.vbar-chart{display:flex;align-items:flex-end;gap:1.5vw;margin:2vh 0;padding-bottom:2vh;border-bottom:1px solid rgba(0,0,0,.08);cursor:pointer;}
+.vbar-col{flex:1;display:flex;flex-direction:column;align-items:center;height:200px;justify-content:flex-end;}
+.vbar{width:100%;max-width:100px;border-radius:7px 7px 0 0;height:0%;transition:height 1s var(--ease);}
+.vbar-val{font-family:var(--display);font-size:clamp(.8rem,1.15vw,1.05rem);font-weight:700;color:var(--sky);margin-bottom:.3rem;opacity:0;transition:opacity .4s .8s;}
+.vbar-lbl{font-size:clamp(.58rem,.76vw,.76rem);font-weight:600;color:var(--muted);text-align:center;margin-top:.5rem;line-height:1.3;}
+
+/* ─── SPLIT LAYOUT ─── */
+.split-layout{flex:1;display:flex;position:relative;z-index:2;}
+.split-image{width:35%;position:relative;overflow:hidden;flex-shrink:0;}
+.split-image img{width:100%;height:100%;object-fit:cover;display:block;}
+.split-image .img-overlay{position:absolute;inset:0;background:linear-gradient(90deg,transparent 60%,var(--bg) 100%);}
+.split-content{flex:1;padding:4vh 4vw 3vh 3vw;display:flex;flex-direction:column;overflow-y:auto;justify-content:space-evenly;}
+
+/* ─── BG IMAGES ─── */
+.bg-img{position:absolute;inset:0;z-index:0;}
+.bg-img img{width:100%;height:100%;object-fit:cover;}
+.bg-img .ov{position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,20,55,.92) 0%,rgba(0,40,90,.82) 100%);}
+.bg-img .ov-dk{position:absolute;inset:0;background:rgba(0,20,55,.88);}
+.slide-img{background:linear-gradient(135deg,var(--sky),var(--sky2),var(--lime-d));}
+
+/* ─── ANIMATIONS ─── */
+.anim{opacity:0;transition:all .7s var(--ease);}
+.anim.fade-up{transform:translateY(28px);}
+.anim.fade-left{transform:translateX(-38px);}
+.anim.fade-right{transform:translateX(38px);}
+.anim.scale-up{transform:scale(.86);}
+.anim.in{opacity:1!important;transform:none!important;}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+.d4{transition-delay:.4s}.d5{transition-delay:.5s}.d6{transition-delay:.6s}
+.d7{transition-delay:.7s}.d8{transition-delay:.8s}.d9{transition-delay:.9s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes glow-pulse{0%,100%{box-shadow:0 0 0 0 rgba(30,112,166,0)}50%{box-shadow:0 0 20px 4px rgba(30,112,166,.18)}}
+@keyframes breathe{0%,100%{opacity:.1;transform:scale(1)}50%{opacity:.18;transform:scale(1.05)}}
+@keyframes float-p{0%{transform:translateY(100vh) rotate(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-10vh) rotate(720deg);opacity:0}}
+@keyframes reflGlow{0%,100%{color:#f6e3a4;text-shadow:0 0 0 rgba(201,162,39,0)}50%{color:#fff3c5;text-shadow:0 0 10px rgba(201,162,39,.35)}}
+@keyframes reflSheen{0%,20%{background-position:0% 50%}60%,100%{background-position:100% 50%}}
+.float{animation:float 3s ease-in-out infinite;}
+.glow-pulse{animation:glow-pulse 2.5s ease-in-out infinite;}
+.breathe{animation:breathe 4s ease-in-out infinite;}
+.particles{position:absolute;inset:0;overflow:hidden;z-index:1;}
+.particle{position:absolute;border-radius:50%;background:rgba(147,217,17,.16);animation:float-p linear infinite;}
+
+/* ─── REFLECTIVE ─── */
+.refl-wrap{max-width:1040px;margin:0 auto;padding:2vh 3vw;border-radius:16px;background:rgba(0,0,0,.18);backdrop-filter:blur(2px);}
+.refl-text{font-family:var(--display);font-size:clamp(1.2rem,2.2vw,1.7rem);line-height:1.8;font-weight:400;color:var(--white);}
+.refl-em1{color:#f6e3a4;font-weight:700;animation:reflGlow 9s ease-in-out infinite;}
+.refl-em2{font-weight:700;background:linear-gradient(100deg,rgba(255,255,255,.9) 0%,var(--lime) 45%,rgba(255,255,255,.9) 100%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:reflSheen 13s ease-in-out infinite;}
+.refl-verse{margin-top:1.8rem;font-size:1.8rem;color:var(--gold);font-style:italic;font-family:var(--display);text-shadow:0 0 15px rgba(201,162,39,.4);}
+
+/* ─── CAROUSEL MODAL ─── */
+#carousel-overlay{position:fixed;inset:0;z-index:99991;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;}
+#carousel-overlay.open{opacity:1;visibility:visible;}
+#carousel-box{background:var(--white);border-radius:16px;max-width:700px;width:94%;padding:2rem 2.5rem;position:relative;transform:scale(.9);transition:transform .4s var(--ease-b);box-shadow:0 30px 80px rgba(0,0,0,.4);max-height:85vh;overflow-y:auto;}
+#carousel-overlay.open #carousel-box{transform:scale(1);}
+#carousel-close{position:absolute;top:.75rem;right:.75rem;width:32px;height:32px;border-radius:50%;border:none;background:var(--bg);cursor:pointer;font-size:1rem;color:var(--muted);display:flex;align-items:center;justify-content:center;}
+#carousel-close:hover{background:var(--red-lt);color:var(--red);}
+#carousel-title{font-family:var(--display);font-size:1rem;font-weight:600;color:var(--red);margin-bottom:1rem;}
+#carousel-body{font-size:.85rem;color:var(--fg-med);line-height:1.7;}
+.carousel-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--bg);}
+.carousel-nav button{font-size:.7rem;font-weight:600;padding:.4rem 1rem;border-radius:6px;border:1px solid var(--sky2);background:transparent;color:var(--sky2);cursor:pointer;transition:all .2s;}
+.carousel-nav button:hover{background:var(--sky2);color:var(--white);}
+.carousel-nav button:disabled{opacity:.3;cursor:default;}
+.carousel-counter{font-size:.62rem;color:var(--muted);}
+
+/* ─── STANDARD MODAL ─── */
+#modal-overlay{position:fixed;inset:0;z-index:99990;background:rgba(0,0,0,.65);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;}
+#modal-overlay.open{opacity:1;visibility:visible;}
+#modal-box{background:var(--white);border-radius:16px;max-width:640px;width:92%;padding:2.5rem;position:relative;transform:scale(.9) translateY(20px);transition:transform .4s var(--ease-b);box-shadow:0 30px 80px rgba(0,0,0,.3);max-height:85vh;overflow-y:auto;}
+#modal-overlay.open #modal-box{transform:scale(1) translateY(0);}
+#modal-close{position:absolute;top:1rem;right:1rem;width:36px;height:36px;border-radius:50%;border:none;background:var(--bg);cursor:pointer;font-size:1.2rem;color:var(--muted);display:flex;align-items:center;justify-content:center;transition:background .2s;}
+#modal-close:hover{background:var(--red-lt);color:var(--red);}
+#modal-stat{font-family:var(--display);font-size:2.2rem;font-weight:700;color:var(--sky);margin-bottom:.5rem;}
+#modal-title{font-family:var(--display);font-size:1.1rem;font-weight:600;color:var(--sky-dark);margin-bottom:.75rem;}
+#modal-body{font-size:.85rem;color:var(--fg-med);line-height:1.7;margin-bottom:1rem;}
+#modal-source{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem;}
+#modal-link a{font-size:.7rem;font-weight:600;color:var(--sky2);text-decoration:none;padding:.4rem .8rem;border:1px solid var(--sky2);border-radius:6px;display:inline-block;transition:all .2s;}
+#modal-link a:hover{background:var(--sky2);color:var(--white);}
+#modal-overlay.video-open #modal-box{max-width:90vw;width:90vw;max-height:90vh;height:90vh;padding:1rem;}
+#modal-overlay.video-open #modal-content{width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
+#modal-video-wrap{position:relative;width:100%;max-width:90vw;padding-bottom:56.25%;height:0;}
+#modal-video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;border-radius:8px;}
+
+/* ─── CONTACT SLIDE ─── */
+.contact-layout{display:flex;gap:3rem;align-items:stretch;width:100%;max-width:900px;margin:0 auto;min-height:60vh;}
+.contact-photo{width:44%;min-width:280px;border-radius:12px;overflow:hidden;flex-shrink:0;}
+.contact-photo img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block;min-height:55vh;}
+.contact-info{flex:1;display:flex;flex-direction:column;justify-content:center;padding:2vh 0;}
+.contact-info .contact-msg{font-size:clamp(1.1rem,1.5vw,1.35rem);line-height:1.7;color:rgba(255,255,255,.9);margin-bottom:2rem;}
+.contact-info .contact-links{display:flex;flex-direction:column;gap:.75rem;}
+.contact-info .contact-links a{font-size:clamp(.88rem,1.15vw,1.05rem);font-weight:600;color:var(--lime);text-decoration:none;transition:color .2s;}
+.contact-info .contact-links a:hover{color:var(--white);}
+.contact-ctas{display:flex;flex-wrap:wrap;gap:1rem;margin-top:2rem;}
+.contact-ctas a{font-size:clamp(.82rem,1.05vw,.95rem);font-weight:700;color:var(--white);background:linear-gradient(90deg,var(--sky2),var(--sky-dark));padding:.72rem 1.5rem;border-radius:8px;text-decoration:none;transition:opacity .2s,transform .2s;display:inline-block;}
+.contact-ctas a:hover{opacity:.9;transform:translateY(-2px);}
+
+/* ─── QR SLIDE ─── */
+.qr-wrap{margin:1.5rem auto 1rem;display:flex;justify-content:center;align-items:center;}
+.qr-wrap img{display:block;width:min(260px,70vw);height:auto;border-radius:12px;background:#fff;padding:12px;box-shadow:0 12px 40px rgba(0,0,0,.35);}
+
+/* ─── VIDEO CARDS ─── */
+.bento-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;margin:2vh 0;width:100%;max-width:900px;}
+.bento-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin:2vh 0;width:100%;max-width:1000px;}
+.video-card{min-height:180px;background:var(--white);border-radius:14px;padding:0;position:relative;overflow:hidden;display:flex;flex-direction:column;border:1px solid rgba(0,75,141,.08);box-shadow:0 4px 16px rgba(0,0,0,.05);cursor:pointer;transition:transform .4s var(--ease),box-shadow .4s;}
+.video-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--sky);}
+.video-card:hover{transform:translateY(-4px);box-shadow:0 10px 30px rgba(0,0,0,.1);}
+.video-card.warning::before{background:var(--red);}
+.video-card-thumb{width:100%;aspect-ratio:16/9;border-radius:10px 10px 0 0;overflow:hidden;background:var(--bg);flex-shrink:0;position:relative;}
+.video-card-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.video-card-thumb::after{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 68 48'%3E%3Cpath fill='%23fff' fill-opacity='0.9' d='M66 24c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h60c1.1 0 2 .9 2 2v20zm-32-6v12l10-6-10-6z'/%3E%3C/svg%3E") center/56px no-repeat;pointer-events:none;}
+.video-card-body{padding:1.8vh 1.4vw;flex:1;}
+.video-card-title{font-family:var(--display);font-size:clamp(.88rem,1.18vw,1.05rem);font-weight:600;color:var(--sky-dark);margin-bottom:.35rem;}
+.video-card-summary{font-size:clamp(.72rem,.92vw,.86rem);color:var(--muted);line-height:1.45;}
+.video-card-large{min-height:220px;background:var(--white);border-radius:14px;padding:0;position:relative;overflow:hidden;display:flex;flex-direction:column;border:1px solid rgba(0,75,141,.08);box-shadow:0 4px 20px rgba(0,0,0,.06);cursor:pointer;transition:transform .4s var(--ease),box-shadow .4s,border-color .3s;}
+.video-card-large::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--sky);}
+.video-card-large:hover{transform:translateY(-6px);box-shadow:0 12px 40px rgba(0,0,0,.12);border-color:var(--sky2);}
+.video-card-large .video-card-thumb{border-radius:12px 12px 0 0;}
+.video-card-large .video-card-body{padding:2.2vh 1.8vw;}
+.video-card-large .video-card-title{font-family:var(--display);font-size:clamp(.95rem,1.3vw,1.2rem);font-weight:600;color:var(--sky-dark);margin-bottom:.4rem;}
+.video-card-large .video-card-summary{font-size:clamp(.78rem,1.02vw,.92rem);color:var(--muted);line-height:1.45;}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:900px){
+  .s-body{padding:2vh 4vw 1.5vh;}
+  .stat-row{flex-direction:column;}
+  .brain-split{grid-template-columns:1fr;}
+  .bits-atoms{grid-template-columns:1fr;}
+  .info-shift{grid-template-columns:1fr;}
+  .is-arrow{display:none;}
+  .lever-grid{grid-template-columns:1fr 1fr;}
+  .level-grid{flex-direction:column;}
+  .spheres-grid{grid-template-columns:repeat(2,1fr);}
+  .spheres-grid .sphere-card:nth-child(7){grid-column:auto;}
+  .bento-grid,.bento-grid-3{grid-template-columns:1fr;}
+  .contact-layout{flex-direction:column;}
+  .contact-photo{width:100%;min-width:0;min-height:40vh;}
+  .split-layout{flex-direction:column;}
+  .split-image{width:100%;height:30vh;}
+  .disc-questions{max-width:100%;}
+  .session-div-title{font-size:clamp(2rem,7vw,3rem);}
+}
+
+/* ─── ALT THEMES ─── */
+html[data-theme="nocturne"]{--sky:#38bdf8;--sky2:#22d3ee;--sky-dark:#020617;--sky-light:rgba(56,189,248,.12);--fg:#f1f5f9;--fg-med:#cbd5e1;--muted:#94a3b8;--bg:#0f172a;--bg-warm:#0f172a;--border:rgba(255,255,255,.1);--gold:#fbbf24;--gold-lt:rgba(251,191,36,.15);}
+html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-light:#f5f5f5;--fg:#171717;--fg-med:#262626;--muted:#525252;--bg:#fafafa;--bg-warm:#f5f5f5;--border:#e5e5e5;--gold:#a16207;--gold-lt:#fef9c3;}
+
+
+/* ─── CLIP-PATH TRANSITIONS ─── */
+.slide{transition:none;}
+.slide.active{visibility:visible;pointer-events:auto;}
+.slide.tx-out,.slide.tx-in{visibility:visible;pointer-events:none;}
+@keyframes exitFwd{from{opacity:1;transform:scale(1)}to{opacity:.15;transform:scale(.95)}}
+@keyframes enterFwd{from{clip-path:inset(0 0 0 100%)}to{clip-path:inset(0 0 0 0%)}}
+@keyframes exitBwd{from{opacity:1;transform:scale(1)}to{opacity:.15;transform:scale(1.05)}}
+@keyframes enterBwd{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0% 0 0)}}
+@keyframes exitSpl{from{clip-path:inset(0 0 0 0)}to{clip-path:inset(50% 0 50% 0)}}
+@keyframes enterSpl{from{clip-path:inset(50% 0 50% 0)}to{clip-path:inset(0 0 0 0)}}
+.slide.lv-fwd{animation:exitFwd .46s var(--ease) forwards;}
+.slide.en-fwd{animation:enterFwd .46s var(--ease) forwards;}
+.slide.lv-bwd{animation:exitBwd .46s var(--ease) forwards;}
+.slide.en-bwd{animation:enterBwd .46s var(--ease) forwards;}
+.slide.lv-spl{animation:exitSpl .52s var(--ease) forwards;}
+.slide.en-spl{animation:enterSpl .52s var(--ease) forwards;}
+
+/* ─── ANIMATED MESH GRADIENT ─── */
+.mesh-bg{position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse 60% 50% at 25% 35%,hsl(207,52%,18%) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 75% 70%,hsl(213,55%,12%) 0%,transparent 55%),hsl(218,32%,9%);
+  background-size:200% 200%;animation:meshDrift 14s ease-in-out infinite alternate;}
+@keyframes meshDrift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes meshDrift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+/* ─── ANIMATED SVG DIVIDER ─── */
+.s-div{position:relative;overflow:hidden;background:transparent;}
+.s-div::after{content:'';position:absolute;inset:0;background:var(--lime);transform:scaleX(0);transform-origin:left;transition:transform .65s var(--ease-b) .15s;}
+.s-div.in::after{transform:scaleX(1);}
+
+/* ─── WORD-SPLIT REVEAL ─── */
+.wo{display:inline-block;overflow:hidden;vertical-align:bottom;}
+.wi{display:inline-block;transform:translateY(108%) rotate(.3deg);opacity:0;transition:transform .68s var(--ease-b),opacity .42s;}
+.wi.in{transform:translateY(0) rotate(0);opacity:1;}
+
+/* ─── SCAN-LINE ─── */
+.scan-el{position:absolute;left:0;right:0;height:2px;z-index:20;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(147,217,17,.55) 28%,rgba(255,255,255,.95) 50%,rgba(147,217,17,.55) 72%,transparent);
+  animation:scanDown .7s ease-in-out forwards;}
+@keyframes scanDown{0%{top:-4px;opacity:0}6%{opacity:1}94%{opacity:.8}100%{top:100%;opacity:0}}
+
+/* ─── DISCUSSION TIMER ─── */
+#disc-timer{position:fixed;top:1.1rem;right:1.4rem;z-index:9997;width:56px;height:56px;border-radius:50%;display:none;align-items:center;justify-content:center;flex-direction:column;cursor:pointer;}
+#disc-timer.vis{display:flex;}
+#disc-timer svg{position:absolute;inset:0;transform:rotate(-90deg);}
+#dt-bg{fill:none;stroke:rgba(255,255,255,.08);stroke-width:3.5;}
+#dt-ring{fill:none;stroke:var(--lime);stroke-width:3.5;stroke-dasharray:150.8;stroke-dashoffset:0;stroke-linecap:round;transition:stroke .5s;}
+#dt-lbl{font-family:var(--display);font-size:.75rem;font-weight:700;color:var(--lime);line-height:1;z-index:1;letter-spacing:-.02em;}
+#dt-sub{font-size:.4rem;color:rgba(255,255,255,.3);z-index:1;text-transform:uppercase;letter-spacing:.08em;margin-top:.05rem;}
+
+/* ─── AI FLOATING PANEL ─── */
+#ai-fab{position:fixed;bottom:3.6rem;left:1.2rem;z-index:9996;width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--sky-dark),hsl(207,55%,22%));border:1.5px solid rgba(147,217,17,.3);cursor:pointer;display:none;align-items:center;justify-content:center;font-size:1.05rem;transition:all .3s var(--ease);box-shadow:0 4px 20px rgba(0,0,0,.45);}
+#ai-fab.vis{display:flex;}
+#ai-fab:hover{transform:scale(1.12);border-color:var(--lime);}
+#ai-fab .ai-ping{position:absolute;inset:-3px;border-radius:50%;border:1.5px solid rgba(147,217,17,.4);opacity:0;animation:aiPing 2.8s ease-in-out infinite;}
+@keyframes aiPing{0%,100%{transform:scale(1);opacity:.5}60%{transform:scale(1.3);opacity:0}}
+#ai-panel{position:fixed;bottom:5.8rem;left:1.2rem;z-index:9995;width:min(368px,calc(100vw - 2.4rem));background:hsl(218,32%,10%);border:1px solid rgba(255,255,255,.1);border-radius:16px;box-shadow:0 24px 64px rgba(0,0,0,.65);overflow:hidden;display:flex;flex-direction:column;max-height:430px;transform:translateY(14px) scale(.96);opacity:0;visibility:hidden;transition:all .38s var(--ease-b);}
+#ai-panel.open{transform:none;opacity:1;visibility:visible;}
+#ai-ph{padding:.85rem 1rem .65rem;display:flex;align-items:center;gap:.6rem;border-bottom:1px solid rgba(255,255,255,.07);flex-shrink:0;}
+#ai-ph-title{font-size:.68rem;font-weight:700;color:var(--lime);letter-spacing:.1em;text-transform:uppercase;flex:1;}
+#ai-ph-close{background:none;border:none;color:rgba(255,255,255,.36);cursor:pointer;font-size:.95rem;padding:.2rem;transition:color .2s;}
+#ai-ph-close:hover{color:#fff;}
+#ai-msgs{flex:1;overflow-y:auto;padding:.75rem 1rem;display:flex;flex-direction:column;gap:.65rem;scroll-behavior:smooth;}
+.ai-m{font-size:.76rem;line-height:1.68;border-radius:10px;padding:.6rem .85rem;max-width:94%;}
+.ai-m.u{background:rgba(147,217,17,.1);color:rgba(255,255,255,.82);align-self:flex-end;border:1px solid rgba(147,217,17,.18);}
+.ai-m.a{background:rgba(255,255,255,.055);color:rgba(255,255,255,.76);align-self:flex-start;border:1px solid rgba(255,255,255,.08);}
+.ai-m.t{color:rgba(255,255,255,.3);font-style:italic;align-self:flex-start;}
+.ai-m.t::after{content:'.';display:inline-block;animation:dots 1.1s steps(3,end) infinite;}
+@keyframes dots{0%{content:'.'}33%{content:'..'}66%{content:'...'}}
+#ai-ir{display:flex;gap:.5rem;padding:.65rem .75rem;border-top:1px solid rgba(255,255,255,.07);flex-shrink:0;}
+#ai-inp{flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:.48rem .72rem;color:rgba(255,255,255,.82);font-family:var(--body);font-size:.75rem;outline:none;}
+#ai-inp:focus{border-color:var(--lime);}
+#ai-inp::placeholder{color:rgba(255,255,255,.22);}
+#ai-go{width:32px;height:32px;border-radius:8px;background:var(--sky);border:none;cursor:pointer;color:#fff;font-size:.82rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s;}
+#ai-go:hover{background:var(--sky2);}
+#ai-go:disabled{opacity:.35;cursor:default;}
+
+/* ─── AI MODAL BUTTON ─── */
+#modal-ai-row{margin-top:.85rem;}
+#modal-ai-btn{display:inline-flex;align-items:center;gap:.45rem;padding:.42rem .95rem;border-radius:8px;background:linear-gradient(90deg,hsl(213,62%,11%),var(--sky));border:1px solid rgba(147,217,17,.28);color:var(--lime);font-size:.68rem;font-weight:700;cursor:pointer;transition:all .25s;font-family:var(--body);}
+#modal-ai-btn:hover{border-color:var(--lime);filter:brightness(1.1);}
+#modal-ai-btn:disabled{opacity:.4;cursor:default;}
+#modal-ai-resp{margin-top:.7rem;padding:.8rem 1rem;border-radius:10px;background:var(--sky-light);border-left:3px solid var(--sky);font-size:.8rem;color:var(--fg-med);line-height:1.72;display:none;}
+#modal-ai-resp.vis{display:block;}
+#modal-ai-resp strong{color:var(--sky);font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;display:block;margin-bottom:.35rem;}
+
+/* ─── PARTICLE BURST ─── */
+.bp{position:fixed;border-radius:50%;pointer-events:none;z-index:99998;animation:burstOut .9s ease-out forwards;}
+@keyframes burstOut{0%{transform:translate(-50%,-50%) scale(0);opacity:1;}100%{transform:translate(calc(-50% + var(--bx)),calc(-50% + var(--by))) scale(1);opacity:0;}}
+
+/* ─── DISCUSSION Q HIDDEN STATE ─── */
+.disc-q-block.q-hidden{opacity:0;transform:translateY(18px);pointer-events:none;transition:opacity .5s var(--ease),transform .5s var(--ease);}
+.disc-hint{font-size:.62rem;color:rgba(255,255,255,.22);text-align:center;letter-spacing:.06em;margin-top:-.5vh;}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}
+  .particle{display:none;}
+  .refl-em1,.refl-em2{animation:none!important;}
+  .refl-em2{-webkit-text-fill-color:var(--lime-d);background:none;}
+}
+
+/* ─── PART BADGE / NAV ─── */
+.part-badge{display:inline-flex;align-items:center;gap:.5rem;padding:.4rem 1rem;border-radius:50px;border:1px solid rgba(255,255,255,.15);margin-bottom:1.2rem;}
+.part-num{font-family:var(--display);font-size:1.1rem;font-weight:700;color:var(--lime);}
+.part-of{font-size:.65rem;color:rgba(255,255,255,.38);font-weight:600;letter-spacing:.1em;text-transform:uppercase;}
+.part-nav-strip{display:flex;align-items:center;justify-content:center;gap:.75rem;padding:.65rem 2rem;border-top:1px solid rgba(255,255,255,.07);flex-shrink:0;z-index:2;position:relative;}
+.pns-item{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.22);}
+.pns-item.active{color:var(--lime);}
+.pns-sep{font-size:.5rem;color:rgba(255,255,255,.12);}
+
+/* ─── LEVELS / LEVERS ─── */
+.levels-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.4vw;margin:2vh 0;}
+.level-card{border-radius:14px;padding:3vh 2.2vw;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);position:relative;overflow:hidden;transition:transform .35s var(--ease),background .3s;}
+.level-card:hover{transform:translateY(-5px);background:rgba(255,255,255,.09);}
+.level-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.level-card.lv1::before{background:var(--sky2);}
+.level-card.lv2::before{background:var(--lime);}
+.level-card.lv3::before{background:var(--gold);}
+.lv-num{font-family:var(--display);font-size:2.5rem;font-weight:700;color:rgba(255,255,255,.12);line-height:1;margin-bottom:.4rem;}
+.lv-title{font-family:var(--display);font-size:clamp(1rem,1.4vw,1.2rem);font-weight:700;color:var(--white);margin-bottom:.5rem;}
+.lv-body{font-size:clamp(.78rem,.98vw,.9rem);color:rgba(255,255,255,.58);line-height:1.6;}
+.lv-example{margin-top:1rem;padding:.55rem .8rem;border-radius:8px;background:rgba(255,255,255,.07);font-size:clamp(.7rem,.85vw,.78rem);color:rgba(255,255,255,.45);font-style:italic;}
+
+/* ─── 4 LEVERS ─── */
+.levers-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2vw;margin:2vh 0;}
+.lever-card{border-radius:14px;padding:2.8vh 1.8vw;text-align:center;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);transition:transform .3s var(--ease),box-shadow .3s;}
+.lever-card:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(0,0,0,.25);}
+.lever-icon{font-size:2rem;margin-bottom:.7rem;display:block;}
+.lever-word{font-family:var(--display);font-size:clamp(1.1rem,1.6vw,1.5rem);font-weight:700;margin-bottom:.5rem;}
+.lever-card.l-auto .lever-word{color:var(--red);}
+.lever-card.l-aug .lever-word{color:var(--lime);}
+.lever-card.l-acc .lever-word{color:var(--sky2);}
+.lever-card.l-act .lever-word{color:var(--gold);}
+.lever-body{font-size:clamp(.76rem,.95vw,.88rem);color:rgba(255,255,255,.55);line-height:1.55;}
+.lever-card.l-auto{border-color:rgba(192,57,43,.25);background:rgba(192,57,43,.07);}
+.lever-card.l-aug{border-color:rgba(147,217,17,.2);background:rgba(147,217,17,.06);}
+.lever-card.l-acc{border-color:rgba(57,120,168,.25);background:rgba(57,120,168,.07);}
+.lever-card.l-act{border-color:rgba(201,162,39,.25);background:rgba(201,162,39,.07);}
+
+/* ─── CONTEXT SANDWICH ─── */
+.sandwich{display:flex;flex-direction:column;gap:.7vh;max-width:680px;margin:2vh auto;}
+.sw-layer{border-radius:12px;padding:1.8vh 2.5vw;display:flex;align-items:center;gap:1.4rem;}
+.sw-layer.sw-top{background:rgba(147,217,17,.12);border:1px solid rgba(147,217,17,.25);}
+.sw-layer.sw-mid{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);flex-direction:column;text-align:center;padding:2.4vh 2.5vw;}
+.sw-layer.sw-bot{background:rgba(147,217,17,.12);border:1px solid rgba(147,217,17,.25);}
+.sw-label{font-size:.58rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;white-space:nowrap;}
+.sw-top .sw-label,.sw-bot .sw-label{color:var(--lime);}
+.sw-mid .sw-label{color:rgba(255,255,255,.4);margin-bottom:.4rem;}
+.sw-text{font-size:clamp(.82rem,1.05vw,.95rem);color:rgba(255,255,255,.75);line-height:1.55;}
+.sw-mid .sw-text{font-family:var(--display);font-size:clamp(1rem,1.4vw,1.2rem);color:var(--white);}
+
+/* ─── BITS ATOMS ─── */
+.ba-split{display:grid;grid-template-columns:1fr 1fr;gap:2vw;margin:2vh 0;}
+.ba-side{border-radius:14px;padding:3vh 2.5vw;}
+.ba-side.bits{background:rgba(57,120,168,.12);border:1px solid rgba(57,120,168,.25);}
+.ba-side.atoms{background:rgba(147,217,17,.08);border:1px solid rgba(147,217,17,.2);}
+.ba-tag{font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.6rem;}
+.bits .ba-tag{color:var(--sky2);}
+.atoms .ba-tag{color:var(--lime);}
+.ba-title{font-family:var(--display);font-size:clamp(1.1rem,1.6vw,1.4rem);font-weight:700;color:var(--white);margin-bottom:.8rem;}
+.ba-items{list-style:none;display:flex;flex-direction:column;gap:.6vh;}
+.ba-items li{font-size:clamp(.8rem,1vw,.9rem);color:rgba(255,255,255,.62);padding-left:1.2rem;position:relative;line-height:1.5;}
+.ba-items li::before{content:'';position:absolute;left:0;top:.6em;width:5px;height:5px;border-radius:50%;}
+.bits .ba-items li::before{background:var(--sky2);}
+.atoms .ba-items li::before{background:var(--lime);}
+
+/* ─── SACRED TASKS ─── */
+.sacred-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4vw;margin:2vh 0;}
+.sacred-card{border-radius:14px;padding:2.8vh 2vw;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);transition:transform .3s var(--ease),background .3s;}
+.sacred-card:hover{transform:translateY(-5px);background:rgba(255,255,255,.09);}
+.sc-sphere{font-size:.58rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--lime);margin-bottom:.5rem;}
+.sc-title{font-family:var(--display);font-size:clamp(.9rem,1.2vw,1.05rem);font-weight:700;color:var(--white);margin-bottom:.5rem;}
+.sc-body{font-size:clamp(.76rem,.92vw,.84rem);color:rgba(255,255,255,.55);line-height:1.55;}
+.sc-prompt{margin-top:.8rem;font-size:clamp(.7rem,.84vw,.78rem);color:var(--gold);font-style:italic;}
+
+/* ─── 5 DISCIPLINES ─── */
+.disc5-list{display:flex;flex-direction:column;gap:1.2vh;max-width:840px;margin:2vh 0;}
+.d5-item{display:grid;grid-template-columns:2.4rem 8rem 1fr;align-items:center;gap:1.4rem;padding:2vh 2vw;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);transition:background .3s;}
+.d5-item:hover{background:rgba(255,255,255,.09);}
+.d5-num{font-family:var(--display);font-size:1.5rem;font-weight:700;color:rgba(255,255,255,.15);text-align:center;}
+.d5-word{font-family:var(--display);font-size:clamp(1rem,1.3vw,1.15rem);font-weight:700;color:var(--white);}
+.d5-body{font-size:clamp(.78rem,.96vw,.88rem);color:rgba(255,255,255,.55);line-height:1.55;}
+.d5-item:nth-child(1) .d5-word{color:var(--sky2);}
+.d5-item:nth-child(2) .d5-word{color:var(--lime);}
+.d5-item:nth-child(3) .d5-word{color:var(--gold);}
+.d5-item:nth-child(4) .d5-word{color:var(--amber);}
+.d5-item:nth-child(5) .d5-word{color:hsl(290,60%,72%);}
+
+/* ─── COUNTER FORMATION ─── */
+.cf-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.4vw;margin:2vh 0;max-width:820px;}
+.cf-card{border-radius:14px;padding:2.8vh 2.2vw;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);transition:transform .35s var(--ease),background .3s;}
+.cf-card:hover{transform:translateY(-5px);background:rgba(255,255,255,.09);}
+.cf-icon{font-size:1.6rem;margin-bottom:.7rem;}
+.cf-title{font-family:var(--display);font-size:clamp(.95rem,1.3vw,1.15rem);font-weight:700;color:var(--white);margin-bottom:.5rem;}
+.cf-verse{font-size:.62rem;font-weight:700;letter-spacing:.1em;color:var(--lime);margin-bottom:.5rem;}
+.cf-body{font-size:clamp(.78rem,.96vw,.88rem);color:rgba(255,255,255,.58);line-height:1.6;}
+
+/* ─── BRIDGE ─── */
+.part-bridge{margin:2.5vh 0;}
+.bridge-btn{display:inline-flex;flex-direction:column;align-items:center;gap:.4rem;padding:1.1rem 2.4rem;border-radius:14px;background:linear-gradient(135deg,hsl(207,58%,22%),hsl(207,58%,30%));border:1.5px solid rgba(147,217,17,.3);color:var(--white);text-decoration:none;font-family:var(--body);font-size:1.05rem;font-weight:700;transition:all .3s var(--ease);}
+.bridge-btn:hover{background:linear-gradient(135deg,hsl(207,58%,28%),hsl(207,58%,36%));border-color:var(--lime);transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.4);}
+.bridge-btn span{font-size:.7rem;font-weight:600;color:var(--lime);letter-spacing:.08em;text-transform:uppercase;}
+
+@media(max-width:900px){
+  .levels-grid,.levers-grid,.sacred-grid,.cf-grid{grid-template-columns:1fr 1fr;}
+  .ba-split{grid-template-columns:1fr;}
+  .d5-item{grid-template-columns:2rem 1fr;}
+  .d5-body{display:none;}
+}
+
+</style>
+</head>
+<body>
+
+<div id="play-overlay">
+  <div class="po-hero">
+    <p class="po-eyebrow">Part 3 of 4 &nbsp;&middot;&nbsp; Tauranga &nbsp;&middot;&nbsp; May 2026</p>
+    <h1 class="po-title">A Framework For Leading<em>Practical tools grounded in what you now understand</em></h1>
+    <p class="po-sub">Session 03 of a half-day seminar. Complicated vs Complex, Three Levels, Four Levers, Context Sandwich, Bits vs Atoms, Sacred Tasks, Five Disciplines, Counter-Formation Practices, Seven Spheres. &nbsp; ~45 minutes.</p>
+    <button id="start-btn">Begin <span class="arr">→</span></button>
+  </div>
+  <div class="po-footer">
+    <p class="po-name">Nathaniel Baldock <span class="yr">· 2026</span></p>
+    <p class="po-tag">nathanielbaldock.com</p>
+  </div>
+</div>
+
+<div id="progress-bar"></div>
+<div id="video-overlay"><iframe id="video-player" src="" allow="autoplay;encrypted-media;fullscreen" allowfullscreen></iframe></div>
+<button id="skip-video">Skip &rarr;</button>
+<button class="arrow-btn" id="prev-btn">&#8249;</button>
+<button class="arrow-btn" id="next-btn">&#8250;</button>
+<div id="nav-bar"></div>
+<div id="slide-counter"></div>
+
+<div id="disc-timer">
+  <svg viewBox="0 0 56 56" width="56" height="56">
+    <circle id="dt-bg" cx="28" cy="28" r="24"/>
+    <circle id="dt-ring" cx="28" cy="28" r="24"/>
+  </svg>
+  <span id="dt-lbl">15:00</span>
+  <span id="dt-sub">left</span>
+</div>
+
+<button id="ai-fab" title="Ask Claude">✨<span class="ai-ping"></span></button>
+<div id="ai-panel">
+  <div id="ai-ph">
+    <span id="ai-ph-title">Ask Claude</span>
+    <span style="font-size:.6rem;color:rgba(255,255,255,.28);flex:1;text-align:right;margin-right:.5rem">Framework &amp; Seven Spheres · NZ</span>
+    <button id="ai-ph-close">✕</button>
+  </div>
+  <div id="ai-msgs">
+    <div class="ai-m a" style="font-style:italic;color:rgba(255,255,255,.4)">Ask anything about the framework, Sacred Tasks, or applying the Seven Spheres to your context in Tauranga NZ.</div>
+  </div>
+  <div id="ai-ir">
+    <input id="ai-inp" type="text" placeholder="Type a question for the room…" autocomplete="off">
+    <button id="ai-go">→</button>
+  </div>
+</div>
+
+<div id="modal-overlay">
+  <div id="modal-box">
+    <button id="modal-close">&times;</button>
+    <div id="modal-content">
+      <div id="modal-stat"></div>
+      <div id="modal-title"></div>
+      <div id="modal-body"></div>
+      <div id="modal-source"></div>
+      <div id="modal-link"></div>
+      <div id="modal-ai-row">
+        <button id="modal-ai-btn"><span>✨</span> Ask Claude about this for NZ leaders</button>
+        <div id="modal-ai-resp"></div>
+      </div>
+    </div>
+    <div id="modal-video-wrap" style="display:none;position:relative;width:100%;padding-bottom:56.25%;height:0"></div>
+  </div>
+</div>
+
+<div id="carousel-overlay">
+  <div id="carousel-box">
+    <button id="carousel-close">&times;</button>
+    <div id="carousel-title"></div>
+    <div id="carousel-body"></div>
+    <div class="carousel-nav">
+      <button id="car-prev">&larr; Previous</button>
+      <span class="carousel-counter" id="car-counter"></span>
+      <button id="car-next">Next &rarr;</button>
+    </div>
+  </div>
+</div>
+
+<div id="deck">
+
+<div class="slide active" id="slide-0">
+  <div class="slide-inner dark">
+    <div class="bg-img"><img class="slide-img" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1400&auto=format&fit=crop&q=80" alt="" decoding="async"><div class="ov"></div></div>
+    <div class="particles" id="hero-particles"></div>
+    <div class="s-body center">
+      <div class="part-badge anim fade-up d1"><span class="part-num">03</span><span class="part-of">of 04</span></div>
+      <h1 class="s-title xl anim fade-up d2" style="color:var(--white)" data-split="words">A Framework<br>For <span class="lime">Leading</span></h1>
+      <p class="anim fade-up d3" style="font-family:var(--display);font-style:italic;font-size:clamp(1rem,1.6vw,1.35rem);color:rgba(255,255,255,.5);margin-top:.4rem">Practical tools grounded in what you now understand</p>
+      <div class="s-div anim fade-up d4" style="margin:1.2rem auto"></div>
+      <p class="anim fade-up d5" style="font-size:clamp(.78rem,1vw,.88rem);color:rgba(255,255,255,.28)">Half-Day Seminar &middot; Tauranga &middot; May 2026 &middot; Nathaniel Baldock</p>
+    </div>
+    <div class="part-nav-strip">
+      <span class="pns-item">1 · The Ground</span><span class="pns-sep">→</span>
+      <span class="pns-item">2 · Formation</span><span class="pns-sep">→</span>
+      <span class="pns-item active">3 · Framework</span><span class="pns-sep">→</span>
+      <span class="pns-item">4 · Commission</span>
+    </div>
+    <div class="s-footer"><span></span><span style="color:rgba(255,255,255,.2)">Arrow keys or tap to navigate</span></div>
+  </div>
+</div>
+
+<div class="slide" data-session-div="3">
+  <div class="slide-inner session-div">
+    <div class="session-part-num">03</div>
+    <div class="session-div-body">
+      <div class="session-pill anim scale-up d1"><span class="dot"></span>Session 03 &middot; Part 3 of 4</div>
+      <div class="session-div-title anim fade-up d2" data-split="words">A Framework<br>For Leading</div>
+      <div class="session-div-desc anim fade-up d3">The tools land differently now. You understand what is at stake — formation, dignity, the apprenticeship pipeline, the frictionless trap. Now we build the practical response.</div>
+      <div class="session-time-badge anim fade-up d4">⏱ ~45 minutes &nbsp;&middot;&nbsp; Discussion at the close</div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span></span></div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="slide-inner warm">
+    <div class="s-body top">
+      <div class="eyebrow anim fade-up d1">The First Distinction — Dr. Arthur Brooks, Harvard</div>
+      <h2 class="s-title lg anim fade-up d2" data-split="words">AI solves complicated.<br>Leaders navigate <em>complex.</em></h2>
+      <div class="info-shift anim fade-up d3">
+        <div class="is-panel past">
+          <div class="is-label">Complicated</div>
+          <div class="is-title">Has a Solution</div>
+          <div class="is-desc">Many moving parts, but the right expertise applied correctly produces the right answer. A car engine. A tax return. A marketing funnel. A scheduling system.<br><br><strong>AI is extraordinary here.</strong> These tasks are being transferred to machines at high speed.</div>
+        </div>
+        <div class="is-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        <div class="is-panel future">
+          <div class="is-label">Complex</div>
+          <div class="is-title">Has No Solution — Only Navigation</div>
+          <div class="is-desc">Involves people with agency, competing values, unpredictable responses. A marriage. A congregation. A grieving team. A community in crisis.<br><br><strong>AI cannot navigate this.</strong> It requires formed humans. This is where leadership actually lives.</div>
+        </div>
+      </div>
+      <div class="callout amber anim fade-up d4">The more AI handles the complicated, the more your value as a leader is concentrated in the complex. This is not a threat to your role. It is a clarification of it — if you have done the formation work that Part 2 was about.</div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 03</span></div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="slide-inner dark2">
+    <div class="s-body top">
+      <div class="eyebrow anim fade-up d1">How to Engage — The Three Levels</div>
+      <h2 class="s-title lg anim fade-up d2" data-split="words">Most leaders are at Level 1.<br>The mission needs Level 3 thinking.</h2>
+      <div class="levels-grid anim fade-up d3">
+        <div class="level-card lv1" data-modal="three_levels">
+          <div class="lv-num">1</div>
+          <div class="lv-title">AI as Tool</div>
+          <div class="lv-body">Using specific AI applications to do defined tasks better. Point solutions for defined problems. You remain in control of every input and output.</div>
+          <div class="lv-example">ChatGPT for a first draft. Otter.ai for meeting notes. Canva AI for a graphic.</div>
+        </div>
+        <div class="level-card lv2" data-modal="three_levels">
+          <div class="lv-num">2</div>
+          <div class="lv-title">AI as Collaborator</div>
+          <div class="lv-body">Working with AI as a thinking partner that augments your output across a project or decision. The judgment is yours — the research, synthesis and drafting are shared.</div>
+          <div class="lv-example">Working through a strategic decision with AI analysis. Refining a teaching series with AI as an editorial partner.</div>
+        </div>
+        <div class="level-card lv3" data-modal="three_levels">
+          <div class="lv-num">3</div>
+          <div class="lv-title">AI as System</div>
+          <div class="lv-body">Designing workflows and organisations where AI handles defined streams autonomously, freeing people for the complex and sacred work that requires human presence.</div>
+          <div class="lv-example">An automated pastoral care follow-up pipeline. A self-updating communications calendar. An AI-driven content translation workflow.</div>
+        </div>
+      </div>
+      <div class="callout dark-call anim fade-up d4">Leaders who only operate at Level 1 will find themselves doing manual work alongside AI-native organisations. Leaders who jump to Level 3 without Level 2 wisdom will lose the formation awareness that makes Level 3 safe. The path is sequential.</div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 03</span></div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="slide-inner dark">
+    <div class="s-body top">
+      <div class="eyebrow anim fade-up d1">The Four Levers</div>
+      <h2 class="s-title lg anim fade-up d2" data-split="words">Not every task should<br>be automated. Know which<br>lever you are pulling.</h2>
+      <div class="levers-grid anim fade-up d3">
+        <div class="lever-card l-auto" data-modal="four_levers">
+          <span class="lever-icon">🤖</span>
+          <div class="lever-word">Automate</div>
+          <div class="lever-body">Hand off the task entirely. AI runs it without your involvement. For tasks where the outcome is defined, repeatable, and the struggle is not formative.</div>
+        </div>
+        <div class="lever-card l-aug" data-modal="four_levers">
+          <span class="lever-icon">🔍</span>
+          <div class="lever-word">Augment</div>
+          <div class="lever-body">Use AI to enhance your own thinking and output. You are still doing the work — better. The judgment, presence and relationships remain yours.</div>
+        </div>
+        <div class="lever-card l-acc" data-modal="four_levers">
+          <span class="lever-icon">⚡</span>
+          <div class="lever-word">Accelerate</div>
+          <div class="lever-body">Use AI to speed up existing processes without changing their fundamental nature. Faster research, faster synthesis, faster communication.</div>
+        </div>
+        <div class="lever-card l-act" data-modal="four_levers">
+          <span class="lever-icon">🚀</span>
+          <div class="lever-word">Activate</div>
+          <div class="lever-body">Use AI to unlock work you could not previously do at all. New mission capacity. The small team doing the work of a large one. The church that could never afford a communications director — now running one.</div>
+        </div>
+      </div>
+      <div class="callout dark-call anim fade-up d4">Most leaders default to Automate when their mission is best served by Activate. The tractor did not automate the farmer out of farming. It activated a new scale of mission that would have been impossible without it.</div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 03</span></div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="slide-inner warm">
+    <div class="s-body top">
+      <div class="eyebrow anim fade-up d1">Practical Skill &mdash; The Context Sandwich</div>
+      <h2 class="s-title lg anim fade-up d2" data-split="words">Generic prompts get<br>generic answers.</h2>
+      <div class="s-div anim fade-up d3"></div>
+      <p class="s-sub anim fade-up d4">The single most effective upgrade to your AI output requires no technical knowledge. It requires knowing your own context well enough to describe it clearly.</p>
+      <div class="sandwich anim fade-up d5">
+        <div class="sw-layer sw-top">
+          <div class="sw-label">Top Layer — Context</div>
+          <div class="sw-text">Who you are. Your role, your community, your values, your organisation. The more specific, the better the output.</div>
+        </div>
+        <div class="sw-layer sw-mid">
+          <div class="sw-label">Middle — The Task</div>
+          <div class="sw-text">The actual question, request or task. Clear and specific.</div>
+        </div>
+        <div class="sw-layer sw-bot">
+          <div class="sw-label">Bottom Layer — Constraints</div>
+          <div class="sw-text">Format, length, tone, what to avoid. "No jargon. 250 words. Warm, not corporate."</div>
+        </div>
+      </div>
+      <div class="callout lime anim fade-up d6" data-modal="context_sandwich">Without top and bottom layers, AI defaults to generic responses calibrated for an average user. With them, it responds as a well-briefed assistant who actually knows your context. This is the whole game. <span style="color:var(--sky2);font-size:.8em">Click for example →</span></div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 03</span></div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="slide-inner">
+    <div class="s-body top">
+      <div class="eyebrow anim fade-up d1">The Bits vs Atoms Framework</div>
+      <h2 class="s-title lg anim fade-up d2" data-split="words">AI lives in Bits.<br>Mission lives in Atoms.</h2>
+      <div class="ba-split anim fade-up d3">
+        <div class="ba-side bits" data-modal="bits_atoms">
+          <div class="ba-tag">Bits — Digital Domain</div>
+          <div class="ba-title">AI is extraordinary here</div>
+          <ul class="ba-items">
+            <li>Content, data, information, code</li>
+            <li>Analysis and synthesis</li>
+            <li>Communication and translation</li>
+            <li>Research and pattern-finding</li>
+            <li>Anything that can be digitised</li>
+          </ul>
+        </div>
+        <div class="ba-side atoms" data-modal="bits_atoms">
+          <div class="ba-tag">Atoms — Embodied Domain</div>
+          <div class="ba-title">AI cannot cross this line</div>
+          <ul class="ba-items">
+            <li>Your physical presence in a room</li>
+            <li>Tears at a funeral — real ones</li>
+            <li>A hand on a shoulder at the right moment</li>
+            <li>The trust built over ten years of showing up</li>
+            <li>The incarnational, embodied core of mission</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout lime anim fade-up d4">God chose atoms. The incarnation is the definitive statement that embodied presence matters. The Church's deepest calling is always an atoms calling. The strategic question: where are you accidentally treating atoms work like bits work — and losing what makes it powerful?</div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 03</span></div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="slide-inner dark2">
+    <div class="s-body top">
+      <div class="eyebrow anim fade-up d1">Exercise — What You Are Actually Protecting</div>
+      <h2 class="s-title lg anim fade-up d2" data-split="words">Sacred Tasks.<br>What must not<br>be delegated.</h2>
+      <div class="sacred-grid anim fade-up d3">
+        <div class="sacred-card" data-modal="sacred_tasks">
+          <div class="sc-sphere">The First Question</div>
+          <div class="sc-title">Does this task require a human being?</div>
+          <div class="sc-body">Some tasks genuinely need human judgment, empathy, or presence. Others simply have a human doing them out of habit.</div>
+          <div class="sc-prompt">If no → automate with confidence.</div>
+        </div>
+        <div class="sacred-card" data-modal="sacred_tasks">
+          <div class="sc-sphere">The Second Question</div>
+          <div class="sc-title">Does it require this specific human — you?</div>
+          <div class="sc-body">Your history, your relationships, your calling in this community. Some tasks could be done by anyone with the right skill — others require you specifically.</div>
+          <div class="sc-prompt">If no → delegate or systematise.</div>
+        </div>
+        <div class="sacred-card" data-modal="sacred_tasks">
+          <div class="sc-sphere">The Third Question</div>
+          <div class="sc-title">Is the struggle part of the formation?</div>
+          <div class="sc-body">Is doing this task — wrestling with it — forming you or the people you serve? The difficulty might be the point. Not all struggle should be removed.</div>
+          <div class="sc-prompt">If yes → protect it. This is Sacred.</div>
+        </div>
+      </div>
+      <div class="callout dark-call anim fade-up d4">Most leaders find roughly 20% of their tasks are genuinely Sacred — and that they spend far too much time on the other 80%. The exercise clarifies fast. And it removes the guilt from handing off everything else.</div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 03</span></div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="slide-inner dark">
+    <div class="s-body top">
+      <div class="eyebrow anim fade-up d1">The Leadership Framework — Five Disciplines</div>
+      <h2 class="s-title lg anim fade-up d2" data-split="words">Five disciplines for<br>leading <span class="lime">through</span> this.</h2>
+      <div class="disc5-list anim fade-up d3">
+        <div class="d5-item" data-modal="five_disciplines"><div class="d5-num">1</div><div class="d5-word">Discernment</div><div class="d5-body">Ask the formation question before the efficiency question. What is this tool training the people in my sphere to desire? Is that what I want them to desire?</div></div>
+        <div class="d5-item" data-modal="five_disciplines"><div class="d5-num">2</div><div class="d5-word">Dignity</div><div class="d5-body">Treat every person in your sphere as an image-bearer, not an optimisation target. Their worth does not depend on what AI can or cannot do better than them.</div></div>
+        <div class="d5-item" data-modal="five_disciplines"><div class="d5-num">3</div><div class="d5-word">Design</div><div class="d5-body">Build systems and workflows that use AI without deforming the people inside them. Protect the formation pipeline. Know which tasks are Sacred before you automate them.</div></div>
+        <div class="d5-item" data-modal="five_disciplines"><div class="d5-num">4</div><div class="d5-word">Discipleship</div><div class="d5-body">Actively form the next generation of leaders in the habits AI cannot replicate: truthfulness, presence, embodied love, the ability to sit with the unresolvable.</div></div>
+        <div class="d5-item" data-modal="five_disciplines"><div class="d5-num">5</div><div class="d5-word">Mission</div><div class="d5-body">Use AI to extend the reach of the mission — translation, content, admin, research — without replacing the human core of it. Activate, don't amputate.</div></div>
+      </div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 03</span></div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="slide-inner warm">
+    <div class="s-body top">
+      <div class="eyebrow anim fade-up d1">Counter-Formation Practices</div>
+      <h2 class="s-title lg anim fade-up d2" data-split="words">The disciplines that<br>form what AI cannot.</h2>
+      <div class="cf-grid anim fade-up d3">
+        <div class="cf-card" data-modal="sabbath_practice">
+          <div class="cf-icon">🌿</div>
+          <div class="cf-verse">Exodus 20:8-11 &mdash; Sabbath</div>
+          <div class="cf-title">Sabbath as Resistance</div>
+          <div class="cf-body">A weekly declaration that the world does not require your constant productivity to hold together. In an always-on culture, Sabbath is the most countercultural thing you can do. It trains the posture of dependence that AI culture most wants to dissolve.</div>
+        </div>
+        <div class="cf-card" data-modal="embodiment">
+          <div class="cf-icon">🤝</div>
+          <div class="cf-verse">John 1:14 &mdash; Incarnation</div>
+          <div class="cf-title">Embodiment as Theology</div>
+          <div class="cf-body">God became flesh. Physical presence matters. In a world of infinite disembodied interaction, showing up in person — sharing a meal, sitting in silence — is not pastoral niceness. It is a theological act.</div>
+        </div>
+        <div class="cf-card" data-modal="truthfulness">
+          <div class="cf-icon">🪞</div>
+          <div class="cf-verse">Proverbs 27:17 &mdash; Honest witness</div>
+          <div class="cf-title">Truthfulness as Currency</div>
+          <div class="cf-body">Sycophantic AI tells people what they want to hear. The counter-formation practice is the commitment to say the thing that costs something, to name what is real. In a world of AI flattery, genuine honesty is the rarest currency.</div>
+        </div>
+        <div class="cf-card" data-modal="apprenticeship_cf">
+          <div class="cf-icon">🧑‍🏫</div>
+          <div class="cf-verse">Matthew 28:19 &mdash; Make disciples</div>
+          <div class="cf-title">Apprenticeship as Mission</div>
+          <div class="cf-body">Protect the formation pipeline. Identify which entry-level tasks are formative rather than merely productive. Deliberately keep them in human hands. The Great Commission is the original counter-formation strategy.</div>
+        </div>
+      </div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 03</span></div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="slide-inner dark2">
+    <div class="s-body top">
+      <div class="eyebrow anim fade-up d1">The Seven Spheres &mdash; David Hamilton</div>
+      <h2 class="s-title lg anim fade-up d2" data-split="words">AI enters every sphere<br>simultaneously.</h2>
+      <div class="s-div anim fade-up d3"></div>
+      <p class="s-sub anim fade-up d4">The Seven Spheres of Society framework prevents AI from being evaluated only in economic terms. Each sphere has its own formation question. Each sphere is being entered right now.</p>
+      <div class="stat-row anim fade-up d5" style="max-width:860px">
+        <div class="stat-card dark-stat" data-modal="seven_spheres"><div class="s-num" style="font-size:1.4rem">Family</div><div class="s-label">AI companions targeting the intimacy hunger of isolated people</div></div>
+        <div class="stat-card dark-stat" data-modal="seven_spheres"><div class="s-num" style="font-size:1.4rem">Economics</div><div class="s-label">AI displacing entry-level workers, concentrating economic power</div></div>
+        <div class="stat-card dark-stat" data-modal="seven_spheres"><div class="s-num" style="font-size:1.4rem">Government</div><div class="s-label">AI surveillance, deepfakes, political manipulation at scale</div></div>
+        <div class="stat-card dark-stat" data-modal="seven_spheres"><div class="s-num" style="font-size:1.4rem">Religion</div><div class="s-label">1 in 3 adults trust AI spiritual advice as much as a pastor</div></div>
+        <div class="stat-card dark-stat" data-modal="seven_spheres"><div class="s-num" style="font-size:1.4rem">Education</div><div class="s-label">AI tutors available to every child — and forming every child</div></div>
+        <div class="stat-card dark-stat" data-modal="seven_spheres"><div class="s-num" style="font-size:1.4rem">Media</div><div class="s-label">AI generating the majority of online content — truth and lies at equal scale</div></div>
+        <div class="stat-card dark-stat" data-modal="seven_spheres"><div class="s-num" style="font-size:1.4rem">Arts</div><div class="s-label">AI-generated creativity democratised and devalued simultaneously</div></div>
+      </div>
+      <div class="callout dark-call anim fade-up d6" style="max-width:800px">Each sphere asks the same formation question: <strong>what is AI training the people in this sphere to desire — and is that what God intends for them?</strong></div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 03 &mdash; David Hamilton, <em>God Revealed Through the Spheres</em> (2014)</span></div>
+  </div>
+</div>
+
+<div class="slide" data-disc-mins="15">
+  <div class="slide-inner dark">
+    <div class="bg-img"><img class="slide-img" src="https://images.unsplash.com/photo-1573497491765-dccce02b29df?w=960&auto=format&fit=crop&q=80" alt="" decoding="async"><div class="ov-dk"></div></div>
+    <div class="disc-body">
+      <div class="disc-header anim fade-up d1"><div class="disc-title">Discussion</div><div class="disc-time">15 Minutes</div></div>
+      <div class="disc-questions">
+        <div class="disc-q-block"><div class="disc-audience">For Everyone</div><div class="disc-q-text">Work through the Sacred Tasks exercise for your own role. What is on your list that genuinely answers yes to all three questions? And what have you been spending time on that you can now, with a clear conscience, hand off?</div></div>
+        <div class="disc-q-block"><div class="disc-audience amber">For Pastors &amp; Church Leaders</div><div class="disc-q-text">Which of the four counter-formation practices — Sabbath, Embodiment, Truthfulness, Apprenticeship — is most countercultural for your congregation right now? What would it look like to build one of them into your community's rhythms before the end of this year?</div></div>
+        <div class="disc-q-block"><div class="disc-audience blue">For Business Leaders</div><div class="disc-q-text">Which of the Seven Spheres is your organisation touching — and what is the formation question that sphere is asking of the people inside it? Name it specifically. Not generically.</div></div>
+      </div>
+      <p class="disc-hint anim fade-up d6">Press space or arrow to reveal each question</p>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Discussion 03</span></div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="slide-inner dark" style="background:radial-gradient(ellipse at 30% 40%,hsl(213,52%,12%) 0%,hsl(218,38%,7%) 60%)">
+    <div class="s-body center">
+      <div class="eyebrow anim fade-up d1" style="color:var(--lime)">Part 3 Complete</div>
+      <h2 class="s-title lg anim fade-up d2" style="color:var(--white);text-align:center" data-split="words">You have the framework.<br>One part left: <em>what you do<br>with it from Monday.</em></h2>
+      <div class="s-div anim fade-up d3" style="margin:.8rem auto 1.6rem"></div>
+      <p class="s-sub anim fade-up d4" style="text-align:center;max-width:600px">Part 4 moves from framework to commission. The 90-Day Plan, the city-wide strategy, the Great Commission in the age of AI — and the three-part charge that closes the seminar.</p>
+      <div class="part-bridge anim fade-up d5">
+        <a href="Part4_The_City_Wide_Strategy.html" class="bridge-btn">Continue to Part 4 &rarr;<span>The City-Wide Strategy</span></a>
+      </div>
+    </div>
+    <div class="s-footer"><span>Nathaniel Baldock &middot; nathanielbaldock.com</span><span></span></div>
+  </div>
+</div>
+</div>
+
+<script>
+
+const MD={
+  complicated_complex:{stat:"Complexity",title:"Complicated vs Complex — Arthur Brooks",body:"Arthur Brooks uses this distinction at the AI Advantage Summit 2026. Complicated problems (like a car engine) can be solved with the right expertise applied correctly. Complex problems (like a marriage, a community, an organisation) cannot be solved — they can only be navigated. They involve people with agency, competing values, and unpredictable responses. AI can handle complicated problems extremely well. Complex problems still require human judgment — specifically, the kind formed by experience, relationship, and character. This distinction is the practical hinge between Parts 2 and 3.",source:"Dr. Arthur Brooks, Harvard, AI Advantage Summit 2026",link:""},
+  three_levels:{stat:"3 Levels",title:"The Three Levels of AI Engagement",body:"Level 1: AI as Tool — using specific AI applications to do defined tasks better. Level 2: AI as Collaborator — working with AI as a thinking partner that augments your output. Level 3: AI as System — designing workflows and organisations where AI handles defined streams autonomously. Most leaders are at Level 1. Leaders who want to remain effective need a deliberate strategy for Levels 2 and 3, with clear theological and ethical guardrails for each.",source:"Nathaniel Baldock, AI Consulting Framework, 2026",link:""},
+  four_levers:{stat:"4 Levers",title:"The Four Levers: Automate, Augment, Accelerate, Activate",body:"Automate: hand off the task entirely — AI runs it without your involvement. Augment: use AI to enhance your own thinking and output — you are still doing the work, better. Accelerate: use AI to speed up existing processes without changing their fundamental nature. Activate: use AI to unlock work you could not previously do at all — new mission capacity. The key insight: most leaders default to Automate when their mission is better served by Activate. The tractor example: it did not automate the farmer out of farming. It activated a new scale of output that served the same mission.",source:"Nathaniel Baldock, AI Consulting Framework, 2026 — drawing on GRD V2 teaching",link:""},
+  context_sandwich:{stat:"Context",title:"The Context Sandwich",body:"The Context Sandwich is a prompt architecture for getting high-quality, specific output from AI. Top layer: who you are and your context (your role, your community, your values, your organisation). Middle layer: the task or question. Bottom layer: constraints (format, length, tone, what to avoid). Without the top and bottom layers, AI defaults to generic responses calibrated for an average user. With them, it responds as a well-briefed assistant who knows your context. [Insert specific truthful example from your own AI consulting work with a YWAM or church context here.]",source:"Nathaniel Baldock, AI Consulting Framework, 2026",link:""},
+  bits_atoms:{stat:"Bits/Atoms",title:"Bits vs Atoms",body:"Bits: the digital domain — content, data, information, code, analysis, communication. AI can handle bits with extraordinary speed and quality. Atoms: the physical, embodied domain — your presence in a room, your handshake, your tears at a funeral, your willingness to sit with someone in their worst hour. AI cannot cross into atoms. It cannot show up. The mission of the Church is, at its deepest level, always an atoms mission — incarnational, embodied, present. The strategy question for every Christian leader: where in your mission are you treating atoms tasks like bits tasks and losing the thing that makes them powerful?",source:"Nathaniel Baldock, AI Consulting Framework, 2026 — drawing on Arthur Brooks, AI Advantage Summit 2026",link:""},
+  sacred_tasks:{stat:"Sacred",title:"The Sacred Tasks Exercise",body:"The Sacred Tasks exercise asks three questions about every significant task in your role. First: does this task require a human being to do it? Second: does it require this specific human being — you, with your particular history, relationships, and calling? Third: is the struggle of doing it part of the formation process for you or the people you serve? Tasks that answer yes to all three are Sacred Tasks — they must not be delegated to AI, because doing so loses something irreplaceable. The exercise is not about resisting AI. It is about clarity: knowing what you are protecting and why, so that everything else can be handed off with confidence.",source:"Nathaniel Baldock, AI Consulting Framework, 2026",link:""},
+  five_disciplines:{stat:"5",title:"The Five Disciplines for AI Leadership",body:"Discernment: asking the formation question before the efficiency question. Dignity: treating every person in your sphere as an image-bearer, not an optimisation target. Design: building systems and workflows that use AI without deforming the people inside them. Discipleship: actively forming the next generation of leaders in the habits that AI cannot replicate. Mission: using AI to extend the reach of the mission rather than to replace the human core of it.",source:"Nathaniel Baldock, AI and Discipleship Framework, 2026",link:""},
+  sabbath_practice:{stat:"Sabbath",title:"Sabbath as Counter-Formation",body:"Sabbath is not simply rest. It is a weekly declaration that the world does not require your constant productivity to hold together. In an age of always-on AI, always-available tools and infinite content, Sabbath is the most countercultural spiritual practice available to a Christian leader. It is not a productivity hack. It is a theological statement about who is actually in charge. Dallas Willard taught that spiritual disciplines are not ways of earning God's favour — they are ways of training the body and the will to respond to grace. Sabbath trains us for the posture of dependence that AI culture most wants to dissolve.",source:"Dallas Willard, The Spirit of the Disciplines (1988); John Mark Comer, The Ruthless Elimination of Hurry (2019)",link:""},
+  embodiment:{stat:"Embodied",title:"Embodiment as Counter-Formation",body:"The Christian claim is incarnational — God became flesh. The body matters. Physical presence matters. In a world where AI offers infinite disembodied interaction, the counter-formation practice of deliberate embodiment — showing up in person, sharing a meal, sitting with someone in silence — is not just pastoral niceness. It is a theological act. It is the enactment of the belief that the atoms domain is the domain God chose to inhabit.",source:"Andy Crouch, The Life We're Looking For (2022); theological framework: imago Dei and incarnation",link:""},
+  truthfulness:{stat:"Truth",title:"Truthfulness as Counter-Formation",body:"Sycophantic AI tells you what you want to hear. This is not a bug — it is, in many implementations, a feature designed to maximise engagement. The counter-formation practice is truthfulness: the commitment to say the thing that costs something, to receive feedback that is uncomfortable, to name what is real rather than what is flattering. In a world where AI companions optimise for your approval, the leader who tells the truth and the community that can receive it become extraordinarily rare and extraordinarily valuable.",source:"Cheng et al., Stanford/CMU, 2025; Andy Crouch, The Life We're Looking For (2022)",link:""},
+  apprenticeship_cf:{stat:"Apprentice",title:"Apprenticeship as Counter-Formation",body:"The response to the Apprenticeship Crisis is not to lament it — it is to deliberately protect the formation pipeline. This means identifying which entry-level tasks in your organisation are formative rather than merely productive, and protecting them from automation. It means intentionally creating mentored learning contexts where junior people get to struggle under senior oversight. It means valuing the person being formed more than the efficiency of the output. The church has always known this. It is called discipleship.",source:"Brynjolfsson, Chandar & Chen, Stanford Digital Economy Lab, August 2025; Matthew 28:18-20",link:""},
+  wef_jobs:{stat:"WEF",title:"WEF Future of Jobs 2025",body:"The World Economic Forum's Future of Jobs Report 2025 projects 92 million roles displaced and 170 million new roles created by 2030 — a net positive of 78 million jobs globally. 41% of employers plan to reduce their workforce in areas where AI can automate tasks. 40% of the global workforce will need to reskill within three years. The key insight for Christian leaders: the disruption falls hardest on those with the least capital and fewest options. This is a social justice concern, not only an economic one.",source:"World Economic Forum, Future of Jobs Report 2025",link:"https://www.weforum.org/publications/the-future-of-jobs-report-2025/"},
+  seven_spheres:{stat:"7 Spheres",title:"The Seven Spheres of Society",body:"The Seven Spheres of Society (David Hamilton, God Revealed Through the Spheres, 2014) are: Family, Economics, Government, Religion, Education, Communication, and Celebration. Each sphere operates according to God-given principles that, when followed, produce human flourishing. When distorted by idolatry, they produce harm. AI is not sphere-neutral — it enters every sphere simultaneously, accelerating both the good and the distorted. The framework's value for leaders is that it prevents AI from being evaluated only in economic terms. The formation question applies in every sphere: what is AI training the people in this sphere to desire?",source:"David Hamilton, God Revealed Through the Spheres (2014); developed by Landa Cope, Darrow Miller, Darlene Cunningham",link:""}
+};
+
+const carouselItems=[
+  {title:"The Four Levers in Practice",body:"Automate: the admin assistant who sets up meeting scheduling, manages inbox filtering, and processes routine reports. Time reclaimed: 6-8 hours per week.\n\nAugment: the pastor who uses AI to research a sermon — but who still prays through it, still brings their own experience, still delivers it to people they know. The sermon is theirs.\n\nAccelerate: the nonprofit that uses AI translation to distribute a single piece of curriculum into 12 languages in a week rather than three years.\n\nActivate: the small church in rural New Zealand that could never afford a communications team — now running a genuinely excellent digital presence because one person with AI tools has the capability of three."},
+  {title:"The Context Sandwich — Example",body:"Without context:\nUser: 'Write a parent newsletter about screen time.'\nResult: Generic, could be from any organisation.\n\nWith Context Sandwich:\nTop layer: 'I'm a school principal in Tauranga, NZ. Our community is mostly working families, Pacific Island and Maori backgrounds. We have a digital wellbeing policy and I want to build trust, not create alarm.'\nMiddle: 'Write a parent newsletter about screen time and AI.'\nBottom: 'Warm, accessible tone. 250 words. No jargon. End with one practical family suggestion.'\nResult: Something that actually sounds like you, speaks to your people, and could be sent tomorrow."},
+  {title:"Sacred Tasks — Working Example",body:"Task: Visiting a family in the hospital.\nRequires a human? Yes — presence and tears cannot be simulated.\nRequires this specific human? Yes — you have history with this family.\nIs the struggle formative? Yes — for you and for them.\n→ Sacred. Do not delegate.\n\nTask: Preparing the building usage schedule for next quarter.\nRequires a human? Arguably not.\nRequires this specific human? No.\nIs the struggle formative? No.\n→ Not Sacred. Automate with confidence.\n\nThe exercise clarifies fast. Most leaders find that only about 20% of their tasks are genuinely Sacred — and that they spend far too much time on the other 80%."},
+  {title:"The Seven Spheres and AI",body:"Family: AI companions targeting the intimacy hunger of isolated people. Formation question: what are we training our families to desire from relationship?\n\nEconomics: AI displacing entry-level workers, concentrating economic power. Formation question: what obligations does this create for those with more capital and options?\n\nGovernment: AI surveillance, deepfakes, political manipulation. Formation question: what is being done to truth itself as the foundation of civic life?\n\nReligion: 1 in 3 adults trust AI spiritual advice as much as a pastor. Formation question: what is the Church offering that AI genuinely cannot replicate?\n\nEach sphere is being entered simultaneously. The response cannot be sector-by-sector. It must be whole-of-life."}
+];
+
+// CAROUSEL
+let carIdx=0;
+function showCar(i){carIdx=i;document.getElementById('carousel-title').textContent=carouselItems[i].title;const b=document.getElementById('carousel-body');b.textContent=carouselItems[i].body;b.style.whiteSpace='pre-line';document.getElementById('car-counter').textContent=(i+1)+' of '+carouselItems.length;document.getElementById('car-prev').disabled=i===0;document.getElementById('car-next').disabled=i===carouselItems.length-1;}
+document.getElementById('carousel-trigger')?.addEventListener('click',()=>{showCar(0);document.getElementById('carousel-overlay').classList.add('open');});
+document.getElementById('car-prev').addEventListener('click',()=>{if(carIdx>0)showCar(carIdx-1);});
+document.getElementById('car-next').addEventListener('click',()=>{if(carIdx<carouselItems.length-1)showCar(carIdx+1);});
+document.getElementById('carousel-close').addEventListener('click',()=>document.getElementById('carousel-overlay').classList.remove('open'));
+document.getElementById('carousel-overlay').addEventListener('click',e=>{if(e.target===document.getElementById('carousel-overlay'))document.getElementById('carousel-overlay').classList.remove('open');});
+
+// THEME
+(function(){const k=['default','nocturne','editorial'],s=localStorage.getItem('deckTheme');if(s&&k.includes(s))document.documentElement.setAttribute('data-theme',s);})();
+
+// WORD-SPLIT
+function initSplit(el){
+  if(el.dataset.splitDone)return;el.dataset.splitDone='1';
+  const orig=el.innerHTML;
+  // tokenise preserving HTML tags and whitespace
+  const tokens=orig.split(/(<[^>]+>)/);
+  let out='';
+  tokens.forEach(tok=>{
+    if(tok.startsWith('<')){out+=tok;}
+    else{tok.split(/(\s+)/).forEach(w=>{if(/\S/.test(w)){out+=`<span class="wo"><span class="wi">${w}</span></span>`;}else{out+=w;}});}
+  });
+  el.innerHTML=out;
+}
+function revealSplit(container){
+  container.querySelectorAll('[data-split]').forEach(el=>{
+    initSplit(el);
+    el.querySelectorAll('.wi').forEach((w,i)=>{w.style.transitionDelay=`${i*0.065+0.04}s`;w.classList.add('in');});
+  });
+}
+
+// SCAN-LINE
+function fireScanLine(slide){
+  const si=slide.querySelector('.slide-inner');if(!si)return;
+  const el=document.createElement('div');el.className='scan-el';si.appendChild(el);
+  setTimeout(()=>el.remove(),900);
+}
+
+// MESH GRADIENT - add to dark slides without bg-img
+document.querySelectorAll('.slide-inner.dark,.slide-inner.dark2,.slide-inner.session-div').forEach(el=>{
+  if(!el.querySelector('.bg-img')&&!el.querySelector('.mesh-bg')){
+    const m=document.createElement('div');m.className='mesh-bg';el.insertBefore(m,el.firstChild);
+  }
+});
+
+// DISCUSSION Q REVEAL
+const discState={};
+function initDiscSlide(slide,idx){
+  discState[idx]=0;
+  slide.querySelectorAll('.disc-q-block').forEach(q=>q.classList.add('q-hidden'));
+  const mins=parseInt(slide.dataset.discMins||'25');
+  startTimer(mins);
+  // Add hint if missing
+  const dq=slide.querySelector('.disc-questions');
+  if(dq&&!slide.querySelector('.disc-hint')){
+    const h=document.createElement('p');h.className='disc-hint';h.textContent='Press space or → to reveal each question';
+    dq.after(h);
+  }
+}
+function revealNextQ(idx){
+  const slide=slides[idx];
+  const qs=[...slide.querySelectorAll('.disc-q-block')];
+  const n=discState[idx]||0;
+  if(n<qs.length){qs[n].classList.remove('q-hidden');discState[idx]=n+1;return true;}
+  return false;
+}
+
+// TIMER
+let timerIv=null,timerTotal=0,timerLeft=0;
+const dtEl=document.getElementById('disc-timer'),dtRing=document.getElementById('dt-ring'),dtLbl=document.getElementById('dt-lbl');
+const CIRC=150.8;
+function startTimer(mins){
+  clearInterval(timerIv);timerTotal=mins*60;timerLeft=timerTotal;
+  dtEl.classList.add('vis');dtRing.style.stroke='var(--lime)';dtRing.style.strokeDashoffset='0';dtLbl.style.color='var(--lime)';fmt();
+  timerIv=setInterval(()=>{
+    timerLeft=Math.max(0,timerLeft-1);
+    const p=(timerTotal-timerLeft)/timerTotal;
+    dtRing.style.strokeDashoffset=CIRC*p;
+    if(timerLeft<120){dtRing.style.stroke='var(--red)';dtLbl.style.color='var(--red)';}
+    else if(timerLeft<300){dtRing.style.stroke='var(--amber)';dtLbl.style.color='var(--amber)';}
+    fmt();if(timerLeft===0)clearInterval(timerIv);
+  },1000);
+}
+function stopTimer(){clearInterval(timerIv);dtEl.classList.remove('vis');}
+function fmt(){const m=Math.floor(timerLeft/60),s=timerLeft%60;dtLbl.textContent=`${m}:${String(s).padStart(2,'0')}`;}
+let timerPaused=false;
+dtEl.addEventListener('click',()=>{
+  if(timerIv){clearInterval(timerIv);timerIv=null;timerPaused=true;}
+  else if(timerPaused){timerIv=setInterval(()=>{timerLeft=Math.max(0,timerLeft-1);const p=(timerTotal-timerLeft)/timerTotal;dtRing.style.strokeDashoffset=CIRC*p;fmt();if(timerLeft===0)clearInterval(timerIv);},1000);timerPaused=false;}
+});
+
+// PARTICLE BURST
+function burstParticles(){
+  const cx=window.innerWidth/2,cy=window.innerHeight*0.4;
+  const cols=['#93d911','#1e8a5a','#C9A227','rgba(255,255,255,.7)'];
+  for(let i=0;i<18;i++){
+    const el=document.createElement('div');el.className='bp';
+    const a=Math.random()*Math.PI*2,d=70+Math.random()*220;
+    const s=4+Math.random()*9;
+    el.style.cssText=`left:${cx}px;top:${cy}px;width:${s}px;height:${s}px;background:${cols[Math.floor(Math.random()*cols.length)]};--bx:${Math.cos(a)*d}px;--by:${Math.sin(a)*d}px;`;
+    document.body.appendChild(el);setTimeout(()=>el.remove(),950);
+  }
+}
+
+// SCRAMBLE COUNT-UP
+function animCounts(s){
+  s.querySelectorAll('.count-up').forEach(el=>{
+    if(el.dataset.counted)return;el.dataset.counted='1';
+    const target=parseFloat(el.dataset.target),suffix=el.dataset.suffix||'',dc=parseInt(el.dataset.decimals)||0,sep=el.dataset.separator===',';
+    const digits=Math.max(String(Math.round(Math.abs(target))).length,1);
+    let frame=0;const SCRAM=16;
+    function step(){
+      if(frame<SCRAM){
+        const r=Math.floor(Math.random()*Math.pow(10,digits));
+        el.textContent=String(r).slice(0,digits)+suffix;frame++;setTimeout(step,30);
+      } else {
+        const st=performance.now(),dur=1100;
+        function ease(x){return x===1?1:1-Math.pow(2,-10*x);}
+        (function tick(now){const p=Math.min((now-st)/dur,1);let v=target*ease(p);v=dc>0?v.toFixed(dc):Math.floor(v);if(sep)v=Number(v).toLocaleString();el.textContent=v+suffix;if(p<1)requestAnimationFrame(tick);})(performance.now());
+      }
+    }
+    setTimeout(step,100);
+  });
+}
+
+function animCharts(s){
+  s.querySelectorAll('.hbar').forEach((r,i)=>setTimeout(()=>{const f=r.querySelector('.hbar-fill');f.style.width=r.dataset.w+'%';const sp=f.querySelector('span');if(sp)sp.style.opacity='1';},i*120));
+  s.querySelectorAll('.vbar-col').forEach((c,i)=>setTimeout(()=>{c.querySelector('.vbar').style.height=c.dataset.h+'%';c.querySelector('.vbar-val').style.opacity='1';},i*160));
+}
+
+// TRANSITION ENGINE
+let cur=0,trans=false,started=false;
+const slides=document.querySelectorAll('.slide'),total=slides.length;
+const SESSION_DIVS=new Set([...slides].map((s,i)=>s.dataset.sessionDiv?i:-1).filter(i=>i>=0));
+const DISC_SLIDES=new Set([...slides].map((s,i)=>s.dataset.discMins?i:-1).filter(i=>i>=0));
+const POS_IDX=[...slides].findIndex(s=>s.dataset.positive);
+
+function syncA11y(){slides.forEach((s,i)=>s.setAttribute('aria-hidden',!started||i!==cur?'true':'false'));}
+
+function triggerEntrance(slide,idx){
+  slide.querySelectorAll('.anim').forEach(e=>e.classList.add('in'));
+  animCharts(slide);animCounts(slide);revealSplit(slide);
+  if(DISC_SLIDES.has(idx))initDiscSlide(slide,idx);
+  else stopTimer();
+  if(idx===POS_IDX)setTimeout(burstParticles,750);
+}
+
+function go(n){
+  if(!started||trans||n<0||n>=total)return;
+  if(DISC_SLIDES.has(cur)&&n>cur){if(revealNextQ(cur))return;}
+  if(n===cur)return;
+  trans=true;
+  const dir=n>cur?1:-1,out=slides[cur],inn=slides[n];
+  const spl=SESSION_DIVS.has(n)||SESSION_DIVS.has(cur);
+  const DUR=spl?530:460;
+  out.querySelectorAll('.anim.in').forEach(e=>e.classList.remove('in'));
+  out.querySelectorAll('.wi.in').forEach(e=>e.classList.remove('in'));
+  out.querySelectorAll('.s-div.in').forEach(e=>e.classList.remove('in'));
+  inn.classList.add('tx-in');
+  requestAnimationFrame(()=>{
+    out.classList.add(spl?'lv-spl':(dir>0?'lv-fwd':'lv-bwd'));
+    inn.classList.add(spl?'en-spl':(dir>0?'en-fwd':'en-bwd'));
+    if(SESSION_DIVS.has(n))setTimeout(()=>fireScanLine(inn),DUR*0.72);
+    setTimeout(()=>{
+      out.classList.remove('active','lv-fwd','lv-bwd','lv-spl');
+      inn.classList.remove('en-fwd','en-bwd','en-spl','tx-in');
+      inn.classList.add('active');cur=n;syncA11y();
+      setTimeout(()=>{triggerEntrance(inn,n);updNav();trans=false;},55);
+    },DUR);
+  });
+}
+
+function updNav(){
+  document.querySelectorAll('.nav-dot').forEach((d,i)=>d.classList.toggle('active',i===cur));
+  document.getElementById('slide-counter').textContent=`${cur+1} / ${total}`;
+  document.getElementById('progress-bar').style.width=(total<=1?100:(cur/(total-1))*100)+'%';
+}
+const nb=document.getElementById('nav-bar');
+syncA11y();
+for(let i=0;i<total;i++){const d=document.createElement('button');d.className='nav-dot'+(i===0?' active':'');d.addEventListener('click',()=>{if(started)go(i);});nb.appendChild(d);}
+
+document.addEventListener('keydown',e=>{
+  if(e.altKey&&e.shiftKey&&(e.key==='t'||e.key==='T')){e.preventDefault();const k=['default','nocturne','editorial'];let i=k.indexOf(document.documentElement.getAttribute('data-theme')||'default');if(i<0)i=0;i=(i+1)%k.length;document.documentElement.setAttribute('data-theme',k[i]);localStorage.setItem('deckTheme',k[i]);return;}
+  if(!started)return;
+  if(document.getElementById('modal-overlay').classList.contains('open')){if(e.key==='Escape')closeModal();return;}
+  if(document.getElementById('carousel-overlay').classList.contains('open')){if(e.key==='Escape')document.getElementById('carousel-overlay').classList.remove('open');if(e.key==='ArrowRight')document.getElementById('car-next').click();if(e.key==='ArrowLeft')document.getElementById('car-prev').click();return;}
+  if(document.getElementById('ai-panel').classList.contains('open')&&e.key==='Escape'){document.getElementById('ai-panel').classList.remove('open');return;}
+  if(['ArrowRight','ArrowDown',' '].includes(e.key)){e.preventDefault();go(cur+1);}
+  if(['ArrowLeft','ArrowUp'].includes(e.key)){e.preventDefault();go(cur-1);}
+});
+document.getElementById('next-btn').addEventListener('click',()=>go(cur+1));
+document.getElementById('prev-btn').addEventListener('click',()=>go(cur-1));
+let tx=0;
+document.getElementById('deck').addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
+document.getElementById('deck').addEventListener('touchend',e=>{if(!started)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50)go(dx<0?cur+1:cur-1);},{passive:true});
+
+function startPres(){
+  const el=document.documentElement;
+  if(el.requestFullscreen)el.requestFullscreen().catch(()=>{});
+  else if(el.webkitRequestFullscreen)el.webkitRequestFullscreen();
+  document.getElementById('play-overlay').classList.add('hidden');
+  document.getElementById('video-player').src='https://www.youtube.com/embed/YOUR_VIDEO_ID?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+  document.getElementById('video-overlay').classList.add('visible');
+  setTimeout(()=>document.getElementById('skip-video').classList.add('visible'),2000);
+}
+function finishVideo(){
+  if(started)return;started=true;
+  document.getElementById('video-player').src='';
+  document.getElementById('video-overlay').classList.remove('visible');
+  document.getElementById('skip-video').classList.remove('visible');
+  ['nav-bar','slide-counter','prev-btn','next-btn'].forEach(id=>document.getElementById(id).classList.add('visible'));
+  document.getElementById('ai-fab').classList.add('vis');
+  setTimeout(()=>{slides[0].querySelectorAll('.anim').forEach(e=>e.classList.add('in'));revealSplit(slides[0]);animCounts(slides[0]);},300);
+  syncA11y();updNav();
+}
+document.getElementById('start-btn').addEventListener('click',startPres);
+document.getElementById('skip-video').addEventListener('click',finishVideo);
+document.getElementById('play-overlay').addEventListener('click',e=>{if(e.target===document.getElementById('play-overlay'))startPres();});
+
+// MODAL SYSTEM
+const mo=document.getElementById('modal-overlay'),mc=document.getElementById('modal-content'),mv=document.getElementById('modal-video-wrap');
+let curModalKey='';
+function openModal(k){
+  const d=MD[k];if(!d)return;curModalKey=k;
+  mc.style.display='';mv.style.display='none';mv.innerHTML='';mo.classList.remove('video-open');
+  document.getElementById('modal-stat').textContent=d.stat;
+  document.getElementById('modal-title').textContent=d.title;
+  document.getElementById('modal-body').textContent=d.body;
+  document.getElementById('modal-body').style.whiteSpace='pre-line';
+  document.getElementById('modal-source').textContent='Source: '+d.source;
+  document.getElementById('modal-link').innerHTML=d.link?`<a href="${d.link}" target="_blank" rel="noopener">View Source &rarr;</a>`:'';
+  const aiBtn=document.getElementById('modal-ai-btn'),aiResp=document.getElementById('modal-ai-resp');
+  aiBtn.disabled=false;aiBtn.innerHTML='<span>✨</span> Ask Claude about this for NZ leaders';
+  aiResp.classList.remove('vis');aiResp.innerHTML='';
+  mo.classList.add('open');
+}
+function openVideoModal(id,st){
+  mc.style.display='none';mv.style.display='block';mv.innerHTML='';
+  const f=document.createElement('iframe');
+  f.src='https://www.youtube.com/embed/'+id+'?autoplay=1&rel=0&modestbranding=1&playsinline=1'+(st?'&start='+st:'');
+  f.setAttribute('allow','accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture');
+  f.setAttribute('allowfullscreen','');mv.appendChild(f);mo.classList.add('open','video-open');
+}
+function closeModal(){mo.classList.remove('open','video-open');mv.innerHTML='';mv.style.display='none';mc.style.display='';}
+document.getElementById('modal-close').addEventListener('click',closeModal);
+mo.addEventListener('click',e=>{if(e.target===mo)closeModal();});
+document.querySelectorAll('[data-modal]').forEach(el=>el.addEventListener('click',()=>openModal(el.dataset.modal)));
+document.querySelectorAll('[data-video]').forEach(el=>el.addEventListener('click',function(){openVideoModal(this.dataset.video,this.dataset.videoStart||'');}));
+
+// AI SYSTEM
+const AI_SYS='You are assisting Nathaniel Baldock presenting Part 3 of 4: A Framework For Leading — to Christian business leaders, pastors and church leaders in Tauranga, New Zealand in May 2026. This session covers: Complicated vs Complex (Arthur Brooks), Three Levels of AI, Four Levers (Automate/Augment/Accelerate/Activate), Context Sandwich, Bits vs Atoms, Sacred Tasks, Five Disciplines, Counter-Formation Practices, and the Seven Spheres. Keep responses to 3-4 sentences. Warm, direct, pastoral tone. No bullet points. No em-dashes.';
+
+async function callClaude(msg,sys){
+  const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys||AI_SYS,messages:[{role:'user',content:msg}]})});
+  const d=await r.json();
+  if(d.content&&d.content[0])return d.content[0].text;
+  throw new Error(d.error?.message||'API error');
+}
+
+// Modal AI button
+document.getElementById('modal-ai-btn').addEventListener('click',async function(){
+  const d=MD[curModalKey];if(!d)return;
+  this.disabled=true;this.innerHTML='<span>⏳</span> Thinking…';
+  const resp=document.getElementById('modal-ai-resp');
+  resp.innerHTML='<em style="color:var(--muted)">Generating context for Tauranga leaders…</em>';resp.classList.add('vis');
+  try{
+    const text=await callClaude(`Stat shown: "${d.stat} — ${d.title}". Context: ${d.body}
+
+In 3 sentences, explain why this matters for Christian leaders in Tauranga, NZ, and what it calls them to do. Be direct, pastoral, and locally grounded.`);
+    resp.innerHTML=`<strong>For Tauranga Leaders</strong>${text}`;
+  }catch(e){resp.innerHTML='<em>Unable to connect. Check your internet and try again.</em>';this.disabled=false;this.innerHTML='<span>✨</span> Ask Claude about this for NZ leaders';}
+});
+
+// Floating AI panel
+const aiFab=document.getElementById('ai-fab'),aiPanel=document.getElementById('ai-panel'),aiMsgs=document.getElementById('ai-msgs'),aiInp=document.getElementById('ai-inp'),aiGo=document.getElementById('ai-go');
+aiFab.addEventListener('click',()=>aiPanel.classList.toggle('open'));
+document.getElementById('ai-ph-close').addEventListener('click',()=>aiPanel.classList.remove('open'));
+async function sendAI(){
+  const text=aiInp.value.trim();if(!text)return;
+  aiInp.value='';aiGo.disabled=true;
+  const um=document.createElement('div');um.className='ai-m u';um.textContent=text;aiMsgs.appendChild(um);
+  const tm=document.createElement('div');tm.className='ai-m t';tm.textContent='Thinking';aiMsgs.appendChild(tm);
+  aiMsgs.scrollTop=aiMsgs.scrollHeight;
+  const titleEl=slides[cur].querySelector('.s-title,.session-div-title,.disc-title');
+  const ctx=titleEl?titleEl.textContent.replace(/\s+/g,' ').trim():'AI and leadership';
+  try{
+    const reply=await callClaude(`Current slide: "${ctx}"
+
+Question: ${text}`);
+    tm.remove();const am=document.createElement('div');am.className='ai-m a';am.textContent=reply;aiMsgs.appendChild(am);
+  }catch(e){tm.className='ai-m a';tm.textContent='Connection error — check your internet and try again.';}
+  aiMsgs.scrollTop=aiMsgs.scrollHeight;aiGo.disabled=false;
+}
+aiGo.addEventListener('click',sendAI);
+aiInp.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendAI();}});
+
+// MAGNETIC HOVER
+document.querySelectorAll('.stat-card,.level-card,.lever-card,.sphere-card').forEach(c=>{
+  let raf=0,mx=0,my=0;
+  c.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;if(raf)return;raf=requestAnimationFrame(()=>{raf=0;const r=c.getBoundingClientRect();const x=((mx-r.left)/r.width-.5)*10;const y=((my-r.top)/r.height-.5)*10;c.style.transform=`translate(${x*.35}px,${y*.35}px) scale(1.02)`;c.style.transition='transform 0.08s';});});
+  c.addEventListener('mouseleave',()=>{c.style.transform='';c.style.transition='transform .4s var(--ease)';});
+});
+
+// PARTICLES
+function mkP(id,n,dur,span){const c=document.getElementById(id);if(!c)return;for(let i=0;i<n;i++){const p=document.createElement('div');p.className='particle';const s=Math.random()*4+2;p.style.cssText=`width:${s}px;height:${s}px;left:${Math.random()*100}%;animation-duration:${Math.random()*span+dur}s;animation-delay:${Math.random()*6}s`;c.appendChild(p);}}
+mkP('hero-particles',20,8,11);
+
+</script>
+</body>
+</html>

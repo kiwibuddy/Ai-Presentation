@@ -67,12 +67,13 @@ export default async function handler(req, res) {
     return res.status(502).json({ error: 'No voice_id in response', raw: j });
   }
 
+  // Keep demo clones alive longer for live stage flow.
   setTimeout(() => {
     fetch(`https://api.elevenlabs.io/v1/voices/${voiceId}`, {
       method: 'DELETE',
       headers: { 'xi-api-key': key },
     }).catch(() => {});
-  }, 5 * 60 * 1000);
+  }, 30 * 60 * 1000);
 
   return res.status(200).json({ voiceId });
 }

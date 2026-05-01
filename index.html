@@ -1173,7 +1173,7 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
         <div class="demo-stage anim fade-up d5">
           <p style="font-size:.72rem;font-weight:600;color:var(--lime);margin-bottom:.5rem">2 &middot; Type + play</p>
           <label class="s-sub" for="vo-text" style="display:block;margin-bottom:.4rem;font-size:.8rem">Line they <em>never</em> read aloud:</label>
-          <textarea id="vo-text" rows="3" class="s-sub" style="background:rgba(0,0,0,.2);color:var(--white);border-color:rgba(255,255,255,.15)">If you&rsquo;re in this room today, I want you to know: God sees your labour in Tauranga, and you are not alone in this shift.</textarea>
+          <textarea id="vo-text" rows="3" class="s-sub" style="background:rgba(0,0,0,.2);color:var(--white);border-color:rgba(255,255,255,.15)">If you&rsquo;re in this room today, I want you to know: God sees your labour in Tauranga, and you are not alone in this work.</textarea>
           <div style="margin-top:.5rem">
             <button type="button" class="demo-btn" id="vo-clone" disabled>Clone from recording</button>
             <button type="button" class="demo-btn" id="vo-play" disabled>Speak as clone</button>
@@ -2060,8 +2060,17 @@ async function getHealth() {
         const r = await fetch((API_BASE || '') + '/api/clone-voice', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ audioBase64: b64, mime: 'audio/webm' }) });
         const j = await r.json();
         if (!r.ok) throw j;
-        voVoiceId = j.voiceId; btnP.disabled = false; st.textContent = 'Clone ready. Type and press “Speak as clone”.';
-      } catch (e) { st.textContent = 'Clone failed (check API / keys on server).'; }
+        voVoiceId = j.voiceId; btnP.disabled = false; st.textContent = 'Clone ready. Type and press “Speak as clone” (voice kept for ~30 min).';
+      } catch (e) {
+        const raw = JSON.stringify(e || {});
+        const detail = (e && (e.error || (e.raw && e.raw.detail) || e.detail)) || {};
+        const msg = detail.message || detail.status || detail.code || (e && e.message) || '';
+        if (/paid_plan_required|instant voice cloning|can_not_use_instant_voice_cloning/i.test(raw)) {
+          st.textContent = 'Clone blocked: current ElevenLabs plan does not include Instant Voice Cloning.';
+        } else {
+          st.textContent = msg ? (`Clone failed: ${msg}`) : 'Clone failed (check API / keys on server).';
+        }
+      }
     };
     rdr.readAsDataURL(b);
   });
@@ -2071,11 +2080,19 @@ async function getHealth() {
     st.textContent = 'Generating…';
     try {
       const r = await fetch((API_BASE || '') + '/api/tts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ voiceId: voVoiceId, text: t }) });
-      if (!r.ok) throw new Error('tts');
+      if (!r.ok) {
+        const errText = await r.text();
+        let msg = errText;
+        try {
+          const parsed = JSON.parse(errText);
+          msg = parsed.detail?.message || parsed.message || parsed.error || errText;
+        } catch {}
+        throw new Error(String(msg || 'tts').slice(0, 240));
+      }
       const u = URL.createObjectURL(await r.blob());
       const a = new Audio(u); a.play();
       a.onended = () => { URL.revokeObjectURL(u); st.textContent = 'Done playing.'; };
-    } catch (e) { st.textContent = 'TTS failed.'; }
+    } catch (e) { st.textContent = `TTS failed: ${(e && e.message) ? e.message : 'unknown error'}`; }
   });
 })();
 (function initDemoI2V() {
@@ -2084,19 +2101,50 @@ async function getHealth() {
   const go = document.getElementById('i2v-go');
   const out = document.getElementById('i2v-out');
   const pr = document.getElementById('i2v-prompt');
+  const dropTxt = document.getElementById('i2v-drop-txt');
   let dataUrl = '';
+  function loadImageFile(file) {
+    if (!file) return;
+    if (!/^image\//.test(file.type || '')) {
+      if (dropTxt) dropTxt.textContent = 'Please choose an image file.';
+      return;
+    }
+    const r = new FileReader();
+    r.onload = () => {
+      dataUrl = String(r.result || '');
+      const kb = Math.max(1, Math.round(file.size / 1024));
+      if (dropTxt) dropTxt.textContent = `Loaded: ${file.name} (${kb} KB)`;
+      if (out) out.innerHTML = '<img src="' + dataUrl + '" alt="Selected" style="max-width:100%;border-radius:10px" />';
+    };
+    r.onerror = () => {
+      if (dropTxt) dropTxt.textContent = 'Could not read that image. Try another file.';
+    };
+    r.readAsDataURL(file);
+  }
   if (fi) {
-    fi.addEventListener('change', () => {
-      if (!fi.files[0]) return; const r = new FileReader();
-      r.onload = () => { dataUrl = r.result; const d = document.getElementById('i2v-drop-txt'); if (d) d.textContent = 'Image loaded'; };
-      r.readAsDataURL(fi.files[0]);
-    });
+    fi.addEventListener('change', () => loadImageFile(fi.files && fi.files[0]));
   }
   if (dz && fi) {
-    dz.addEventListener('click', () => fi.click());
+    dz.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (typeof fi.showPicker === 'function') fi.showPicker();
+      else fi.click();
+    });
+    dz.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        if (typeof fi.showPicker === 'function') fi.showPicker();
+        else fi.click();
+      }
+    });
     dz.addEventListener('dragover', (e) => { e.preventDefault(); dz.classList.add('dragover'); });
     dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
-    dz.addEventListener('drop', (e) => { e.preventDefault(); dz.classList.remove('dragover'); if (e.dataTransfer.files[0]) { fi.files = e.dataTransfer.files; fi.dispatchEvent(new Event('change')); } });
+    dz.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dz.classList.remove('dragover');
+      const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if (f) loadImageFile(f);
+    });
   }
   go && go.addEventListener('click', async () => {
     if (!dataUrl) { if (out) out.innerHTML = '<p class="s-sub">Add a photo first.</p>'; return; }
@@ -2113,7 +2161,16 @@ async function getHealth() {
       const j = await r.json();
       if (!r.ok) throw j;
       i2vReqId = j.requestId; i2vModelId = j.model; i2vT0 = Date.now();
-    } catch (e) { setI2vPill(false, ''); if (out) out.innerHTML = '<p class="s-sub">Submit failed. Check CORS, FAL_KEY, and model availability.</p>'; return; }
+    } catch (e) {
+      setI2vPill(false, '');
+      let msg = 'Submit failed. Check CORS, FAL_KEY, and model availability.';
+      try {
+        const detail = (e && (e.detail || (e.error && e.error.detail))) || '';
+        if (typeof detail === 'string' && detail.trim()) msg = `Submit failed: ${detail}`;
+      } catch {}
+      if (out) out.innerHTML = `<p class="s-sub">${msg}</p>`;
+      return;
+    }
     if (i2vPoll) { try { clearInterval(i2vPoll); } catch (e) {} }
     if (i2vElapsedTimer) { try { clearInterval(i2vElapsedTimer); } catch (e) {} }
     i2vPoll = setInterval(function () { pollI2V(out); }, (mode === 'img') ? 3000 : 4000);
