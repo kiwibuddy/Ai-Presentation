@@ -622,7 +622,10 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
 
 /* ─── BITS ATOMS ─── */
 .ba-split{display:grid;grid-template-columns:1fr 1fr;gap:2vw;margin:2vh 0;}
-.ba-side{border-radius:14px;padding:3vh 2.5vw;}
+.ba-side{border-radius:14px;padding:0 0 2.4vh;overflow:hidden;}
+.ba-side .ba-tag,.ba-side .ba-title,.ba-side .ba-items{padding-left:2.5vw;padding-right:2.5vw;}
+.ba-photo{aspect-ratio:21/9;overflow:hidden;margin-bottom:1.4vh;background:#101524;}
+.ba-photo img{width:100%;height:100%;object-fit:cover;display:block;}
 .ba-side.bits{background:rgba(57,120,168,.12);border:1px solid rgba(57,120,168,.25);}
 .ba-side.atoms{background:rgba(147,217,17,.08);border:1px solid rgba(147,217,17,.2);}
 .ba-tag{font-size:.6rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.6rem;}
@@ -659,7 +662,20 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
 
 /* ─── COUNTER FORMATION ─── */
 .cf-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.4vw;margin:2vh 0;max-width:820px;}
-.cf-card{border-radius:14px;padding:2.8vh 2.2vw;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);transition:transform .35s var(--ease),background .3s;}
+.spheres-stack{display:grid;grid-template-columns:1fr 1fr;gap:1vh 1.4vw;max-width:920px;margin:1.5vh 0 1.4vh;}
+.sphere-row{display:grid;grid-template-columns:64px minmax(98px,auto) 1fr;align-items:center;gap:1.1rem;padding:1vh 1.2vw;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);cursor:pointer;transition:background .25s var(--ease),transform .25s var(--ease);}
+.sphere-row:hover{background:rgba(255,255,255,.09);transform:translateY(-2px);}
+.sphere-photo{width:64px;height:48px;border-radius:10px;overflow:hidden;background:#101524;}
+.sphere-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+.sphere-name{font-family:var(--display);font-weight:700;color:var(--lime);font-size:clamp(.95rem,1.4vw,1.15rem);}
+.sphere-line{font-size:clamp(.74rem,.92vw,.86rem);color:rgba(255,255,255,.72);line-height:1.45;}
+@media(max-width:900px){.spheres-stack{grid-template-columns:1fr;}}
+
+.cf-card{border-radius:14px;padding:0 0 2.4vh;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);transition:transform .35s var(--ease),background .3s;overflow:hidden;}
+.cf-card .cf-icon,.cf-card .cf-verse,.cf-card .cf-title,.cf-card .cf-body{padding-left:2.2vw;padding-right:2.2vw;}
+.cf-card .cf-icon{padding-top:1.4vh;}
+.cf-photo{aspect-ratio:21/9;overflow:hidden;background:#101524;}
+.cf-photo img{width:100%;height:100%;object-fit:cover;display:block;}
 .cf-card:hover{transform:translateY(-5px);background:rgba(255,255,255,.09);}
 .cf-icon{font-size:1.6rem;margin-bottom:.7rem;}
 .cf-title{font-family:var(--display);font-size:clamp(.95rem,1.3vw,1.15rem);font-weight:700;color:var(--white);margin-bottom:.5rem;}
@@ -677,6 +693,50 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
   .ba-split{grid-template-columns:1fr;}
   .d5-item{grid-template-columns:2rem 1fr;}
   .d5-body{display:none;}
+}
+
+/* ═══ PREMIUM PRIMITIVES (shared, cross-session) ═══ */
+.stat-card.magnetic,.level-card.magnetic,.lever-card.magnetic,.sphere-card.magnetic,.formation-card.magnetic,.lit-card.magnetic,.theol-card.magnetic,.cf-card.magnetic,.pos-card.magnetic,.eth-card.magnetic,.nday-card.magnetic,.sacred-card.magnetic,.imago-side.magnetic,.brain-card.magnetic,.d5-item.magnetic{transform:perspective(900px) rotateX(var(--ry,0deg)) rotateY(var(--rx,0deg)) translateY(-3px);transition:transform .25s var(--ease),box-shadow .25s var(--ease);will-change:transform;}
+
+.paced{opacity:0;transform:translateY(14px);transition:opacity .55s var(--ease),transform .55s var(--ease);pointer-events:none;}
+.paced.show{opacity:1;transform:translateY(0);pointer-events:auto;}
+.pace-hint{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.34);text-align:center;margin-top:1.4rem;font-family:var(--body);font-weight:600;transition:opacity .4s var(--ease);}
+.slide-inner.warm .pace-hint,.slide-inner:not(.dark):not(.dark2):not(.session-div) .pace-hint{color:rgba(15,17,23,.42);}
+
+.title-word-clip{display:inline-block;overflow:hidden;vertical-align:bottom;line-height:1.05;}
+.title-word-clip>span{display:inline-block;transform:translateY(110%);transition:transform .9s var(--ease);}
+.title-word-clip.in>span{transform:translateY(0);}
+
+.stroke-anim{stroke-dasharray:600;stroke-dashoffset:600;transition:stroke-dashoffset 1.4s var(--ease);}
+.svg-drawn .stroke-anim{stroke-dashoffset:0;}
+
+.tw-active::after{content:'|';display:inline-block;margin-left:2px;color:var(--lime);animation:twBlink 1s step-end infinite;}
+@keyframes twBlink{50%{opacity:0;}}
+
+.media-card{aspect-ratio:1/1;border-radius:14px;overflow:hidden;position:relative;background:#1a1d28;border:1px solid rgba(255,255,255,.06);}
+.media-card.wide{aspect-ratio:16/9;}
+.media-card.tall{aspect-ratio:4/5;}
+.media-card img{width:100%;height:100%;object-fit:cover;display:block;}
+.media-card::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 55%,rgba(0,0,0,.34) 100%);pointer-events:none;}
+
+.photo-band{height:22vh;border-radius:14px;overflow:hidden;position:relative;margin:0 0 2.4vh;}
+.photo-band.tall{height:30vh;}
+.photo-band img{width:100%;height:100%;object-fit:cover;display:block;}
+.photo-band::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.55) 100%);pointer-events:none;}
+
+@property --p10{syntax:'<number>';inherits:false;initial-value:0;}
+.donut-9010{--p10:0;width:clamp(180px,22vw,260px);aspect-ratio:1/1;border-radius:50%;background:conic-gradient(var(--lime) calc(var(--p10) * 3.6deg),rgba(255,255,255,.08) 0);position:relative;display:flex;align-items:center;justify-content:center;transition:--p10 1.6s var(--ease);margin:0 auto;}
+.donut-9010::before{content:'';position:absolute;inset:18%;border-radius:50%;background:var(--dark);}
+.donut-9010 .donut-num{position:relative;z-index:2;font-family:var(--display);font-weight:700;font-size:clamp(2.4rem,5vw,3.4rem);color:var(--lime);}
+.donut-9010 .donut-lbl{position:absolute;bottom:-2.4rem;left:50%;transform:translateX(-50%);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.55);white-space:nowrap;text-align:center;font-weight:600;}
+.donut-9010.contrast{background:conic-gradient(var(--red) calc(var(--p10) * 3.6deg),rgba(255,255,255,.08) 0);}
+.donut-9010.contrast .donut-num{color:var(--red);}
+
+@media(prefers-reduced-motion:reduce){
+  .paced{transition:opacity .25s linear !important;transform:none !important;}
+  .title-word-clip>span{transition:none !important;transform:none !important;}
+  .stroke-anim{transition:none !important;stroke-dashoffset:0 !important;}
+  .tw-active::after{animation:none !important;}
 }
 
 </style>
@@ -796,128 +856,131 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
   </div>
 </div>
 
-<div class="slide">
+<div class="slide" data-pace="cards">
   <div class="slide-inner warm">
     <div class="s-body top">
       <div class="eyebrow anim fade-up d1">The First Distinction — Dr. Arthur Brooks, Harvard</div>
       <h2 class="s-title lg anim fade-up d2" data-split="words">AI solves complicated.<br>Leaders navigate <em>complex.</em></h2>
       <div class="info-shift anim fade-up d3">
-        <div class="is-panel past">
+        <div class="is-panel past paced">
           <div class="is-label">Complicated</div>
           <div class="is-title">Has a Solution</div>
           <div class="is-desc">Many moving parts, but the right expertise applied correctly produces the right answer. A car engine. A tax return. A marketing funnel. A scheduling system.<br><br><strong>AI is extraordinary here.</strong> These tasks are being transferred to machines at high speed.</div>
         </div>
-        <div class="is-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
-        <div class="is-panel future">
+        <div class="is-arrow paced"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path class="stroke-anim" d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+        <div class="is-panel future paced">
           <div class="is-label">Complex</div>
           <div class="is-title">Has No Solution — Only Navigation</div>
           <div class="is-desc">Involves people with agency, competing values, unpredictable responses. A marriage. A congregation. A grieving team. A community in crisis.<br><br><strong>AI cannot navigate this.</strong> It requires formed humans. This is where leadership actually lives.</div>
         </div>
       </div>
-      <div class="callout amber anim fade-up d4">The more AI handles the complicated, the more your value as a leader is concentrated in the complex. This is not a threat to your role. It is a clarification of it — if you have done the formation work that Part 2 was about.</div>
+      <div class="callout amber paced">The more AI handles the complicated, the more your value as a leader is concentrated in the complex. This is not a threat to your role. It is a clarification of it — if you have done the formation work that Part 2 was about.</div>
     </div>
     <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 03</span></div>
   </div>
 </div>
 
-<div class="slide">
+<div class="slide" data-pace="cards">
   <div class="slide-inner dark2">
+    <div class="bg-img" style="opacity:.16"><img class="slide-img" src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1400&auto=format&fit=crop&q=80" alt="" decoding="async"><div class="ov-dk"></div></div>
     <div class="s-body top">
       <div class="eyebrow anim fade-up d1">How to Engage — The Three Levels</div>
       <h2 class="s-title lg anim fade-up d2" data-split="words">Most leaders are at Level 1.<br>The mission needs Level 3 thinking.</h2>
       <div class="levels-grid anim fade-up d3">
-        <div class="level-card lv1" data-modal="three_levels">
+        <div class="level-card lv1 paced" data-modal="three_levels">
           <div class="lv-num">1</div>
           <div class="lv-title">AI as Tool</div>
           <div class="lv-body">Using specific AI applications to do defined tasks better. Point solutions for defined problems. You remain in control of every input and output.</div>
           <div class="lv-example">ChatGPT for a first draft. Otter.ai for meeting notes. Canva AI for a graphic.</div>
         </div>
-        <div class="level-card lv2" data-modal="three_levels">
+        <div class="level-card lv2 paced" data-modal="three_levels">
           <div class="lv-num">2</div>
           <div class="lv-title">AI as Collaborator</div>
           <div class="lv-body">Working with AI as a thinking partner that augments your output across a project or decision. The judgment is yours — the research, synthesis and drafting are shared.</div>
           <div class="lv-example">Working through a strategic decision with AI analysis. Refining a teaching series with AI as an editorial partner.</div>
         </div>
-        <div class="level-card lv3" data-modal="three_levels">
+        <div class="level-card lv3 paced" data-modal="three_levels">
           <div class="lv-num">3</div>
           <div class="lv-title">AI as System</div>
           <div class="lv-body">Designing workflows and organisations where AI handles defined streams autonomously, freeing people for the complex and sacred work that requires human presence.</div>
           <div class="lv-example">An automated pastoral care follow-up pipeline. A self-updating communications calendar. An AI-driven content translation workflow.</div>
         </div>
       </div>
-      <div class="callout dark-call anim fade-up d4">Leaders who only operate at Level 1 will find themselves doing manual work alongside AI-native organisations. Leaders who jump to Level 3 without Level 2 wisdom will lose the formation awareness that makes Level 3 safe. The path is sequential.</div>
+      <div class="callout dark-call paced">Leaders who only operate at Level 1 will find themselves doing manual work alongside AI-native organisations. Leaders who jump to Level 3 without Level 2 wisdom will lose the formation awareness that makes Level 3 safe. The path is sequential.</div>
     </div>
     <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 03</span></div>
   </div>
 </div>
 
-<div class="slide">
+<div class="slide" data-pace="cards">
   <div class="slide-inner dark">
     <div class="s-body top">
       <div class="eyebrow anim fade-up d1">The Four Levers</div>
       <h2 class="s-title lg anim fade-up d2" data-split="words">Not every task should<br>be automated. Know which<br>lever you are pulling.</h2>
       <div class="levers-grid anim fade-up d3">
-        <div class="lever-card l-auto" data-modal="four_levers">
+        <div class="lever-card l-auto paced" data-modal="four_levers">
           <span class="lever-icon">🤖</span>
           <div class="lever-word">Automate</div>
           <div class="lever-body">Hand off the task entirely. AI runs it without your involvement. For tasks where the outcome is defined, repeatable, and the struggle is not formative.</div>
         </div>
-        <div class="lever-card l-aug" data-modal="four_levers">
+        <div class="lever-card l-aug paced" data-modal="four_levers">
           <span class="lever-icon">🔍</span>
           <div class="lever-word">Augment</div>
           <div class="lever-body">Use AI to enhance your own thinking and output. You are still doing the work — better. The judgment, presence and relationships remain yours.</div>
         </div>
-        <div class="lever-card l-acc" data-modal="four_levers">
+        <div class="lever-card l-acc paced" data-modal="four_levers">
           <span class="lever-icon">⚡</span>
           <div class="lever-word">Accelerate</div>
           <div class="lever-body">Use AI to speed up existing processes without changing their fundamental nature. Faster research, faster synthesis, faster communication.</div>
         </div>
-        <div class="lever-card l-act" data-modal="four_levers">
+        <div class="lever-card l-act paced" data-modal="four_levers">
           <span class="lever-icon">🚀</span>
           <div class="lever-word">Activate</div>
           <div class="lever-body">Use AI to unlock work you could not previously do at all. New mission capacity. The small team doing the work of a large one. The church that could never afford a communications director — now running one.</div>
         </div>
       </div>
-      <div class="callout dark-call anim fade-up d4">Most leaders default to Automate when their mission is best served by Activate. The tractor did not automate the farmer out of farming. It activated a new scale of mission that would have been impossible without it.</div>
+      <div class="callout dark-call paced">Most leaders default to Automate when their mission is best served by Activate. The tractor did not automate the farmer out of farming. It activated a new scale of mission that would have been impossible without it.</div>
     </div>
     <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 03</span></div>
   </div>
 </div>
 
-<div class="slide">
+<div class="slide" data-pace="cards">
   <div class="slide-inner warm">
+    <div class="bg-img" style="opacity:.12"><img class="slide-img" src="https://images.unsplash.com/photo-1512314889357-e157c22f938d?w=1400&auto=format&fit=crop&q=80" alt="" decoding="async"><div class="ov"></div></div>
     <div class="s-body top">
       <div class="eyebrow anim fade-up d1">Practical Skill &mdash; The Context Sandwich</div>
       <h2 class="s-title lg anim fade-up d2" data-split="words">Generic prompts get<br>generic answers.</h2>
       <div class="s-div anim fade-up d3"></div>
       <p class="s-sub anim fade-up d4">The single most effective upgrade to your AI output requires no technical knowledge. It requires knowing your own context well enough to describe it clearly.</p>
       <div class="sandwich anim fade-up d5">
-        <div class="sw-layer sw-top">
+        <div class="sw-layer sw-top paced">
           <div class="sw-label">Top Layer — Context</div>
           <div class="sw-text">Who you are. Your role, your community, your values, your organisation. The more specific, the better the output.</div>
         </div>
-        <div class="sw-layer sw-mid">
+        <div class="sw-layer sw-mid paced">
           <div class="sw-label">Middle — The Task</div>
           <div class="sw-text">The actual question, request or task. Clear and specific.</div>
         </div>
-        <div class="sw-layer sw-bot">
+        <div class="sw-layer sw-bot paced">
           <div class="sw-label">Bottom Layer — Constraints</div>
           <div class="sw-text">Format, length, tone, what to avoid. "No jargon. 250 words. Warm, not corporate."</div>
         </div>
       </div>
-      <div class="callout lime anim fade-up d6" data-modal="context_sandwich">Without top and bottom layers, AI defaults to generic responses calibrated for an average user. With them, it responds as a well-briefed assistant who actually knows your context. This is the whole game. <span style="color:var(--sky2);font-size:.8em">Click for example →</span></div>
+      <div class="callout lime paced" data-modal="context_sandwich">Without top and bottom layers, AI defaults to generic responses calibrated for an average user. With them, it responds as a well-briefed assistant who actually knows your context. This is the whole game. <span style="color:var(--sky2);font-size:.8em">Click for example →</span></div>
     </div>
     <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 03</span></div>
   </div>
 </div>
 
-<div class="slide">
+<div class="slide" data-pace="cards">
   <div class="slide-inner">
     <div class="s-body top">
       <div class="eyebrow anim fade-up d1">The Bits vs Atoms Framework</div>
       <h2 class="s-title lg anim fade-up d2" data-split="words">AI lives in Bits.<br>Mission lives in Atoms.</h2>
       <div class="ba-split anim fade-up d3">
-        <div class="ba-side bits" data-modal="bits_atoms">
+        <div class="ba-side bits paced" data-modal="bits_atoms">
+          <div class="ba-photo"><img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=900&auto=format&fit=crop&q=80" alt="" decoding="async"></div>
           <div class="ba-tag">Bits — Digital Domain</div>
           <div class="ba-title">AI is extraordinary here</div>
           <ul class="ba-items">
@@ -928,7 +991,8 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
             <li>Anything that can be digitised</li>
           </ul>
         </div>
-        <div class="ba-side atoms" data-modal="bits_atoms">
+        <div class="ba-side atoms paced" data-modal="bits_atoms">
+          <div class="ba-photo"><img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?w=900&auto=format&fit=crop&q=80" alt="" decoding="async"></div>
           <div class="ba-tag">Atoms — Embodied Domain</div>
           <div class="ba-title">AI cannot cross this line</div>
           <ul class="ba-items">
@@ -940,85 +1004,91 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
           </ul>
         </div>
       </div>
-      <div class="callout lime anim fade-up d4">God chose atoms. The incarnation is the definitive statement that embodied presence matters. The Church's deepest calling is always an atoms calling. The strategic question: where are you accidentally treating atoms work like bits work — and losing what makes it powerful?</div>
+      <div class="callout lime paced">God chose atoms. The incarnation is the definitive statement that embodied presence matters. The Church's deepest calling is always an atoms calling. The strategic question: where are you accidentally treating atoms work like bits work — and losing what makes it powerful?</div>
     </div>
     <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 03</span></div>
   </div>
 </div>
 
-<div class="slide">
+<div class="slide" data-pace="cards">
   <div class="slide-inner dark2">
     <div class="s-body top">
       <div class="eyebrow anim fade-up d1">Exercise — What You Are Actually Protecting</div>
       <h2 class="s-title lg anim fade-up d2" data-split="words">Sacred Tasks.<br>What must not<br>be delegated.</h2>
-      <div class="sacred-grid anim fade-up d3">
-        <div class="sacred-card" data-modal="sacred_tasks">
+      <div class="photo-band anim fade-up d3" style="height:14vh"><img src="https://images.unsplash.com/photo-1438032005730-c779502df39b?w=1400&auto=format&fit=crop&q=80" alt="" decoding="async"></div>
+      <div class="sacred-grid anim fade-up d4">
+        <div class="sacred-card paced" data-modal="sacred_tasks">
           <div class="sc-sphere">The First Question</div>
           <div class="sc-title">Does this task require a human being?</div>
           <div class="sc-body">Some tasks genuinely need human judgment, empathy, or presence. Others simply have a human doing them out of habit.</div>
           <div class="sc-prompt">If no → automate with confidence.</div>
         </div>
-        <div class="sacred-card" data-modal="sacred_tasks">
+        <div class="sacred-card paced" data-modal="sacred_tasks">
           <div class="sc-sphere">The Second Question</div>
           <div class="sc-title">Does it require this specific human — you?</div>
           <div class="sc-body">Your history, your relationships, your calling in this community. Some tasks could be done by anyone with the right skill — others require you specifically.</div>
           <div class="sc-prompt">If no → delegate or systematise.</div>
         </div>
-        <div class="sacred-card" data-modal="sacred_tasks">
+        <div class="sacred-card paced" data-modal="sacred_tasks">
           <div class="sc-sphere">The Third Question</div>
           <div class="sc-title">Is the struggle part of the formation?</div>
           <div class="sc-body">Is doing this task — wrestling with it — forming you or the people you serve? The difficulty might be the point. Not all struggle should be removed.</div>
           <div class="sc-prompt">If yes → protect it. This is Sacred.</div>
         </div>
       </div>
-      <div class="callout dark-call anim fade-up d4">Most leaders find roughly 20% of their tasks are genuinely Sacred — and that they spend far too much time on the other 80%. The exercise clarifies fast. And it removes the guilt from handing off everything else.</div>
+      <div class="callout dark-call paced">Most leaders find roughly 20% of their tasks are genuinely Sacred — and that they spend far too much time on the other 80%. The exercise clarifies fast. And it removes the guilt from handing off everything else.</div>
     </div>
     <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 03</span></div>
   </div>
 </div>
 
-<div class="slide">
+<div class="slide" data-pace="cards">
   <div class="slide-inner dark">
     <div class="s-body top">
       <div class="eyebrow anim fade-up d1">The Leadership Framework — Five Disciplines</div>
       <h2 class="s-title lg anim fade-up d2" data-split="words">Five disciplines for<br>leading <span class="lime">through</span> this.</h2>
       <div class="disc5-list anim fade-up d3">
-        <div class="d5-item" data-modal="five_disciplines"><div class="d5-num">1</div><div class="d5-word">Discernment</div><div class="d5-body">Ask the formation question before the efficiency question. What is this tool training the people in my sphere to desire? Is that what I want them to desire?</div></div>
-        <div class="d5-item" data-modal="five_disciplines"><div class="d5-num">2</div><div class="d5-word">Dignity</div><div class="d5-body">Treat every person in your sphere as an image-bearer, not an optimisation target. Their worth does not depend on what AI can or cannot do better than them.</div></div>
-        <div class="d5-item" data-modal="five_disciplines"><div class="d5-num">3</div><div class="d5-word">Design</div><div class="d5-body">Build systems and workflows that use AI without deforming the people inside them. Protect the formation pipeline. Know which tasks are Sacred before you automate them.</div></div>
-        <div class="d5-item" data-modal="five_disciplines"><div class="d5-num">4</div><div class="d5-word">Discipleship</div><div class="d5-body">Actively form the next generation of leaders in the habits AI cannot replicate: truthfulness, presence, embodied love, the ability to sit with the unresolvable.</div></div>
-        <div class="d5-item" data-modal="five_disciplines"><div class="d5-num">5</div><div class="d5-word">Mission</div><div class="d5-body">Use AI to extend the reach of the mission — translation, content, admin, research — without replacing the human core of it. Activate, don't amputate.</div></div>
+        <div class="d5-item paced" data-modal="five_disciplines"><div class="d5-num">1</div><div class="d5-word">Discernment</div><div class="d5-body">Ask the formation question before the efficiency question. What is this tool training the people in my sphere to desire? Is that what I want them to desire?</div></div>
+        <div class="d5-item paced" data-modal="five_disciplines"><div class="d5-num">2</div><div class="d5-word">Dignity</div><div class="d5-body">Treat every person in your sphere as an image-bearer, not an optimisation target. Their worth does not depend on what AI can or cannot do better than them.</div></div>
+        <div class="d5-item paced" data-modal="five_disciplines"><div class="d5-num">3</div><div class="d5-word">Design</div><div class="d5-body">Build systems and workflows that use AI without deforming the people inside them. Protect the formation pipeline. Know which tasks are Sacred before you automate them.</div></div>
+        <div class="d5-item paced" data-modal="five_disciplines"><div class="d5-num">4</div><div class="d5-word">Discipleship</div><div class="d5-body">Actively form the next generation of leaders in the habits AI cannot replicate: truthfulness, presence, embodied love, the ability to sit with the unresolvable.</div></div>
+        <div class="d5-item paced" data-modal="five_disciplines"><div class="d5-num">5</div><div class="d5-word">Mission</div><div class="d5-body">Use AI to extend the reach of the mission — translation, content, admin, research — without replacing the human core of it. Activate, don't amputate.</div></div>
       </div>
+      <div class="callout lime paced" style="max-width:840px;margin-top:1.5vh"><strong>Five disciplines, one posture.</strong> Hold these together and AI becomes a servant of the mission. Drop any one and the others bend out of shape — efficiency without dignity, design without discipleship, mission without discernment.</div>
     </div>
     <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 03</span></div>
   </div>
 </div>
 
-<div class="slide">
+<div class="slide" data-pace="cards">
   <div class="slide-inner warm">
     <div class="s-body top">
       <div class="eyebrow anim fade-up d1">Counter-Formation Practices</div>
       <h2 class="s-title lg anim fade-up d2" data-split="words">The disciplines that<br>form what AI cannot.</h2>
       <div class="cf-grid anim fade-up d3">
-        <div class="cf-card" data-modal="sabbath_practice">
+        <div class="cf-card paced" data-modal="sabbath_practice">
+          <div class="cf-photo"><img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=900&auto=format&fit=crop&q=80" alt="" decoding="async"></div>
           <div class="cf-icon">🌿</div>
           <div class="cf-verse">Exodus 20:8-11 &mdash; Sabbath</div>
           <div class="cf-title">Sabbath as Resistance</div>
           <div class="cf-body">A weekly declaration that the world does not require your constant productivity to hold together. In an always-on culture, Sabbath is the most countercultural thing you can do. It trains the posture of dependence that AI culture most wants to dissolve.</div>
         </div>
-        <div class="cf-card" data-modal="embodiment">
+        <div class="cf-card paced" data-modal="embodiment">
+          <div class="cf-photo"><img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?w=900&auto=format&fit=crop&q=80" alt="" decoding="async"></div>
           <div class="cf-icon">🤝</div>
           <div class="cf-verse">John 1:14 &mdash; Incarnation</div>
           <div class="cf-title">Embodiment as Theology</div>
           <div class="cf-body">God became flesh. Physical presence matters. In a world of infinite disembodied interaction, showing up in person — sharing a meal, sitting in silence — is not pastoral niceness. It is a theological act.</div>
         </div>
-        <div class="cf-card" data-modal="truthfulness">
+        <div class="cf-card paced" data-modal="truthfulness">
+          <div class="cf-photo"><img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=900&auto=format&fit=crop&q=80" alt="" decoding="async"></div>
           <div class="cf-icon">🪞</div>
           <div class="cf-verse">Proverbs 27:17 &mdash; Honest witness</div>
           <div class="cf-title">Truthfulness as Currency</div>
           <div class="cf-body">Sycophantic AI tells people what they want to hear. The counter-formation practice is the commitment to say the thing that costs something, to name what is real. In a world of AI flattery, genuine honesty is the rarest currency.</div>
         </div>
-        <div class="cf-card" data-modal="apprenticeship_cf">
+        <div class="cf-card paced" data-modal="apprenticeship_cf">
+          <div class="cf-photo"><img src="https://images.unsplash.com/photo-1577563908411-5077b6dc7624?w=900&auto=format&fit=crop&q=80" alt="" decoding="async"></div>
           <div class="cf-icon">🧑‍🏫</div>
           <div class="cf-verse">Matthew 28:19 &mdash; Make disciples</div>
           <div class="cf-title">Apprenticeship as Mission</div>
@@ -1030,23 +1100,23 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
   </div>
 </div>
 
-<div class="slide">
+<div class="slide" data-pace="cards">
   <div class="slide-inner dark2">
     <div class="s-body top">
       <div class="eyebrow anim fade-up d1">The Seven Spheres &mdash; David Hamilton</div>
       <h2 class="s-title lg anim fade-up d2" data-split="words">AI enters every sphere<br>simultaneously.</h2>
       <div class="s-div anim fade-up d3"></div>
       <p class="s-sub anim fade-up d4">The Seven Spheres of Society framework prevents AI from being evaluated only in economic terms. Each sphere has its own formation question. Each sphere is being entered right now.</p>
-      <div class="stat-row anim fade-up d5" style="max-width:860px">
-        <div class="stat-card dark-stat" data-modal="seven_spheres"><div class="s-num" style="font-size:1.4rem">Family</div><div class="s-label">AI companions targeting the intimacy hunger of isolated people</div></div>
-        <div class="stat-card dark-stat" data-modal="seven_spheres"><div class="s-num" style="font-size:1.4rem">Economics</div><div class="s-label">AI displacing entry-level workers, concentrating economic power</div></div>
-        <div class="stat-card dark-stat" data-modal="seven_spheres"><div class="s-num" style="font-size:1.4rem">Government</div><div class="s-label">AI surveillance, deepfakes, political manipulation at scale</div></div>
-        <div class="stat-card dark-stat" data-modal="seven_spheres"><div class="s-num" style="font-size:1.4rem">Religion</div><div class="s-label">1 in 3 adults trust AI spiritual advice as much as a pastor</div></div>
-        <div class="stat-card dark-stat" data-modal="seven_spheres"><div class="s-num" style="font-size:1.4rem">Education</div><div class="s-label">AI tutors available to every child — and forming every child</div></div>
-        <div class="stat-card dark-stat" data-modal="seven_spheres"><div class="s-num" style="font-size:1.4rem">Media</div><div class="s-label">AI generating the majority of online content — truth and lies at equal scale</div></div>
-        <div class="stat-card dark-stat" data-modal="seven_spheres"><div class="s-num" style="font-size:1.4rem">Arts</div><div class="s-label">AI-generated creativity democratised and devalued simultaneously</div></div>
+      <div class="spheres-stack anim fade-up d5">
+        <div class="sphere-row paced" data-modal="seven_spheres"><div class="sphere-photo"><img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?w=600&auto=format&fit=crop&q=80" alt="" decoding="async"></div><div class="sphere-name">Family</div><div class="sphere-line">AI companions targeting the intimacy hunger of isolated people.</div></div>
+        <div class="sphere-row paced" data-modal="seven_spheres"><div class="sphere-photo"><img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=600&auto=format&fit=crop&q=80" alt="" decoding="async"></div><div class="sphere-name">Economics</div><div class="sphere-line">AI displacing entry-level workers and concentrating economic power.</div></div>
+        <div class="sphere-row paced" data-modal="seven_spheres"><div class="sphere-photo"><img src="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=600&auto=format&fit=crop&q=80" alt="" decoding="async"></div><div class="sphere-name">Government</div><div class="sphere-line">AI surveillance, deepfakes, political manipulation at scale.</div></div>
+        <div class="sphere-row paced" data-modal="seven_spheres"><div class="sphere-photo"><img src="https://images.unsplash.com/photo-1438032005730-c779502df39b?w=600&auto=format&fit=crop&q=80" alt="" decoding="async"></div><div class="sphere-name">Religion</div><div class="sphere-line">1 in 3 adults trust AI spiritual advice as much as a pastor.</div></div>
+        <div class="sphere-row paced" data-modal="seven_spheres"><div class="sphere-photo"><img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&auto=format&fit=crop&q=80" alt="" decoding="async"></div><div class="sphere-name">Education</div><div class="sphere-line">AI tutors available to every child — and forming every child.</div></div>
+        <div class="sphere-row paced" data-modal="seven_spheres"><div class="sphere-photo"><img src="https://images.unsplash.com/photo-1495020689067-958852a7765e?w=600&auto=format&fit=crop&q=80" alt="" decoding="async"></div><div class="sphere-name">Media</div><div class="sphere-line">AI generating the majority of online content — truth and lies at equal scale.</div></div>
+        <div class="sphere-row paced" data-modal="seven_spheres"><div class="sphere-photo"><img src="https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=600&auto=format&fit=crop&q=80" alt="" decoding="async"></div><div class="sphere-name">Arts</div><div class="sphere-line">AI-generated creativity democratised and devalued simultaneously.</div></div>
       </div>
-      <div class="callout dark-call anim fade-up d6" style="max-width:800px">Each sphere asks the same formation question: <strong>what is AI training the people in this sphere to desire — and is that what God intends for them?</strong></div>
+      <div class="callout dark-call paced" style="max-width:800px">Each sphere asks the same formation question: <strong>what is AI training the people in this sphere to desire — and is that what God intends for them?</strong></div>
     </div>
     <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 03 &mdash; David Hamilton, <em>God Revealed Through the Spheres</em> (2014)</span></div>
   </div>
@@ -1217,6 +1287,7 @@ function burstParticles(){
 // SCRAMBLE COUNT-UP
 function animCounts(s){
   s.querySelectorAll('.count-up').forEach(el=>{
+    const pp=el.closest('.paced');if(pp&&!pp.classList.contains('show'))return;
     if(el.dataset.counted)return;el.dataset.counted='1';
     const target=parseFloat(el.dataset.target),suffix=el.dataset.suffix||'',dc=parseInt(el.dataset.decimals)||0,sep=el.dataset.separator===',';
     const digits=Math.max(String(Math.round(Math.abs(target))).length,1);
@@ -1236,8 +1307,120 @@ function animCounts(s){
 }
 
 function animCharts(s){
-  s.querySelectorAll('.hbar').forEach((r,i)=>setTimeout(()=>{const f=r.querySelector('.hbar-fill');f.style.width=r.dataset.w+'%';const sp=f.querySelector('span');if(sp)sp.style.opacity='1';},i*120));
-  s.querySelectorAll('.vbar-col').forEach((c,i)=>setTimeout(()=>{c.querySelector('.vbar').style.height=c.dataset.h+'%';c.querySelector('.vbar-val').style.opacity='1';},i*160));
+  s.querySelectorAll('.hbar').forEach((r,i)=>{
+    const pp=r.closest('.paced');if(pp&&!pp.classList.contains('show'))return;
+    if(r.dataset.charted)return;r.dataset.charted='1';
+    setTimeout(()=>{const f=r.querySelector('.hbar-fill');f.style.width=r.dataset.w+'%';const sp=f.querySelector('span');if(sp)sp.style.opacity='1';},i*120);
+  });
+  s.querySelectorAll('.vbar-col').forEach((c,i)=>{
+    const pp=c.closest('.paced');if(pp&&!pp.classList.contains('show'))return;
+    if(c.dataset.vcharted)return;c.dataset.vcharted='1';
+    setTimeout(()=>{c.querySelector('.vbar').style.height=c.dataset.h+'%';c.querySelector('.vbar-val').style.opacity='1';},i*160);
+  });
+}
+
+// ═══ PREMIUM PRIMITIVES ═══
+const paceState={};
+function initPaceSlide(slide,idx){
+  if(!slide.dataset.pace)return;
+  paceState[idx]=0;
+  slide.querySelectorAll('.paced').forEach(p=>p.classList.remove('show'));
+  let h=slide.querySelector('.pace-hint');
+  if(slide.querySelectorAll('.paced').length>0){
+    if(!h){h=document.createElement('p');h.className='pace-hint';h.textContent='Press → or space to reveal';
+      const sb=slide.querySelector('.s-body')||slide.querySelector('.slide-inner')||slide;sb.appendChild(h);}
+    h.style.opacity='';
+  }
+}
+function revealNextPace(idx){
+  const slide=slides[idx];
+  if(!slide||!slide.dataset.pace)return false;
+  const items=[...slide.querySelectorAll('.paced')];
+  const n=paceState[idx]||0;
+  if(n<items.length){
+    items[n].classList.add('show');paceState[idx]=n+1;
+    animCounts(slide);animCharts(slide);
+    if(paceState[idx]===items.length){const h=slide.querySelector('.pace-hint');if(h)h.style.opacity='0';}
+    return true;
+  }
+  return false;
+}
+function reversePace(idx){
+  const slide=slides[idx];
+  if(!slide||!slide.dataset.pace)return false;
+  const n=paceState[idx]||0;
+  if(n>0){
+    const items=[...slide.querySelectorAll('.paced')];
+    items[n-1].classList.remove('show');paceState[idx]=n-1;
+    const h=slide.querySelector('.pace-hint');if(h)h.style.opacity='';
+    return true;
+  }
+  return false;
+}
+
+function twQuotes(slide){
+  slide.querySelectorAll('[data-tw]').forEach(el=>{
+    if(el.dataset.twDone)return;el.dataset.twDone='1';
+    const full=el.textContent;el.textContent='';el.classList.add('tw-active');
+    let i=0;const speed=parseInt(el.dataset.twSpeed||'22');
+    function step(){if(i<=full.length){el.textContent=full.slice(0,i);i++;setTimeout(step,speed);}else{el.classList.remove('tw-active');}}
+    setTimeout(step,parseInt(el.dataset.twDelay||'400'));
+  });
+}
+
+function drawStrokes(slide){
+  slide.querySelectorAll('.stroke-anim').forEach(p=>{
+    if(p.dataset.drawn)return;p.dataset.drawn='1';
+    const svg=p.closest('svg');
+    setTimeout(()=>{if(svg)svg.classList.add('svg-drawn');},480);
+  });
+}
+
+function clipTitleWords(slide){
+  slide.querySelectorAll('.title-word-clip').forEach(el=>{setTimeout(()=>el.classList.add('in'),140);});
+}
+
+function bindMagnetic(){
+  const sel='.stat-card,.level-card,.lever-card,.sphere-card,.formation-card,.lit-card,.theol-card,.cf-card,.pos-card,.eth-card,.nday-card,.sacred-card,.imago-side,.brain-card,.d5-item';
+  document.querySelectorAll(sel).forEach(card=>{
+    if(card.dataset.magBound)return;card.dataset.magBound='1';
+    card.classList.add('magnetic');
+    card.addEventListener('mousemove',e=>{
+      const r=card.getBoundingClientRect();
+      const mx=((e.clientX-r.left)/r.width-0.5)*2;
+      const my=((e.clientY-r.top)/r.height-0.5)*2;
+      card.style.setProperty('--rx',(mx*4).toFixed(2)+'deg');
+      card.style.setProperty('--ry',(-my*4).toFixed(2)+'deg');
+    });
+    card.addEventListener('mouseleave',()=>{card.style.setProperty('--rx','0deg');card.style.setProperty('--ry','0deg');});
+  });
+}
+
+function particlesForSlide(){
+  document.querySelectorAll('.particle').forEach(p=>{
+    const s=p.closest('.slide');
+    p.style.animationPlayState=(s&&s.classList.contains('active'))?'running':'paused';
+  });
+}
+
+function preloadNextImg(idx){
+  [idx-1,idx+1,idx+2].forEach(i=>{
+    if(i<0||i>=slides.length)return;
+    slides[i].querySelectorAll('img.slide-img,.media-card img,.photo-band img').forEach(img=>{
+      const src=img.getAttribute('src')||img.dataset.src;
+      if(!src||img.dataset.preloaded)return;img.dataset.preloaded='1';
+      const l=document.createElement('link');l.rel='preload';l.as='image';l.href=src;
+      document.head.appendChild(l);
+    });
+  });
+}
+
+function fireDonut(slide){
+  slide.querySelectorAll('.donut-9010').forEach(d=>{
+    if(d.dataset.fired)return;d.dataset.fired='1';
+    const v=parseInt(d.dataset.p||'90');
+    setTimeout(()=>{d.style.setProperty('--p10',v);},220);
+  });
 }
 
 // TRANSITION ENGINE
@@ -1252,6 +1435,11 @@ function syncA11y(){slides.forEach((s,i)=>s.setAttribute('aria-hidden',!started|
 function triggerEntrance(slide,idx){
   slide.querySelectorAll('.anim').forEach(e=>e.classList.add('in'));
   animCharts(slide);animCounts(slide);revealSplit(slide);
+  initPaceSlide(slide,idx);
+  twQuotes(slide);drawStrokes(slide);clipTitleWords(slide);
+  fireDonut(slide);
+  particlesForSlide();preloadNextImg(idx);
+  bindMagnetic();
   if(DISC_SLIDES.has(idx))initDiscSlide(slide,idx);
   else stopTimer();
   if(idx===POS_IDX)setTimeout(burstParticles,750);
@@ -1259,6 +1447,7 @@ function triggerEntrance(slide,idx){
 
 function go(n){
   if(!started||trans||n<0||n>=total)return;
+  if(slides[cur].dataset.pace&&n>cur){if(revealNextPace(cur))return;}
   if(DISC_SLIDES.has(cur)&&n>cur){if(revealNextQ(cur))return;}
   if(n===cur)return;
   trans=true;
@@ -1298,7 +1487,10 @@ document.addEventListener('keydown',e=>{
   if(document.getElementById('carousel-overlay').classList.contains('open')){if(e.key==='Escape')document.getElementById('carousel-overlay').classList.remove('open');if(e.key==='ArrowRight')document.getElementById('car-next').click();if(e.key==='ArrowLeft')document.getElementById('car-prev').click();return;}
   if(document.getElementById('ai-panel').classList.contains('open')&&e.key==='Escape'){document.getElementById('ai-panel').classList.remove('open');return;}
   if(['ArrowRight','ArrowDown',' '].includes(e.key)){e.preventDefault();go(cur+1);}
-  if(['ArrowLeft','ArrowUp'].includes(e.key)){e.preventDefault();go(cur-1);}
+  if(['ArrowLeft','ArrowUp'].includes(e.key)){e.preventDefault();
+    if(slides[cur].dataset.pace&&reversePace(cur))return;
+    go(cur-1);
+  }
 });
 document.getElementById('next-btn').addEventListener('click',()=>go(cur+1));
 document.getElementById('prev-btn').addEventListener('click',()=>go(cur-1));
@@ -1325,7 +1517,14 @@ function finishVideo(){
   document.getElementById('skip-video').classList.remove('visible');
   ['nav-bar','slide-counter','prev-btn','next-btn'].forEach(id=>document.getElementById(id).classList.add('visible'));
   document.getElementById('ai-fab').classList.add('vis');
-  setTimeout(()=>{slides[0].querySelectorAll('.anim').forEach(e=>e.classList.add('in'));revealSplit(slides[0]);animCounts(slides[0]);},300);
+  setTimeout(()=>{
+    slides[0].querySelectorAll('.anim').forEach(e=>e.classList.add('in'));
+    revealSplit(slides[0]);animCounts(slides[0]);
+    initPaceSlide(slides[0],0);
+    twQuotes(slides[0]);drawStrokes(slides[0]);clipTitleWords(slides[0]);
+    fireDonut(slides[0]);particlesForSlide();preloadNextImg(0);
+    bindMagnetic();
+  },300);
   syncA11y();updNav();
 }
 document.getElementById('start-btn').addEventListener('click',startPres);

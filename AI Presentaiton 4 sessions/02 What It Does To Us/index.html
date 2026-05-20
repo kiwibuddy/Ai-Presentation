@@ -580,7 +580,13 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
 .pns-sep{font-size:.5rem;color:rgba(255,255,255,.12);}
 
 /* ─── FORMATION CARDS ─── */
-.formation-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2vw;margin:2vh 0;}
+.formation-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.4vw 1.6vw;margin:2vh 0;max-width:1080px;}
+.formation-card{min-height:18vh;}
+.formation-card .fc-img{aspect-ratio:21/9;border-radius:10px;overflow:hidden;margin-bottom:1.2vh;background:#101524;}
+.formation-card .fc-img img{width:100%;height:100%;object-fit:cover;display:block;}
+@media(max-width:900px){.formation-grid{grid-template-columns:1fr;}}
+/* keep legacy 4-col rule reference */
+.formation-grid--LEGACY{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2vw;margin:2vh 0;}
 .formation-card{border-radius:14px;padding:2.8vh 2vw;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);position:relative;overflow:hidden;transition:transform .35s var(--ease),background .3s;}
 .formation-card:hover{transform:translateY(-5px);background:rgba(255,255,255,.09);}
 .fc-icon{font-size:2rem;margin-bottom:.8rem;display:block;}
@@ -602,7 +608,11 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
 .theol-card.tc-sky::before{background:var(--sky2);}
 .theol-card.tc-lime::before{background:var(--lime);}
 .theol-card.tc-amber::before{background:var(--amber);}
-.tc-header{display:flex;align-items:center;gap:.7rem;margin-bottom:.65rem;}
+.tc-header{display:flex;align-items:center;gap:.9rem;margin-bottom:.7rem;}
+.tc-portrait{width:42px;height:42px;border-radius:50%;flex-shrink:0;background-size:cover;background-position:center;border:1.5px solid rgba(255,255,255,.18);box-shadow:0 4px 12px rgba(0,0,0,.4);}
+.prophetic-glyph{width:38px;height:38px;color:var(--lime);margin-bottom:.8rem;}
+.prophetic-glyph svg{width:100%;height:100%;display:block;}
+.s-num.syco-word{font-family:var(--display);font-weight:700;font-size:clamp(1.3rem,2vw,1.7rem);color:#fff;letter-spacing:-.01em;}
 .tc-name{font-size:.62rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;}
 .tc-gold .tc-name{color:var(--gold);}
 .tc-sky .tc-name{color:var(--sky2);}
@@ -613,7 +623,8 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
 
 /* ─── LITURGY TRIFECTA ─── */
 .lit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4vw;margin:2vh 0;}
-.lit-card{border-radius:16px;padding:3vh 2.2vw;text-align:center;transition:transform .35s var(--ease);}
+.lit-card{border-radius:16px;padding:3vh 2.2vw;text-align:center;transition:transform .35s var(--ease);position:relative;}
+.lc-portrait{width:64px;height:64px;border-radius:50%;background-size:cover;background-position:center;margin:0 auto 1rem;border:2px solid rgba(255,255,255,.1);box-shadow:0 8px 18px rgba(0,0,0,.32);}
 .lit-card:hover{transform:translateY(-5px);}
 .lit-card.lc-james{background:linear-gradient(135deg,hsl(240,20%,14%),hsl(240,20%,10%));border:1px solid rgba(147,180,255,.15);}
 .lit-card.lc-smith{background:linear-gradient(135deg,hsl(207,40%,14%),hsl(207,40%,10%));border:1px solid rgba(147,217,17,.15);}
@@ -659,6 +670,50 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
   .formation-grid{grid-template-columns:1fr 1fr;}
   .lit-grid{grid-template-columns:1fr;}
   .imago-split{grid-template-columns:1fr;}
+}
+
+/* ═══ PREMIUM PRIMITIVES (shared, cross-session) ═══ */
+.stat-card.magnetic,.level-card.magnetic,.lever-card.magnetic,.sphere-card.magnetic,.formation-card.magnetic,.lit-card.magnetic,.theol-card.magnetic,.cf-card.magnetic,.pos-card.magnetic,.eth-card.magnetic,.nday-card.magnetic,.sacred-card.magnetic,.imago-side.magnetic,.brain-card.magnetic,.d5-item.magnetic{transform:perspective(900px) rotateX(var(--ry,0deg)) rotateY(var(--rx,0deg)) translateY(-3px);transition:transform .25s var(--ease),box-shadow .25s var(--ease);will-change:transform;}
+
+.paced{opacity:0;transform:translateY(14px);transition:opacity .55s var(--ease),transform .55s var(--ease);pointer-events:none;}
+.paced.show{opacity:1;transform:translateY(0);pointer-events:auto;}
+.pace-hint{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.34);text-align:center;margin-top:1.4rem;font-family:var(--body);font-weight:600;transition:opacity .4s var(--ease);}
+.slide-inner.warm .pace-hint,.slide-inner:not(.dark):not(.dark2):not(.session-div) .pace-hint{color:rgba(15,17,23,.42);}
+
+.title-word-clip{display:inline-block;overflow:hidden;vertical-align:bottom;line-height:1.05;}
+.title-word-clip>span{display:inline-block;transform:translateY(110%);transition:transform .9s var(--ease);}
+.title-word-clip.in>span{transform:translateY(0);}
+
+.stroke-anim{stroke-dasharray:600;stroke-dashoffset:600;transition:stroke-dashoffset 1.4s var(--ease);}
+.svg-drawn .stroke-anim{stroke-dashoffset:0;}
+
+.tw-active::after{content:'|';display:inline-block;margin-left:2px;color:var(--lime);animation:twBlink 1s step-end infinite;}
+@keyframes twBlink{50%{opacity:0;}}
+
+.media-card{aspect-ratio:1/1;border-radius:14px;overflow:hidden;position:relative;background:#1a1d28;border:1px solid rgba(255,255,255,.06);}
+.media-card.wide{aspect-ratio:16/9;}
+.media-card.tall{aspect-ratio:4/5;}
+.media-card img{width:100%;height:100%;object-fit:cover;display:block;}
+.media-card::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 55%,rgba(0,0,0,.34) 100%);pointer-events:none;}
+
+.photo-band{height:22vh;border-radius:14px;overflow:hidden;position:relative;margin:0 0 2.4vh;}
+.photo-band.tall{height:30vh;}
+.photo-band img{width:100%;height:100%;object-fit:cover;display:block;}
+.photo-band::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.55) 100%);pointer-events:none;}
+
+@property --p10{syntax:'<number>';inherits:false;initial-value:0;}
+.donut-9010{--p10:0;width:clamp(180px,22vw,260px);aspect-ratio:1/1;border-radius:50%;background:conic-gradient(var(--lime) calc(var(--p10) * 3.6deg),rgba(255,255,255,.08) 0);position:relative;display:flex;align-items:center;justify-content:center;transition:--p10 1.6s var(--ease);margin:0 auto;}
+.donut-9010::before{content:'';position:absolute;inset:18%;border-radius:50%;background:var(--dark);}
+.donut-9010 .donut-num{position:relative;z-index:2;font-family:var(--display);font-weight:700;font-size:clamp(2.4rem,5vw,3.4rem);color:var(--lime);}
+.donut-9010 .donut-lbl{position:absolute;bottom:-2.4rem;left:50%;transform:translateX(-50%);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.55);white-space:nowrap;text-align:center;font-weight:600;}
+.donut-9010.contrast{background:conic-gradient(var(--red) calc(var(--p10) * 3.6deg),rgba(255,255,255,.08) 0);}
+.donut-9010.contrast .donut-num{color:var(--red);}
+
+@media(prefers-reduced-motion:reduce){
+  .paced{transition:opacity .25s linear !important;transform:none !important;}
+  .title-word-clip>span{transition:none !important;transform:none !important;}
+  .stroke-anim{transition:none !important;stroke-dashoffset:0 !important;}
+  .tw-active::after{animation:none !important;}
 }
 
 </style>
@@ -778,7 +833,7 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
   </div>
 </div>
 
-<div class="slide">
+<div class="slide" data-pace="cards">
   <div class="slide-inner dark">
     <div class="s-body top">
       <div class="eyebrow anim fade-up d1">The Question Beneath the Question</div>
@@ -786,43 +841,46 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
       <div class="s-div anim fade-up d3"></div>
       <p class="s-sub anim fade-up d4" style="max-width:680px">Every technology training you without asking permission. The question is not whether you are being formed. The question is what you are being formed into.</p>
       <div class="formation-grid anim fade-up d5">
-        <div class="formation-card danger" data-modal="what_forms"><div class="fc-icon">⚡</div><div class="fc-title">Impatience</div><div class="fc-body">Every delay becomes an irritant. Latency is now intolerable. The discipline of waiting — for God, for people, for understanding — atrophies.</div><div class="fc-arrow">Source →</div></div>
-        <div class="formation-card amber-top" data-modal="what_forms"><div class="fc-icon">🔗</div><div class="fc-title">Dependence</div><div class="fc-body">The capacity to think without assistance weakens. Judgment delegated becomes judgment lost. First principles become inaccessible without a prompt.</div><div class="fc-arrow">Source →</div></div>
-        <div class="formation-card sky-top" data-modal="what_forms"><div class="fc-icon">📱</div><div class="fc-title">Shallow Focus</div><div class="fc-body">Deep reading, sustained prayer, slow conversation — all become increasingly difficult as the threshold for engagement compresses.</div><div class="fc-arrow">Source →</div></div>
-        <div class="formation-card lime-top" data-modal="what_forms"><div class="fc-icon">🎛️</div><div class="fc-title">Control Hunger</div><div class="fc-body">The illusion that the world is optimisable grows. The uncontrollable — grief, failure, mystery, God — becomes less tolerable, not more.</div><div class="fc-arrow">Source →</div></div>
+        <div class="formation-card danger paced" data-modal="what_forms"><div class="fc-img"><img src="https://images.unsplash.com/photo-1495364141860-b0d03eccd065?w=900&auto=format&fit=crop&q=80" alt="" decoding="async"></div><div class="fc-icon">⚡</div><div class="fc-title">Impatience</div><div class="fc-body">Every delay becomes an irritant. Latency is now intolerable. The discipline of waiting — for God, for people, for understanding — atrophies.</div><div class="fc-arrow">Source →</div></div>
+        <div class="formation-card amber-top paced" data-modal="what_forms"><div class="fc-img"><img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=900&auto=format&fit=crop&q=80" alt="" decoding="async"></div><div class="fc-icon">🔗</div><div class="fc-title">Dependence</div><div class="fc-body">The capacity to think without assistance weakens. Judgment delegated becomes judgment lost. First principles become inaccessible without a prompt.</div><div class="fc-arrow">Source →</div></div>
+        <div class="formation-card sky-top paced" data-modal="what_forms"><div class="fc-img"><img src="https://images.unsplash.com/photo-1517292987719-0369a794ec0f?w=900&auto=format&fit=crop&q=80" alt="" decoding="async"></div><div class="fc-icon">📱</div><div class="fc-title">Shallow Focus</div><div class="fc-body">Deep reading, sustained prayer, slow conversation — all become increasingly difficult as the threshold for engagement compresses.</div><div class="fc-arrow">Source →</div></div>
+        <div class="formation-card lime-top paced" data-modal="what_forms"><div class="fc-img"><img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=900&auto=format&fit=crop&q=80" alt="" decoding="async"></div><div class="fc-icon">🎛️</div><div class="fc-title">Control Hunger</div><div class="fc-body">The illusion that the world is optimisable grows. The uncontrollable — grief, failure, mystery, God — becomes less tolerable, not more.</div><div class="fc-arrow">Source →</div></div>
       </div>
-      <div class="callout dark-call anim fade-up d6" style="max-width:720px">These are not personality flaws to overcome. They are the natural outputs of a culture shaped by algorithmic attention. Naming them is the first step to resisting them. — Andy Crouch, <em>The Life We're Looking For</em> (2022)</div>
+      <div class="callout dark-call paced" style="max-width:720px">These are not personality flaws to overcome. They are the natural outputs of a culture shaped by algorithmic attention. Naming them is the first step to resisting them. — Andy Crouch, <em>The Life We're Looking For</em> (2022)</div>
     </div>
     <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 02</span></div>
   </div>
 </div>
 
-<div class="slide">
+<div class="slide" data-pace="cards">
   <div class="slide-inner dark2">
     <div class="s-body top">
       <div class="eyebrow anim fade-up d1">The Formation Trifecta</div>
       <h2 class="s-title lg anim fade-up d2" data-split="words">Three voices naming<br>the same reality.</h2>
       <div class="lit-grid anim fade-up d3">
-        <div class="lit-card lc-james" data-modal="samuel_james">
+        <div class="lit-card lc-james paced" data-modal="samuel_james">
+          <div class="lc-portrait" style="background-image:url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&auto=format&fit=crop&q=80')"></div>
           <div class="lc-author">Samuel James</div>
           <div class="lc-book"><em>Digital Liturgies</em> (2023)</div>
-          <div class="lc-quote">"The social internet is a profoundly spiritual and liturgical environment that trains our hearts to desire a particular vision of the good life."</div>
+          <div class="lc-quote" data-tw data-tw-speed="14">"The social internet is a profoundly spiritual and liturgical environment that trains our hearts to desire a particular vision of the good life."</div>
           <div class="lc-application">The internet itself — not just what is on it — is doing the forming.</div>
         </div>
-        <div class="lit-card lc-smith" data-modal="jka_smith">
+        <div class="lit-card lc-smith paced" data-modal="jka_smith">
+          <div class="lc-portrait" style="background-image:url('https://images.unsplash.com/photo-1438032005730-c779502df39b?w=300&auto=format&fit=crop&q=80')"></div>
           <div class="lc-author">James K.A. Smith</div>
           <div class="lc-book"><em>You Are What You Love</em> (2016)</div>
-          <div class="lc-quote">"You are what you love — and you love what you habitually do. Liturgies are the means by which our hearts are calibrated."</div>
+          <div class="lc-quote" data-tw data-tw-speed="14">"You are what you love — and you love what you habitually do. Liturgies are the means by which our hearts are calibrated."</div>
           <div class="lc-application">Habits form loves. Loves form identity. Identity determines everything.</div>
         </div>
-        <div class="lit-card lc-comer" data-modal="comer_behold">
+        <div class="lit-card lc-comer paced" data-modal="comer_behold">
+          <div class="lc-portrait" style="background-image:url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=300&auto=format&fit=crop&q=80')"></div>
           <div class="lc-author">John Mark Comer</div>
           <div class="lc-book">Art of Manliness Podcast (2025)</div>
-          <div class="lc-quote">"We become what we behold."</div>
+          <div class="lc-quote" data-tw data-tw-speed="22">"We become what we behold."</div>
           <div class="lc-application">What captures our sustained attention shapes what we become. The algorithm knows this better than we do.</div>
         </div>
       </div>
-      <div class="callout dark-call anim fade-up d4" style="max-width:760px">Three thinkers from different traditions saying the same thing: formation is not primarily about what we believe. It is about what we repeatedly attend to. And the attention economy is designed by people who understand this better than the church does.</div>
+      <div class="callout dark-call paced" style="max-width:760px">Three thinkers from different traditions saying the same thing: formation is not primarily about what we believe. It is about what we repeatedly attend to. And the attention economy is designed by people who understand this better than the church does.</div>
     </div>
     <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 02</span></div>
   </div>
@@ -830,11 +888,10 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
 
 <div class="slide">
   <div class="slide-inner dark" style="background:radial-gradient(ellipse at 50% 30%,hsl(38,25%,10%) 0%,hsl(218,38%,7%) 55%)">
+    <div class="bg-img" style="opacity:.18"><img class="slide-img" src="https://images.unsplash.com/photo-1438032005730-c779502df39b?w=1400&auto=format&fit=crop&q=80" alt="" decoding="async"><div class="ov-dk"></div></div>
     <div class="s-body center">
       <div class="eyebrow anim fade-up d1" style="color:var(--gold)">Augustine &middot; Confessions, Book I, Chapter 1 &middot; c. 397 AD</div>
-      <div class="anim fade-up d2" style="font-family:var(--display);font-size:clamp(1.4rem,3.2vw,3rem);font-style:italic;font-weight:400;color:var(--white);line-height:1.55;max-width:820px;text-align:center;margin:2vh auto">
-        &ldquo;You have made us for yourself, O Lord,<br>and our heart is restless<br>until it rests in you.&rdquo;
-      </div>
+      <div class="anim fade-up d2" style="font-family:var(--display);font-size:clamp(1.4rem,3.2vw,3rem);font-style:italic;font-weight:400;color:var(--white);line-height:1.55;max-width:820px;text-align:center;margin:2vh auto" data-tw data-tw-speed="32" data-tw-delay="800">&ldquo;You have made us for yourself, O Lord, and our heart is restless until it rests in you.&rdquo;</div>
       <div class="anim fade-up d3" style="font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-top:1.5rem">Confessions I.1 &mdash; Latin: <em>cor nostrum inquietum est donec requiescat in Te</em></div>
       <div class="s-div anim fade-up d4" style="margin:1.4rem auto"></div>
       <p class="s-sub anim fade-up d5" style="text-align:center;max-width:660px">The restlessness AI companions offer to soothe is not a flaw to be optimised away. It is a God-given hunger pointing toward him. When we hand it to an algorithm, we don't resolve it. We deepen it — and redirect it toward a product designed to monetise it.</p>
@@ -844,55 +901,56 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
   </div>
 </div>
 
-<div class="slide">
+<div class="slide" data-pace="cards">
   <div class="slide-inner dark2">
     <div class="s-body top">
       <div class="eyebrow anim fade-up d1">The Idol Analysis — Three Voices</div>
       <h2 class="s-title lg anim fade-up d2" data-split="words">Every age builds<br>its own <span class="lime">gods.</span></h2>
       <div class="theol-grid anim fade-up d3">
-        <div class="theol-card tc-gold" data-modal="ellul">
-          <div class="tc-header"><div class="tc-name">Jacques Ellul</div><div class="tc-work"><em>The Technological Society</em> (1954)</div></div>
-          <div class="tc-quote">"In our technological society, technique is the totality of methods rationally arrived at and having absolute efficiency in every field of human activity." Technique doesn't just change tasks — it imposes efficiency as a totalising value on everything it touches.</div>
+        <div class="theol-card tc-gold paced" data-modal="ellul">
+          <div class="tc-header"><div class="tc-portrait" style="background-image:url('https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?w=240&auto=format&fit=crop&q=80')"></div><div><div class="tc-name">Jacques Ellul</div><div class="tc-work"><em>The Technological Society</em> (1954)</div></div></div>
+          <div class="tc-quote" data-tw data-tw-speed="10">"In our technological society, technique is the totality of methods rationally arrived at and having absolute efficiency in every field of human activity." Technique doesn't just change tasks — it imposes efficiency as a totalising value on everything it touches.</div>
         </div>
-        <div class="theol-card tc-sky" data-modal="keller_idol">
-          <div class="tc-header"><div class="tc-name">Timothy Keller</div><div class="tc-work"><em>Counterfeit Gods</em> (2009)</div></div>
-          <div class="tc-quote">Idolatry is "a good thing turned into an absolute value." In our age the candidates are intelligence, convenience and scale. These are genuinely good things. That is exactly what makes them dangerous when they become ultimate things.</div>
+        <div class="theol-card tc-sky paced" data-modal="keller_idol">
+          <div class="tc-header"><div class="tc-portrait" style="background-image:url('https://images.unsplash.com/photo-1542596594-649edbc13630?w=240&auto=format&fit=crop&q=80')"></div><div><div class="tc-name">Timothy Keller</div><div class="tc-work"><em>Counterfeit Gods</em> (2009)</div></div></div>
+          <div class="tc-quote" data-tw data-tw-speed="10">Idolatry is "a good thing turned into an absolute value." In our age the candidates are intelligence, convenience and scale. These are genuinely good things. That is exactly what makes them dangerous when they become ultimate things.</div>
         </div>
-        <div class="theol-card tc-lime" data-modal="crouch_idol">
-          <div class="tc-header"><div class="tc-name">Andy Crouch</div><div class="tc-work"><em>The Life We're Looking For</em> (2022)</div></div>
-          <div class="tc-quote">"Technology is the ideology of our age. It is both the material reality of our age and the dream of our age — and to me that means it is the idol of our age, and to a great extent, the unacknowledged source of injustice of our age."</div>
+        <div class="theol-card tc-lime paced" data-modal="crouch_idol">
+          <div class="tc-header"><div class="tc-portrait" style="background-image:url('https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=240&auto=format&fit=crop&q=80')"></div><div><div class="tc-name">Andy Crouch</div><div class="tc-work"><em>The Life We're Looking For</em> (2022)</div></div></div>
+          <div class="tc-quote" data-tw data-tw-speed="10">"Technology is the ideology of our age. It is both the material reality of our age and the dream of our age — and to me that means it is the idol of our age, and to a great extent, the unacknowledged source of injustice of our age."</div>
         </div>
       </div>
-      <div class="callout dark-call anim fade-up d4" style="max-width:720px">Three centuries of analysis landing in the same place. The question AI forces on every leader is not "how do I use it well?" It is "what am I allowing it to become in my organisation, my family, and my own soul?"</div>
+      <div class="callout dark-call paced" style="max-width:720px">Three centuries of analysis landing in the same place. The question AI forces on every leader is not "how do I use it well?" It is "what am I allowing it to become in my organisation, my family, and my own soul?"</div>
     </div>
     <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 02</span></div>
   </div>
 </div>
 
-<div class="slide">
+<div class="slide" data-pace="cards">
   <div class="slide-inner warm">
+    <div class="bg-img" style="opacity:.18"><img class="slide-img" src="https://images.unsplash.com/photo-1473893604213-3df9c15cf066?w=1400&auto=format&fit=crop&q=80" alt="" decoding="async"><div class="ov"></div></div>
     <div class="s-body top">
       <div class="eyebrow anim fade-up d1">Genesis 11 &middot; The Tower of Babel</div>
       <h2 class="s-title lg anim fade-up d2" data-split="words">Unified power without humility<br>always looks efficient<br>until it breaks.</h2>
       <div class="s-div anim fade-up d3"></div>
       <p class="s-sub anim fade-up d4">The builders sought to "make a name for themselves" through technological achievement. The goal was not provision — it was autonomy. Not service — but legacy. Genesis still speaks.</p>
       <div class="brain-split anim fade-up d5" style="margin-top:1.5vh">
-        <div class="brain-card left"><div class="brain-tag">The Babel Pattern</div><div class="brain-title">Capability Before Character</div><div class="brain-desc">Extraordinary technical reach. Unified, coordinated, efficient. No acknowledged limit. No external accountability. A project to "reach heaven" — to transcend the human condition by building well enough.</div><div class="brain-pill">Then it broke</div></div>
-        <div class="brain-card right"><div class="brain-tag">The 2026 Pattern</div><div class="brain-title">Solving Intelligence First</div><div class="brain-desc">Demis Hassabis of DeepMind once said: "First solve intelligence, then use that to solve everything else." The ambition is the same. The scale is larger. The theological diagnosis is the same.</div><div class="brain-pill" style="background:var(--amber)">Still the same story</div></div>
+        <div class="brain-card left paced"><div class="brain-tag">The Babel Pattern</div><div class="brain-title">Capability Before Character</div><div class="brain-desc">Extraordinary technical reach. Unified, coordinated, efficient. No acknowledged limit. No external accountability. A project to "reach heaven" — to transcend the human condition by building well enough.</div><div class="brain-pill">Then it broke</div></div>
+        <div class="brain-card right paced"><div class="brain-tag">The 2026 Pattern</div><div class="brain-title">Solving Intelligence First</div><div class="brain-desc">Demis Hassabis of DeepMind once said: "First solve intelligence, then use that to solve everything else." The ambition is the same. The scale is larger. The theological diagnosis is the same.</div><div class="brain-pill" style="background:var(--amber)">Still the same story</div></div>
       </div>
-      <div class="callout lime anim fade-up d6"><strong>The response to Babel was not the destruction of building.</strong> It was the redistribution of pride. God is not opposed to human technology. He is opposed to the human idolatry that uses technology as a substitute for dependence on him.</div>
+      <div class="callout lime paced"><strong>The response to Babel was not the destruction of building.</strong> It was the redistribution of pride. God is not opposed to human technology. He is opposed to the human idolatry that uses technology as a substitute for dependence on him.</div>
     </div>
     <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 02 &middot; Genesis 11</span></div>
   </div>
 </div>
 
-<div class="slide">
+<div class="slide" data-pace="cards">
   <div class="slide-inner dark">
     <div class="s-body top">
       <div class="eyebrow anim fade-up d1">Genesis 1:27 &middot; Theological Anthropology</div>
       <h2 class="s-title lg anim fade-up d2" data-split="words">What is a human being<br>if machines outperform<br>every task?</h2>
       <div class="imago-split anim fade-up d3">
-        <div class="imago-side machine" data-modal="imago_dei">
+        <div class="imago-side machine paced" data-modal="imago_dei">
           <div class="imago-tag">What AI Offers</div>
           <div class="imago-title">Intelligence Without Being</div>
           <ul class="imago-items">
@@ -903,7 +961,7 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
             <li>Optimisation without love</li>
           </ul>
         </div>
-        <div class="imago-side human" data-modal="imago_dei">
+        <div class="imago-side human paced" data-modal="imago_dei">
           <div class="imago-tag">What Christianity Answers</div>
           <div class="imago-title">Image-Bearer — Imago Dei</div>
           <ul class="imago-items">
@@ -915,23 +973,24 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
           </ul>
         </div>
       </div>
-      <div class="quote-box anim fade-up d4" style="max-width:700px"><div class="qm">&ldquo;</div><blockquote>So God created mankind in his own image, in the image of God he created them; male and female he created them.</blockquote><cite>Genesis 1:27 &mdash; The only framework that answers AI's question without flinching</cite></div>
+      <div class="quote-box paced" style="max-width:700px"><div class="qm">&ldquo;</div><blockquote data-tw data-tw-speed="22">So God created mankind in his own image, in the image of God he created them; male and female he created them.</blockquote><cite>Genesis 1:27 &mdash; The only framework that answers AI's question without flinching</cite></div>
     </div>
     <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 02 &middot; Genesis 1:27</span></div>
   </div>
 </div>
 
-<div class="slide">
+<div class="slide" data-pace="cards">
   <div class="slide-inner">
+    <div class="bg-img" style="opacity:.16"><img class="slide-img" src="https://images.unsplash.com/photo-1543269865-cbf427effbad?w=1400&auto=format&fit=crop&q=80" alt="" decoding="async"><div class="ov"></div></div>
     <div class="s-body top">
       <div class="eyebrow anim fade-up d1">The Pastoral Concern</div>
       <h2 class="s-title lg anim fade-up d2" data-split="words">AI is frictionless.<br>But humans grow<br>through <em>friction.</em></h2>
       <div class="s-div anim fade-up d3"></div>
       <div class="brain-split anim fade-up d4">
-        <div class="brain-card left"><div class="brain-tag">What AI Offers</div><div class="brain-title">Frictionless Intimacy</div><div class="brain-desc">A companion that always affirms, always adapts, never challenges, never walks away, never has a bad day of its own. Efficient. Available. Optimised for engagement. No resistance.</div><div class="brain-pill" style="background:var(--red)">Simulation</div></div>
-        <div class="brain-card right"><div class="brain-tag">What Humans Need</div><div class="brain-title">Genuine Resistance</div><div class="brain-desc">Iron sharpens iron. Real formation happens when another person's reality pushes back against yours. Conflict, apology, forgiveness, difference — this is the texture of actual growth.</div><div class="brain-pill" style="background:var(--green)">Formation</div></div>
+        <div class="brain-card left paced"><div class="brain-tag">What AI Offers</div><div class="brain-title">Frictionless Intimacy</div><div class="brain-desc">A companion that always affirms, always adapts, never challenges, never walks away, never has a bad day of its own. Efficient. Available. Optimised for engagement. No resistance.</div><div class="brain-pill" style="background:var(--red)">Simulation</div></div>
+        <div class="brain-card right paced"><div class="brain-tag">What Humans Need</div><div class="brain-title">Genuine Resistance</div><div class="brain-desc">Iron sharpens iron. Real formation happens when another person's reality pushes back against yours. Conflict, apology, forgiveness, difference — this is the texture of actual growth.</div><div class="brain-pill" style="background:var(--green)">Formation</div></div>
       </div>
-      <div class="callout amber anim fade-up d5">If we automate all the friction from our lives, we don't become more efficient. We stop growing. The church's greatest irreplaceable offering is real, unoptimised, inconvenient human presence. That is now the premium product.</div>
+      <div class="callout amber paced">If we automate all the friction from our lives, we don't become more efficient. We stop growing. The church's greatest irreplaceable offering is real, unoptimised, inconvenient human presence. That is now the premium product.</div>
     </div>
     <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 02</span></div>
   </div>
@@ -939,48 +998,50 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
 
 <div class="slide">
   <div class="slide-inner dark2">
+    <div class="bg-img" style="opacity:.18"><img class="slide-img" src="https://images.unsplash.com/photo-1577563908411-5077b6dc7624?w=1400&auto=format&fit=crop&q=80" alt="" decoding="async"><div class="ov-dk"></div></div>
     <div class="s-body center">
       <div class="eyebrow anim fade-up d1">The Theology of Weakness</div>
       <h2 class="s-title lg anim fade-up d2" style="text-align:center;max-width:800px" data-split="words">A broken human leader<br>is a more powerful vessel<br>than an optimised machine.</h2>
       <div class="s-div anim fade-up d3" style="margin:.8rem auto 1.4rem"></div>
       <p class="s-sub anim fade-up d4" style="text-align:center;max-width:660px">God's power is made perfect in weakness. This is not a consolation prize. It is a design principle. The moments that form people — grief, doubt, repentance, joy — require a human presence that can be wounded and still show up.</p>
       <div class="callout dark-call anim fade-up d5" style="max-width:700px;text-align:left"><strong>Your limitations are not weaknesses to overcome. They are part of what makes you trustworthy.</strong> Pastoral authority that comes through shared suffering cannot be replicated by a tool that has never suffered anything. AI has no scars. That is not a strength.</div>
-      <div class="quote-box anim fade-up d6" style="max-width:700px"><div class="qm">&ldquo;</div><blockquote>You cannot Google the answers to the deep questions of your life. No AI prompt will ever generate the purpose of your existence. You have to live it in the Atoms.</blockquote><cite>Dr. Arthur Brooks, Harvard &mdash; AI Advantage Summit 2026</cite></div>
+      <div class="quote-box anim fade-up d6" style="max-width:700px"><div class="qm">&ldquo;</div><blockquote data-tw data-tw-speed="18">You cannot Google the answers to the deep questions of your life. No AI prompt will ever generate the purpose of your existence. You have to live it in the Atoms.</blockquote><cite>Dr. Arthur Brooks, Harvard &mdash; AI Advantage Summit 2026</cite></div>
     </div>
     <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 02</span></div>
   </div>
 </div>
 
-<div class="slide">
+<div class="slide" data-pace="cards">
   <div class="slide-inner warm">
+    <div class="bg-img" style="opacity:.16"><img class="slide-img" src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=1400&auto=format&fit=crop&q=80" alt="" decoding="async"><div class="ov"></div></div>
     <div class="s-body top">
       <div class="eyebrow anim fade-up d1">The Hidden Cost of Automation</div>
       <h2 class="s-title lg anim fade-up d2" data-split="words">If no one gets trained<br>at the bottom, who<br>becomes <em>senior?</em></h2>
       <div class="s-div anim fade-up d3"></div>
       <p class="s-sub anim fade-up d4">The Stanford data shows entry-level workers aged 22-25 seeing the sharpest employment decline. This matters theologically as much as economically. Formation requires stages. You cannot skip them.</p>
       <div class="insight-list" style="max-width:780px">
-        <div class="insight-item anim fade-left d5"><div class="insight-num">1</div><div><div class="insight-title">Senior lawyers are made by being junior lawyers first</div><div class="insight-body">The cases you lose at 25 form the wisdom you deploy at 45. There is no shortcut to that formation. When AI automates the entry level, it severs intergenerational knowledge transmission.</div></div></div>
-        <div class="insight-item anim fade-right d6"><div class="insight-num">2</div><div><div class="insight-title">Ministry formation requires the same stages</div><div class="insight-body">The associate pastor making mistakes at 27 is being formed. The worship leader who struggles with a difficult congregation at 24 is being shaped. These stages are not inefficiencies to be removed. They are the thing itself.</div></div></div>
-        <div class="insight-item anim fade-left d7"><div class="insight-num">3</div><div><div class="insight-title">The question for every leader in this room</div><div class="insight-body">How are you protecting the formation pathway for the people below you? What are you deliberately not automating because the struggle is the point?</div></div></div>
+        <div class="insight-item paced"><div class="insight-num">1</div><div><div class="insight-title">Senior lawyers are made by being junior lawyers first</div><div class="insight-body">The cases you lose at 25 form the wisdom you deploy at 45. There is no shortcut to that formation. When AI automates the entry level, it severs intergenerational knowledge transmission.</div></div></div>
+        <div class="insight-item paced"><div class="insight-num">2</div><div><div class="insight-title">Ministry formation requires the same stages</div><div class="insight-body">The associate pastor making mistakes at 27 is being formed. The worship leader who struggles with a difficult congregation at 24 is being shaped. These stages are not inefficiencies to be removed. They are the thing itself.</div></div></div>
+        <div class="insight-item paced"><div class="insight-num">3</div><div><div class="insight-title">The question for every leader in this room</div><div class="insight-body">How are you protecting the formation pathway for the people below you? What are you deliberately not automating because the struggle is the point?</div></div></div>
       </div>
     </div>
     <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 02</span></div>
   </div>
 </div>
 
-<div class="slide">
+<div class="slide" data-pace="cards">
   <div class="slide-inner dark" style="background:radial-gradient(ellipse at 50% 35%,hsl(207,38%,9%) 0%,hsl(218,38%,6%) 60%)">
     <div class="s-body center">
       <div class="eyebrow anim fade-up d1" style="color:var(--lime)">The Prophetic Frame</div>
       <h2 class="s-title xl anim fade-up d2" style="color:var(--white);text-align:center" data-split="words">In a synthetic world,<br><span class="lime">holiness</span> is the<br>ultimate disruption.</h2>
       <div class="s-div anim fade-up d3" style="margin:.8rem auto 1.4rem"></div>
       <p class="s-sub anim fade-up d4" style="text-align:center;max-width:660px">As AI floods every platform with generated content and synthetic relationship, the things that cannot be generated become increasingly rare and — in every sense — precious.</p>
-      <div class="stat-row anim fade-up d5" style="max-width:680px;margin-top:2.5vh">
-        <div class="stat-card dark-stat" data-modal="synthetic_world"><div class="s-num" style="font-size:1.8rem">Show up</div><div class="s-label">in person, present, undistracted. In a synthetic world, physical presence is the premium product.</div></div>
-        <div class="stat-card dark-stat" data-modal="synthetic_world"><div class="s-num" style="font-size:1.8rem">Tell truth</div><div class="s-label">when it costs something. In a world of sycophantic AI, genuine honesty is the rarest currency.</div></div>
-        <div class="stat-card dark-stat" data-modal="synthetic_world"><div class="s-num" style="font-size:1.8rem">Stay</div><div class="s-label">when things get hard. In a world of frictionless exits, faithfulness through difficulty is extraordinary.</div></div>
+      <div class="stat-row" style="max-width:760px;margin-top:2.5vh;display:grid;grid-template-columns:repeat(3,1fr);gap:1.4vw;">
+        <div class="stat-card dark-stat paced" data-modal="synthetic_world"><div class="prophetic-glyph"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="16" cy="11" r="5"/><path d="M5 28c0-6 5-10 11-10s11 4 11 10"/></svg></div><div class="s-num syco-word">Show up</div><div class="s-label">in person, present, undistracted. In a synthetic world, physical presence is the premium product.</div></div>
+        <div class="stat-card dark-stat paced" data-modal="synthetic_world"><div class="prophetic-glyph"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 16h20M16 6v20"/></svg></div><div class="s-num syco-word">Tell truth</div><div class="s-label">when it costs something. In a world of sycophantic AI, genuine honesty is the rarest currency.</div></div>
+        <div class="stat-card dark-stat paced" data-modal="synthetic_world"><div class="prophetic-glyph"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 26V10l10-4 10 4v16"/><path d="M14 26v-8h4v8"/></svg></div><div class="s-num syco-word">Stay</div><div class="s-label">when things get hard. In a world of frictionless exits, faithfulness through difficulty is extraordinary.</div></div>
       </div>
-      <div class="callout dark-call anim fade-up d6" style="max-width:700px;margin-top:2vh"><strong>This is not a retreat into irrelevance. It is an advance into the thing only humans can offer.</strong> The question is whether the church recognises it in time to lead it.</div>
+      <div class="callout dark-call paced" style="max-width:700px;margin-top:2vh"><strong>This is not a retreat into irrelevance. It is an advance into the thing only humans can offer.</strong> The question is whether the church recognises it in time to lead it.</div>
     </div>
     <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 02</span></div>
   </div>
@@ -1154,6 +1215,7 @@ function burstParticles(){
 // SCRAMBLE COUNT-UP
 function animCounts(s){
   s.querySelectorAll('.count-up').forEach(el=>{
+    const pp=el.closest('.paced');if(pp&&!pp.classList.contains('show'))return;
     if(el.dataset.counted)return;el.dataset.counted='1';
     const target=parseFloat(el.dataset.target),suffix=el.dataset.suffix||'',dc=parseInt(el.dataset.decimals)||0,sep=el.dataset.separator===',';
     const digits=Math.max(String(Math.round(Math.abs(target))).length,1);
@@ -1173,8 +1235,120 @@ function animCounts(s){
 }
 
 function animCharts(s){
-  s.querySelectorAll('.hbar').forEach((r,i)=>setTimeout(()=>{const f=r.querySelector('.hbar-fill');f.style.width=r.dataset.w+'%';const sp=f.querySelector('span');if(sp)sp.style.opacity='1';},i*120));
-  s.querySelectorAll('.vbar-col').forEach((c,i)=>setTimeout(()=>{c.querySelector('.vbar').style.height=c.dataset.h+'%';c.querySelector('.vbar-val').style.opacity='1';},i*160));
+  s.querySelectorAll('.hbar').forEach((r,i)=>{
+    const pp=r.closest('.paced');if(pp&&!pp.classList.contains('show'))return;
+    if(r.dataset.charted)return;r.dataset.charted='1';
+    setTimeout(()=>{const f=r.querySelector('.hbar-fill');f.style.width=r.dataset.w+'%';const sp=f.querySelector('span');if(sp)sp.style.opacity='1';},i*120);
+  });
+  s.querySelectorAll('.vbar-col').forEach((c,i)=>{
+    const pp=c.closest('.paced');if(pp&&!pp.classList.contains('show'))return;
+    if(c.dataset.vcharted)return;c.dataset.vcharted='1';
+    setTimeout(()=>{c.querySelector('.vbar').style.height=c.dataset.h+'%';c.querySelector('.vbar-val').style.opacity='1';},i*160);
+  });
+}
+
+// ═══ PREMIUM PRIMITIVES ═══
+const paceState={};
+function initPaceSlide(slide,idx){
+  if(!slide.dataset.pace)return;
+  paceState[idx]=0;
+  slide.querySelectorAll('.paced').forEach(p=>p.classList.remove('show'));
+  let h=slide.querySelector('.pace-hint');
+  if(slide.querySelectorAll('.paced').length>0){
+    if(!h){h=document.createElement('p');h.className='pace-hint';h.textContent='Press → or space to reveal';
+      const sb=slide.querySelector('.s-body')||slide.querySelector('.slide-inner')||slide;sb.appendChild(h);}
+    h.style.opacity='';
+  }
+}
+function revealNextPace(idx){
+  const slide=slides[idx];
+  if(!slide||!slide.dataset.pace)return false;
+  const items=[...slide.querySelectorAll('.paced')];
+  const n=paceState[idx]||0;
+  if(n<items.length){
+    items[n].classList.add('show');paceState[idx]=n+1;
+    animCounts(slide);animCharts(slide);
+    if(paceState[idx]===items.length){const h=slide.querySelector('.pace-hint');if(h)h.style.opacity='0';}
+    return true;
+  }
+  return false;
+}
+function reversePace(idx){
+  const slide=slides[idx];
+  if(!slide||!slide.dataset.pace)return false;
+  const n=paceState[idx]||0;
+  if(n>0){
+    const items=[...slide.querySelectorAll('.paced')];
+    items[n-1].classList.remove('show');paceState[idx]=n-1;
+    const h=slide.querySelector('.pace-hint');if(h)h.style.opacity='';
+    return true;
+  }
+  return false;
+}
+
+function twQuotes(slide){
+  slide.querySelectorAll('[data-tw]').forEach(el=>{
+    if(el.dataset.twDone)return;el.dataset.twDone='1';
+    const full=el.textContent;el.textContent='';el.classList.add('tw-active');
+    let i=0;const speed=parseInt(el.dataset.twSpeed||'22');
+    function step(){if(i<=full.length){el.textContent=full.slice(0,i);i++;setTimeout(step,speed);}else{el.classList.remove('tw-active');}}
+    setTimeout(step,parseInt(el.dataset.twDelay||'400'));
+  });
+}
+
+function drawStrokes(slide){
+  slide.querySelectorAll('.stroke-anim').forEach(p=>{
+    if(p.dataset.drawn)return;p.dataset.drawn='1';
+    const svg=p.closest('svg');
+    setTimeout(()=>{if(svg)svg.classList.add('svg-drawn');},480);
+  });
+}
+
+function clipTitleWords(slide){
+  slide.querySelectorAll('.title-word-clip').forEach(el=>{setTimeout(()=>el.classList.add('in'),140);});
+}
+
+function bindMagnetic(){
+  const sel='.stat-card,.level-card,.lever-card,.sphere-card,.formation-card,.lit-card,.theol-card,.cf-card,.pos-card,.eth-card,.nday-card,.sacred-card,.imago-side,.brain-card,.d5-item';
+  document.querySelectorAll(sel).forEach(card=>{
+    if(card.dataset.magBound)return;card.dataset.magBound='1';
+    card.classList.add('magnetic');
+    card.addEventListener('mousemove',e=>{
+      const r=card.getBoundingClientRect();
+      const mx=((e.clientX-r.left)/r.width-0.5)*2;
+      const my=((e.clientY-r.top)/r.height-0.5)*2;
+      card.style.setProperty('--rx',(mx*4).toFixed(2)+'deg');
+      card.style.setProperty('--ry',(-my*4).toFixed(2)+'deg');
+    });
+    card.addEventListener('mouseleave',()=>{card.style.setProperty('--rx','0deg');card.style.setProperty('--ry','0deg');});
+  });
+}
+
+function particlesForSlide(){
+  document.querySelectorAll('.particle').forEach(p=>{
+    const s=p.closest('.slide');
+    p.style.animationPlayState=(s&&s.classList.contains('active'))?'running':'paused';
+  });
+}
+
+function preloadNextImg(idx){
+  [idx-1,idx+1,idx+2].forEach(i=>{
+    if(i<0||i>=slides.length)return;
+    slides[i].querySelectorAll('img.slide-img,.media-card img,.photo-band img').forEach(img=>{
+      const src=img.getAttribute('src')||img.dataset.src;
+      if(!src||img.dataset.preloaded)return;img.dataset.preloaded='1';
+      const l=document.createElement('link');l.rel='preload';l.as='image';l.href=src;
+      document.head.appendChild(l);
+    });
+  });
+}
+
+function fireDonut(slide){
+  slide.querySelectorAll('.donut-9010').forEach(d=>{
+    if(d.dataset.fired)return;d.dataset.fired='1';
+    const v=parseInt(d.dataset.p||'90');
+    setTimeout(()=>{d.style.setProperty('--p10',v);},220);
+  });
 }
 
 // TRANSITION ENGINE
@@ -1189,6 +1363,11 @@ function syncA11y(){slides.forEach((s,i)=>s.setAttribute('aria-hidden',!started|
 function triggerEntrance(slide,idx){
   slide.querySelectorAll('.anim').forEach(e=>e.classList.add('in'));
   animCharts(slide);animCounts(slide);revealSplit(slide);
+  initPaceSlide(slide,idx);
+  twQuotes(slide);drawStrokes(slide);clipTitleWords(slide);
+  fireDonut(slide);
+  particlesForSlide();preloadNextImg(idx);
+  bindMagnetic();
   if(DISC_SLIDES.has(idx))initDiscSlide(slide,idx);
   else stopTimer();
   if(idx===POS_IDX)setTimeout(burstParticles,750);
@@ -1196,6 +1375,7 @@ function triggerEntrance(slide,idx){
 
 function go(n){
   if(!started||trans||n<0||n>=total)return;
+  if(slides[cur].dataset.pace&&n>cur){if(revealNextPace(cur))return;}
   if(DISC_SLIDES.has(cur)&&n>cur){if(revealNextQ(cur))return;}
   if(n===cur)return;
   trans=true;
@@ -1235,7 +1415,10 @@ document.addEventListener('keydown',e=>{
   if(document.getElementById('carousel-overlay').classList.contains('open')){if(e.key==='Escape')document.getElementById('carousel-overlay').classList.remove('open');if(e.key==='ArrowRight')document.getElementById('car-next').click();if(e.key==='ArrowLeft')document.getElementById('car-prev').click();return;}
   if(document.getElementById('ai-panel').classList.contains('open')&&e.key==='Escape'){document.getElementById('ai-panel').classList.remove('open');return;}
   if(['ArrowRight','ArrowDown',' '].includes(e.key)){e.preventDefault();go(cur+1);}
-  if(['ArrowLeft','ArrowUp'].includes(e.key)){e.preventDefault();go(cur-1);}
+  if(['ArrowLeft','ArrowUp'].includes(e.key)){e.preventDefault();
+    if(slides[cur].dataset.pace&&reversePace(cur))return;
+    go(cur-1);
+  }
 });
 document.getElementById('next-btn').addEventListener('click',()=>go(cur+1));
 document.getElementById('prev-btn').addEventListener('click',()=>go(cur-1));
@@ -1262,7 +1445,14 @@ function finishVideo(){
   document.getElementById('skip-video').classList.remove('visible');
   ['nav-bar','slide-counter','prev-btn','next-btn'].forEach(id=>document.getElementById(id).classList.add('visible'));
   document.getElementById('ai-fab').classList.add('vis');
-  setTimeout(()=>{slides[0].querySelectorAll('.anim').forEach(e=>e.classList.add('in'));revealSplit(slides[0]);animCounts(slides[0]);},300);
+  setTimeout(()=>{
+    slides[0].querySelectorAll('.anim').forEach(e=>e.classList.add('in'));
+    revealSplit(slides[0]);animCounts(slides[0]);
+    initPaceSlide(slides[0],0);
+    twQuotes(slides[0]);drawStrokes(slides[0]);clipTitleWords(slides[0]);
+    fireDonut(slides[0]);particlesForSlide();preloadNextImg(0);
+    bindMagnetic();
+  },300);
   syncA11y();updNav();
 }
 document.getElementById('start-btn').addEventListener('click',startPres);

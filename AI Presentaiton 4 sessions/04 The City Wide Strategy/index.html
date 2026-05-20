@@ -582,7 +582,15 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
 .pos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4vw;margin:2vh 0;}
 .pos-card{border-radius:14px;padding:3vh 2.2vw;border:1px solid rgba(147,217,17,.2);background:rgba(147,217,17,.05);transition:transform .35s var(--ease),background .3s;}
 .pos-card:hover{transform:translateY(-5px);background:rgba(147,217,17,.1);}
-.pos-icon{font-size:2rem;margin-bottom:.7rem;display:block;}
+.pos-icon{font-size:2rem;margin-bottom:.9rem;display:block;width:36px;height:36px;color:var(--lime);}
+.pos-icon svg{width:100%;height:100%;display:block;}
+
+/* Slide 4 mentor split */
+.mentor-split{display:grid;grid-template-columns:.85fr 1.2fr;gap:2.2vw;align-items:stretch;margin:1.5vh 0;}
+.mentor-photo{border-radius:14px;overflow:hidden;aspect-ratio:4/5;background:#101524;}
+.mentor-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+.mentor-content{display:flex;flex-direction:column;justify-content:center;}
+@media(max-width:900px){.mentor-split{grid-template-columns:1fr;}.mentor-photo{aspect-ratio:16/9;}}
 .pos-title{font-family:var(--display);font-size:clamp(.95rem,1.3vw,1.15rem);font-weight:700;color:var(--white);margin-bottom:.5rem;}
 .pos-body{font-size:clamp(.78rem,.96vw,.88rem);color:rgba(255,255,255,.62);line-height:1.6;}
 .pos-stat{margin-top:.8rem;font-size:.72rem;font-weight:700;color:var(--lime);}
@@ -630,10 +638,12 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
 .ci-icon{font-size:1.3rem;flex-shrink:0;}
 .ci-text{font-size:clamp(.82rem,1.05vw,.95rem);color:rgba(255,255,255,.75);}
 .ci-text strong{color:var(--white);display:block;font-size:clamp(.72rem,.9vw,.82rem);text-transform:uppercase;letter-spacing:.1em;color:var(--lime);}
-.qr-placeholder{border-radius:16px;border:2px dashed rgba(255,255,255,.15);padding:3vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.7rem;text-align:center;}
-.qr-placeholder .qr-icon{font-size:3rem;}
-.qr-label{font-size:.7rem;color:rgba(255,255,255,.35);letter-spacing:.08em;}
-.qr-url{font-size:clamp(.82rem,1.1vw,.98rem);color:var(--lime);font-weight:700;}
+.qr-block{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.85rem;text-align:center;}
+.qr-frame{padding:14px;background:#fff;border-radius:18px;box-shadow:0 18px 48px rgba(0,0,0,.45),0 0 0 1px rgba(255,255,255,.06);width:clamp(180px,22vw,240px);aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;transition:transform .35s var(--ease),box-shadow .35s var(--ease);}
+.qr-frame:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 26px 60px rgba(0,0,0,.55),0 0 0 1px rgba(166,217,29,.25);}
+.qr-frame img{width:100%;height:100%;display:block;border-radius:6px;}
+.qr-label{font-size:.7rem;color:rgba(255,255,255,.45);letter-spacing:.14em;text-transform:uppercase;font-weight:600;}
+.qr-url{font-size:clamp(.82rem,1.1vw,.98rem);color:var(--lime);font-weight:700;letter-spacing:.01em;}
 
 /* ─── BRIDGE ─── */
 .part-bridge{margin:2.5vh 0;}
@@ -645,6 +655,50 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
   .pos-grid,.nday-grid,.ethics-grid{grid-template-columns:1fr 1fr;}
   .mentor-strip{grid-template-columns:1fr 1fr;}
   .contact-grid{grid-template-columns:1fr;}
+}
+
+/* ═══ PREMIUM PRIMITIVES (shared, cross-session) ═══ */
+.stat-card.magnetic,.level-card.magnetic,.lever-card.magnetic,.sphere-card.magnetic,.formation-card.magnetic,.lit-card.magnetic,.theol-card.magnetic,.cf-card.magnetic,.pos-card.magnetic,.eth-card.magnetic,.nday-card.magnetic,.sacred-card.magnetic,.imago-side.magnetic,.brain-card.magnetic,.d5-item.magnetic{transform:perspective(900px) rotateX(var(--ry,0deg)) rotateY(var(--rx,0deg)) translateY(-3px);transition:transform .25s var(--ease),box-shadow .25s var(--ease);will-change:transform;}
+
+.paced{opacity:0;transform:translateY(14px);transition:opacity .55s var(--ease),transform .55s var(--ease);pointer-events:none;}
+.paced.show{opacity:1;transform:translateY(0);pointer-events:auto;}
+.pace-hint{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.34);text-align:center;margin-top:1.4rem;font-family:var(--body);font-weight:600;transition:opacity .4s var(--ease);}
+.slide-inner.warm .pace-hint,.slide-inner:not(.dark):not(.dark2):not(.session-div) .pace-hint{color:rgba(15,17,23,.42);}
+
+.title-word-clip{display:inline-block;overflow:hidden;vertical-align:bottom;line-height:1.05;}
+.title-word-clip>span{display:inline-block;transform:translateY(110%);transition:transform .9s var(--ease);}
+.title-word-clip.in>span{transform:translateY(0);}
+
+.stroke-anim{stroke-dasharray:600;stroke-dashoffset:600;transition:stroke-dashoffset 1.4s var(--ease);}
+.svg-drawn .stroke-anim{stroke-dashoffset:0;}
+
+.tw-active::after{content:'|';display:inline-block;margin-left:2px;color:var(--lime);animation:twBlink 1s step-end infinite;}
+@keyframes twBlink{50%{opacity:0;}}
+
+.media-card{aspect-ratio:1/1;border-radius:14px;overflow:hidden;position:relative;background:#1a1d28;border:1px solid rgba(255,255,255,.06);}
+.media-card.wide{aspect-ratio:16/9;}
+.media-card.tall{aspect-ratio:4/5;}
+.media-card img{width:100%;height:100%;object-fit:cover;display:block;}
+.media-card::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 55%,rgba(0,0,0,.34) 100%);pointer-events:none;}
+
+.photo-band{height:22vh;border-radius:14px;overflow:hidden;position:relative;margin:0 0 2.4vh;}
+.photo-band.tall{height:30vh;}
+.photo-band img{width:100%;height:100%;object-fit:cover;display:block;}
+.photo-band::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.55) 100%);pointer-events:none;}
+
+@property --p10{syntax:'<number>';inherits:false;initial-value:0;}
+.donut-9010{--p10:0;width:clamp(180px,22vw,260px);aspect-ratio:1/1;border-radius:50%;background:conic-gradient(var(--lime) calc(var(--p10) * 3.6deg),rgba(255,255,255,.08) 0);position:relative;display:flex;align-items:center;justify-content:center;transition:--p10 1.6s var(--ease);margin:0 auto;}
+.donut-9010::before{content:'';position:absolute;inset:18%;border-radius:50%;background:var(--dark);}
+.donut-9010 .donut-num{position:relative;z-index:2;font-family:var(--display);font-weight:700;font-size:clamp(2.4rem,5vw,3.4rem);color:var(--lime);}
+.donut-9010 .donut-lbl{position:absolute;bottom:-2.4rem;left:50%;transform:translateX(-50%);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.55);white-space:nowrap;text-align:center;font-weight:600;}
+.donut-9010.contrast{background:conic-gradient(var(--red) calc(var(--p10) * 3.6deg),rgba(255,255,255,.08) 0);}
+.donut-9010.contrast .donut-num{color:var(--red);}
+
+@media(prefers-reduced-motion:reduce){
+  .paced{transition:opacity .25s linear !important;transform:none !important;}
+  .title-word-clip>span{transition:none !important;transform:none !important;}
+  .stroke-anim{transition:none !important;stroke-dashoffset:0 !important;}
+  .tw-active::after{animation:none !important;}
 }
 
 </style>
@@ -764,79 +818,85 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
   </div>
 </div>
 
-<div class="slide">
+<div class="slide" data-pace="cards">
   <div class="slide-inner warm">
+    <div class="bg-img" style="opacity:.16"><img class="slide-img" src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=1400&auto=format&fit=crop&q=80" alt="" decoding="async"><div class="ov"></div></div>
     <div class="s-body top">
       <div class="eyebrow anim fade-up d1">Before the Commission — The Positive Case</div>
       <h2 class="s-title lg anim fade-up d2" data-split="words">The same tools that<br>concern us can serve<br>the <span class="lime">mission.</span></h2>
       <div class="pos-grid anim fade-up d3">
-        <div class="pos-card" data-modal="positive_tutoring">
-          <span class="pos-icon">📚</span>
+        <div class="pos-card paced" data-modal="positive_tutoring">
+          <span class="pos-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 4l9 5-9 5-9-5 9-5z"/><path d="M21 9v6"/><path d="M5 11v3.5c0 1.5 3.1 2.5 7 2.5s7-1 7-2.5V11"/></svg></span>
           <div class="pos-title">Education Access</div>
           <div class="pos-body">Personalised tutoring at scale — reaching children in the Global South who have never had access to differentiated instruction. In Tanzania, one teacher with an AI tool now delivers what previously required a 1:1 ratio.</div>
           <div class="pos-stat">Khan Academy · World Bank · 2024-25</div>
         </div>
-        <div class="pos-card" data-modal="positive_translation">
-          <span class="pos-icon">🌍</span>
+        <div class="pos-card paced" data-modal="positive_translation">
+          <span class="pos-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg></span>
           <div class="pos-title">Translation and the Great Commission</div>
           <div class="pos-body">~2,000 languages still lack a complete Bible translation. AI-assisted translation could compress timelines from decades to years. Wycliffe and SIL are already deploying this in partnership with local translators.</div>
           <div class="pos-stat">Wycliffe Bible Translators · 2025</div>
         </div>
-        <div class="pos-card" data-modal="positive_global_south">
-          <span class="pos-icon">📡</span>
+        <div class="pos-card paced" data-modal="positive_global_south">
+          <span class="pos-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12a7 7 0 0114 0M2 12a10 10 0 0120 0"/><circle cx="12" cy="14" r="2"/><path d="M12 16v4"/></svg></span>
           <div class="pos-title">Access Equalisation</div>
           <div class="pos-body">A pastor in rural Kenya with a smartphone now has research and teaching support that previously required a seminary library. AI is arriving in many majority-world contexts as democratiser, not disruptor.</div>
           <div class="pos-stat">GSMA · UNESCO · 2025</div>
         </div>
       </div>
-      <div class="callout lime anim fade-up d4">The same AI that raises the concerns in Part 1 and Part 2 is the AI that can accelerate the Great Commission at a scale the church has never had access to. The question is always: who is holding it, with what values, toward what end?</div>
+      <div class="callout lime paced">The same AI that raises the concerns in Part 1 and Part 2 is the AI that can accelerate the Great Commission at a scale the church has never had access to. The question is always: who is holding it, with what values, toward what end?</div>
     </div>
     <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 04</span></div>
   </div>
 </div>
 
-<div class="slide">
+<div class="slide" data-pace="cards">
   <div class="slide-inner dark2">
     <div class="s-body top">
       <div class="eyebrow anim fade-up d1">The Strategic Opportunity — Tauranga 2026</div>
       <h2 class="s-title lg anim fade-up d2" data-split="words">The 18-35 year olds<br>in your city are navigating<br>this <em>without you.</em></h2>
-      <div class="s-div anim fade-up d3"></div>
-      <p class="s-sub anim fade-up d4">The Stanford data shows the sharpest disruption hitting the cohort most likely to be using AI companions as a substitute for real mentorship. That cohort is in your church, your business, your community. And most of them have not heard a leader address this directly.</p>
-      <div class="mentor-strip anim fade-up d5">
-        <div class="ms-item"><div class="ms-num">-20%</div><div class="ms-label">software developers aged 22-25 from 2022 peak</div></div>
-        <div class="ms-item"><div class="ms-num">-13%</div><div class="ms-label">all entry-level AI-exposed roles, aged 22-25</div></div>
-        <div class="ms-item"><div class="ms-num">67%</div><div class="ms-label">of teen AI chatbot users call one a close friend</div></div>
-        <div class="ms-item"><div class="ms-num">0</div><div class="ms-label">of those surveyed say a leader in their community has talked to them about it</div></div>
+      <div class="mentor-split anim fade-up d3">
+        <div class="mentor-photo"><img src="https://images.unsplash.com/photo-1577563908411-5077b6dc7624?w=900&auto=format&fit=crop&q=80" alt="" decoding="async"></div>
+        <div class="mentor-content">
+          <p class="s-sub" style="margin-bottom:1.4vh">The Stanford data shows the sharpest disruption hitting the cohort most likely to be using AI companions as a substitute for real mentorship. That cohort is in your church, your business, your community.</p>
+          <div class="mentor-strip">
+            <div class="ms-item paced"><div class="ms-num"><span class="count-up" data-target="-20" data-suffix="%">0</span></div><div class="ms-label">software developers aged 22-25 from 2022 peak</div></div>
+            <div class="ms-item paced"><div class="ms-num"><span class="count-up" data-target="-13" data-suffix="%">0</span></div><div class="ms-label">all entry-level AI-exposed roles, aged 22-25</div></div>
+            <div class="ms-item paced"><div class="ms-num"><span class="count-up" data-target="67" data-suffix="%">0</span></div><div class="ms-label">of teen AI chatbot users call one a close friend</div></div>
+            <div class="ms-item paced"><div class="ms-num">0</div><div class="ms-label">of those surveyed say a leader in their community has talked to them about it</div></div>
+          </div>
+        </div>
       </div>
-      <div class="callout dark-call anim fade-up d6">The mentor who sits with a 24-year-old and says "Here is what I think is happening, here is what I think it means, and here is what I think you should do" — that mentor is offering something unavailable anywhere else. That is your role. That is the opportunity.</div>
+      <div class="callout dark-call paced">The mentor who sits with a 24-year-old and says "Here is what I think is happening, here is what I think it means, and here is what I think you should do" — that mentor is offering something unavailable anywhere else. That is your role. That is the opportunity.</div>
     </div>
     <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 04</span></div>
   </div>
 </div>
 
-<div class="slide">
+<div class="slide" data-pace="cards">
   <div class="slide-inner">
+    <div class="bg-img" style="opacity:.14"><img class="slide-img" src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1400&auto=format&fit=crop&q=80" alt="" decoding="async"><div class="ov"></div></div>
     <div class="s-body top">
       <div class="eyebrow anim fade-up d1">The New Competitive Advantage</div>
       <h2 class="s-title lg anim fade-up d2" data-split="words">In a world where AI<br>can replicate anything —<br><em>ethics</em> becomes rare.</h2>
       <div class="ethics-grid anim fade-up d3">
-        <div class="eth-card" data-modal="ethics_currency">
+        <div class="eth-card paced" data-modal="ethics_currency">
           <div class="eth-icon">🤝</div>
           <div class="eth-title">Trust</div>
           <div class="eth-body">In an environment of deepfakes and AI-generated everything, demonstrable trustworthiness is a strategic asset. The organisation known to tell the truth is the organisation people turn to when they need to know what is actually true.</div>
         </div>
-        <div class="eth-card" data-modal="ethics_currency">
+        <div class="eth-card paced" data-modal="ethics_currency">
           <div class="eth-icon">🪞</div>
           <div class="eth-title">Presence</div>
           <div class="eth-body">Physical presence is now the premium product. AI cannot show up. The leader who is consistently, reliably, visibly there — in the room, in the hard conversations, in the long seasons — has something that cannot be generated or scaled.</div>
         </div>
-        <div class="eth-card" data-modal="ethics_currency">
+        <div class="eth-card paced" data-modal="ethics_currency">
           <div class="eth-icon">🏛️</div>
           <div class="eth-title">Constancy</div>
           <div class="eth-body">AI optimises for engagement. Engagement algorithms respond to novelty, outrage, and validation. The community that stays constant — same values, same people, same commitments — through technological upheaval becomes a refuge in the truest sense.</div>
         </div>
       </div>
-      <div class="callout amber anim fade-up d4">Ethics is no longer a compliance requirement. In 2026, it is a differentiation strategy. The church has been practising this for two thousand years. The technology just made it visible how rare it is.</div>
+      <div class="callout amber paced">Ethics is no longer a compliance requirement. In 2026, it is a differentiation strategy. The church has been practising this for two thousand years. The technology just made it visible how rare it is.</div>
     </div>
     <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 04</span></div>
   </div>
@@ -844,19 +904,20 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
 
 <div class="slide">
   <div class="slide-inner dark" style="background:radial-gradient(ellipse at 40% 30%,hsl(38,25%,10%) 0%,hsl(218,38%,7%) 55%)">
+    <div class="bg-img" style="opacity:.14"><img class="slide-img" src="https://images.unsplash.com/photo-1473893604213-3df9c15cf066?w=1400&auto=format&fit=crop&q=80" alt="" decoding="async"><div class="ov-dk"></div></div>
     <div class="s-body top">
       <div class="eyebrow anim fade-up d1" style="color:var(--gold)">Ephesians 5:16 &mdash; Making the Most of Every Opportunity</div>
       <h2 class="s-title lg anim fade-up d2" data-split="words">Redeem the time.<br>The days are evil.</h2>
       <div class="s-div anim fade-up d3"></div>
       <p class="s-sub anim fade-up d4" style="max-width:700px">Paul wrote those words into a specific cultural moment of crisis and opportunity. The church in Ephesus was navigating a city shaped by imperial power, religious plurality, and economic complexity. His instruction was not to retreat. It was to redeem — to buy back the time, to use the moment wisely, to act with urgency and clarity.</p>
       <div class="callout dark-call anim fade-up d5" style="max-width:700px">The theological frame for AI leadership is not fear, worship, or sleepwalking. It is redemption. The same time, the same moment, the same city — but used with wisdom toward the purposes of God. That is the calling.</div>
-      <div class="quote-box anim fade-up d6" style="max-width:700px"><div class="qm">&ldquo;</div><blockquote>Be very careful, then, how you live — not as unwise but as wise, making the most of every opportunity, because the days are evil.</blockquote><cite>Ephesians 5:15-16 &mdash; NIV</cite></div>
+      <div class="quote-box anim fade-up d6" style="max-width:700px"><div class="qm">&ldquo;</div><blockquote data-tw data-tw-speed="22" data-tw-delay="700">Be very careful, then, how you live — not as unwise but as wise, making the most of every opportunity, because the days are evil.</blockquote><cite>Ephesians 5:15-16 &mdash; NIV</cite></div>
     </div>
     <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 04 &mdash; Ephesians 5:15-16</span></div>
   </div>
 </div>
 
-<div class="slide">
+<div class="slide" data-pace="cards">
   <div class="slide-inner dark2">
     <div class="s-body top">
       <div class="eyebrow anim fade-up d1">The Church as Shock Absorber</div>
@@ -864,22 +925,22 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
       <div class="s-div anim fade-up d3"></div>
       <p class="s-sub anim fade-up d4" style="max-width:720px">Communities with strong social capital — bonds of trust and obligation that exist independent of economic productivity — suffer less during major disruptions and recover faster. The church, at its best, is exactly that community: multigenerational, geographically local, built on covenant relationship rather than transactional value.</p>
       <div class="brain-split anim fade-up d5">
-        <div class="brain-card left"><div class="brain-tag">What the Economy Cannot Provide</div><div class="brain-title">Trans-economic Community</div><div class="brain-desc">When your job disappears, your productivity metric vanishes, and your economic identity is disrupted — the church is the community where your worth was never measured that way to begin with.</div><div class="brain-pill" style="background:var(--sky)">Covenant &gt; Contract</div></div>
-        <div class="brain-card right"><div class="brain-tag">What the Church Is Uniquely Positioned to Offer</div><div class="brain-title">Multigenerational Mentorship</div><div class="brain-desc">Older members who have navigated disruption before. Younger members who need anchoring. The same community holding both across generations — something no algorithm can replicate or substitute.</div><div class="brain-pill" style="background:var(--lime)">Present &gt; Digital</div></div>
+        <div class="brain-card left paced"><div class="brain-tag">What the Economy Cannot Provide</div><div class="brain-title">Trans-economic Community</div><div class="brain-desc">When your job disappears, your productivity metric vanishes, and your economic identity is disrupted — the church is the community where your worth was never measured that way to begin with.</div><div class="brain-pill" style="background:var(--sky)">Covenant &gt; Contract</div></div>
+        <div class="brain-card right paced"><div class="brain-tag">What the Church Is Uniquely Positioned to Offer</div><div class="brain-title">Multigenerational Mentorship</div><div class="brain-desc">Older members who have navigated disruption before. Younger members who need anchoring. The same community holding both across generations — something no algorithm can replicate or substitute.</div><div class="brain-pill" style="background:var(--lime)">Present &gt; Digital</div></div>
       </div>
-      <div class="callout dark-call anim fade-up d6">The AI disruption is a pastoral event as much as an economic one. The community that shows up for people in their hardest season is not a nice add-on to the response strategy. It is the response strategy.</div>
+      <div class="callout dark-call paced">The AI disruption is a pastoral event as much as an economic one. The community that shows up for people in their hardest season is not a nice add-on to the response strategy. It is the response strategy.</div>
     </div>
     <div class="s-footer"><span>Nathaniel Baldock &middot; 2026</span><span>Session 04</span></div>
   </div>
 </div>
 
-<div class="slide">
+<div class="slide" data-pace="cards">
   <div class="slide-inner warm">
     <div class="s-body top">
       <div class="eyebrow anim fade-up d1">Your Next 90 Days</div>
       <h2 class="s-title lg anim fade-up d2" data-split="words">Conviction without<br>action is just knowledge.</h2>
       <div class="nday-grid anim fade-up d3">
-        <div class="nday-card" data-modal="ninety_day">
+        <div class="nday-card paced phase-1" data-modal="ninety_day">
           <div class="nday-label">Days 1–30</div>
           <div class="nday-title">Assess</div>
           <ul class="nday-items">
@@ -889,7 +950,7 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
             <li>Audit what you are already using AI for — and what it is costing</li>
           </ul>
         </div>
-        <div class="nday-card" data-modal="ninety_day">
+        <div class="nday-card paced phase-2" data-modal="ninety_day">
           <div class="nday-label">Days 31–60</div>
           <div class="nday-title">Act</div>
           <ul class="nday-items">
@@ -899,7 +960,7 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
             <li>Protect one Sacred Task you were on the verge of automating</li>
           </ul>
         </div>
-        <div class="nday-card" data-modal="ninety_day">
+        <div class="nday-card paced phase-3" data-modal="ninety_day">
           <div class="nday-label">Days 61–90</div>
           <div class="nday-title">Advocate</div>
           <ul class="nday-items">
@@ -934,6 +995,7 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
 
 <div class="slide">
   <div class="slide-inner dark" style="background:#0a0c14">
+    <div class="bg-img" style="opacity:.18"><img class="slide-img" src="https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=1600&auto=format&fit=crop&q=80" alt="" decoding="async"><div class="ov-dk"></div></div>
     <div class="s-body center" style="gap:0">
       <div class="eyebrow anim fade-up d1" style="color:var(--lime)">The Three-Part Charge</div>
       <div class="charge-word anim fade-up d2" style="color:var(--white)">Do not</div>
@@ -946,6 +1008,7 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
 
 <div class="slide">
   <div class="slide-inner dark" style="background:#0a0c14">
+    <div class="bg-img" style="opacity:.18"><img class="slide-img" src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1600&auto=format&fit=crop&q=80" alt="" decoding="async"><div class="ov-dk"></div></div>
     <div class="s-body center" style="gap:0">
       <div class="eyebrow anim fade-up d1" style="color:var(--lime)">The Three-Part Charge</div>
       <div class="charge-word anim fade-up d2" style="color:var(--white)">Do not</div>
@@ -958,6 +1021,7 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
 
 <div class="slide">
   <div class="slide-inner dark" style="background:#0a0c14">
+    <div class="bg-img" style="opacity:.18"><img class="slide-img" src="https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?w=1600&auto=format&fit=crop&q=80" alt="" decoding="async"><div class="ov-dk"></div></div>
     <div class="s-body center" style="gap:0">
       <div class="eyebrow anim fade-up d1" style="color:var(--lime)">The Three-Part Charge</div>
       <div class="charge-word anim fade-up d2" style="color:var(--white)">Do not</div>
@@ -981,11 +1045,10 @@ html[data-theme="editorial"]{--sky:#0a0a0a;--sky2:#404040;--sky-dark:#000;--sky-
           <div class="ci-item"><div class="ci-icon">📖</div><div class="ci-text"><strong>Resources</strong>All worksheets, articles and tools available at the link below</div></div>
           <div class="ci-item"><div class="ci-icon">🙏</div><div class="ci-text"><strong>YWAM Tauranga</strong>Missions training, discipleship, and AI consulting for the church</div></div>
         </div>
-        <div class="qr-placeholder">
-          <div class="qr-icon">📱</div>
+        <div class="qr-block">
+          <div class="qr-frame"><img src="https://api.qrserver.com/v1/create-qr-code/?size=420x420&margin=12&data=https%3A%2F%2Fnathanielbaldock.com%2Fresources" alt="QR code linking to nathanielbaldock.com/resources" decoding="async"></div>
           <div class="qr-label">Scan for all seminar resources</div>
           <div class="qr-url">nathanielbaldock.com/resources</div>
-          <p style="font-size:.65rem;color:rgba(255,255,255,.2);margin-top:.5rem">[Replace with actual QR code before use]</p>
         </div>
       </div>
       <p class="anim fade-up d5" style="font-size:.72rem;color:rgba(255,255,255,.22);margin-top:1.5rem;text-align:center">Nathaniel Baldock &middot; YWAM missionary and AI consultant &middot; Tauranga, New Zealand &middot; 2026</p>
@@ -1125,6 +1188,7 @@ function burstParticles(){
 // SCRAMBLE COUNT-UP
 function animCounts(s){
   s.querySelectorAll('.count-up').forEach(el=>{
+    const pp=el.closest('.paced');if(pp&&!pp.classList.contains('show'))return;
     if(el.dataset.counted)return;el.dataset.counted='1';
     const target=parseFloat(el.dataset.target),suffix=el.dataset.suffix||'',dc=parseInt(el.dataset.decimals)||0,sep=el.dataset.separator===',';
     const digits=Math.max(String(Math.round(Math.abs(target))).length,1);
@@ -1144,8 +1208,120 @@ function animCounts(s){
 }
 
 function animCharts(s){
-  s.querySelectorAll('.hbar').forEach((r,i)=>setTimeout(()=>{const f=r.querySelector('.hbar-fill');f.style.width=r.dataset.w+'%';const sp=f.querySelector('span');if(sp)sp.style.opacity='1';},i*120));
-  s.querySelectorAll('.vbar-col').forEach((c,i)=>setTimeout(()=>{c.querySelector('.vbar').style.height=c.dataset.h+'%';c.querySelector('.vbar-val').style.opacity='1';},i*160));
+  s.querySelectorAll('.hbar').forEach((r,i)=>{
+    const pp=r.closest('.paced');if(pp&&!pp.classList.contains('show'))return;
+    if(r.dataset.charted)return;r.dataset.charted='1';
+    setTimeout(()=>{const f=r.querySelector('.hbar-fill');f.style.width=r.dataset.w+'%';const sp=f.querySelector('span');if(sp)sp.style.opacity='1';},i*120);
+  });
+  s.querySelectorAll('.vbar-col').forEach((c,i)=>{
+    const pp=c.closest('.paced');if(pp&&!pp.classList.contains('show'))return;
+    if(c.dataset.vcharted)return;c.dataset.vcharted='1';
+    setTimeout(()=>{c.querySelector('.vbar').style.height=c.dataset.h+'%';c.querySelector('.vbar-val').style.opacity='1';},i*160);
+  });
+}
+
+// ═══ PREMIUM PRIMITIVES ═══
+const paceState={};
+function initPaceSlide(slide,idx){
+  if(!slide.dataset.pace)return;
+  paceState[idx]=0;
+  slide.querySelectorAll('.paced').forEach(p=>p.classList.remove('show'));
+  let h=slide.querySelector('.pace-hint');
+  if(slide.querySelectorAll('.paced').length>0){
+    if(!h){h=document.createElement('p');h.className='pace-hint';h.textContent='Press → or space to reveal';
+      const sb=slide.querySelector('.s-body')||slide.querySelector('.slide-inner')||slide;sb.appendChild(h);}
+    h.style.opacity='';
+  }
+}
+function revealNextPace(idx){
+  const slide=slides[idx];
+  if(!slide||!slide.dataset.pace)return false;
+  const items=[...slide.querySelectorAll('.paced')];
+  const n=paceState[idx]||0;
+  if(n<items.length){
+    items[n].classList.add('show');paceState[idx]=n+1;
+    animCounts(slide);animCharts(slide);
+    if(paceState[idx]===items.length){const h=slide.querySelector('.pace-hint');if(h)h.style.opacity='0';}
+    return true;
+  }
+  return false;
+}
+function reversePace(idx){
+  const slide=slides[idx];
+  if(!slide||!slide.dataset.pace)return false;
+  const n=paceState[idx]||0;
+  if(n>0){
+    const items=[...slide.querySelectorAll('.paced')];
+    items[n-1].classList.remove('show');paceState[idx]=n-1;
+    const h=slide.querySelector('.pace-hint');if(h)h.style.opacity='';
+    return true;
+  }
+  return false;
+}
+
+function twQuotes(slide){
+  slide.querySelectorAll('[data-tw]').forEach(el=>{
+    if(el.dataset.twDone)return;el.dataset.twDone='1';
+    const full=el.textContent;el.textContent='';el.classList.add('tw-active');
+    let i=0;const speed=parseInt(el.dataset.twSpeed||'22');
+    function step(){if(i<=full.length){el.textContent=full.slice(0,i);i++;setTimeout(step,speed);}else{el.classList.remove('tw-active');}}
+    setTimeout(step,parseInt(el.dataset.twDelay||'400'));
+  });
+}
+
+function drawStrokes(slide){
+  slide.querySelectorAll('.stroke-anim').forEach(p=>{
+    if(p.dataset.drawn)return;p.dataset.drawn='1';
+    const svg=p.closest('svg');
+    setTimeout(()=>{if(svg)svg.classList.add('svg-drawn');},480);
+  });
+}
+
+function clipTitleWords(slide){
+  slide.querySelectorAll('.title-word-clip').forEach(el=>{setTimeout(()=>el.classList.add('in'),140);});
+}
+
+function bindMagnetic(){
+  const sel='.stat-card,.level-card,.lever-card,.sphere-card,.formation-card,.lit-card,.theol-card,.cf-card,.pos-card,.eth-card,.nday-card,.sacred-card,.imago-side,.brain-card,.d5-item';
+  document.querySelectorAll(sel).forEach(card=>{
+    if(card.dataset.magBound)return;card.dataset.magBound='1';
+    card.classList.add('magnetic');
+    card.addEventListener('mousemove',e=>{
+      const r=card.getBoundingClientRect();
+      const mx=((e.clientX-r.left)/r.width-0.5)*2;
+      const my=((e.clientY-r.top)/r.height-0.5)*2;
+      card.style.setProperty('--rx',(mx*4).toFixed(2)+'deg');
+      card.style.setProperty('--ry',(-my*4).toFixed(2)+'deg');
+    });
+    card.addEventListener('mouseleave',()=>{card.style.setProperty('--rx','0deg');card.style.setProperty('--ry','0deg');});
+  });
+}
+
+function particlesForSlide(){
+  document.querySelectorAll('.particle').forEach(p=>{
+    const s=p.closest('.slide');
+    p.style.animationPlayState=(s&&s.classList.contains('active'))?'running':'paused';
+  });
+}
+
+function preloadNextImg(idx){
+  [idx-1,idx+1,idx+2].forEach(i=>{
+    if(i<0||i>=slides.length)return;
+    slides[i].querySelectorAll('img.slide-img,.media-card img,.photo-band img').forEach(img=>{
+      const src=img.getAttribute('src')||img.dataset.src;
+      if(!src||img.dataset.preloaded)return;img.dataset.preloaded='1';
+      const l=document.createElement('link');l.rel='preload';l.as='image';l.href=src;
+      document.head.appendChild(l);
+    });
+  });
+}
+
+function fireDonut(slide){
+  slide.querySelectorAll('.donut-9010').forEach(d=>{
+    if(d.dataset.fired)return;d.dataset.fired='1';
+    const v=parseInt(d.dataset.p||'90');
+    setTimeout(()=>{d.style.setProperty('--p10',v);},220);
+  });
 }
 
 // TRANSITION ENGINE
@@ -1160,6 +1336,11 @@ function syncA11y(){slides.forEach((s,i)=>s.setAttribute('aria-hidden',!started|
 function triggerEntrance(slide,idx){
   slide.querySelectorAll('.anim').forEach(e=>e.classList.add('in'));
   animCharts(slide);animCounts(slide);revealSplit(slide);
+  initPaceSlide(slide,idx);
+  twQuotes(slide);drawStrokes(slide);clipTitleWords(slide);
+  fireDonut(slide);
+  particlesForSlide();preloadNextImg(idx);
+  bindMagnetic();
   if(DISC_SLIDES.has(idx))initDiscSlide(slide,idx);
   else stopTimer();
   if(idx===POS_IDX)setTimeout(burstParticles,750);
@@ -1167,6 +1348,7 @@ function triggerEntrance(slide,idx){
 
 function go(n){
   if(!started||trans||n<0||n>=total)return;
+  if(slides[cur].dataset.pace&&n>cur){if(revealNextPace(cur))return;}
   if(DISC_SLIDES.has(cur)&&n>cur){if(revealNextQ(cur))return;}
   if(n===cur)return;
   trans=true;
@@ -1206,7 +1388,10 @@ document.addEventListener('keydown',e=>{
   if(document.getElementById('carousel-overlay').classList.contains('open')){if(e.key==='Escape')document.getElementById('carousel-overlay').classList.remove('open');if(e.key==='ArrowRight')document.getElementById('car-next').click();if(e.key==='ArrowLeft')document.getElementById('car-prev').click();return;}
   if(document.getElementById('ai-panel').classList.contains('open')&&e.key==='Escape'){document.getElementById('ai-panel').classList.remove('open');return;}
   if(['ArrowRight','ArrowDown',' '].includes(e.key)){e.preventDefault();go(cur+1);}
-  if(['ArrowLeft','ArrowUp'].includes(e.key)){e.preventDefault();go(cur-1);}
+  if(['ArrowLeft','ArrowUp'].includes(e.key)){e.preventDefault();
+    if(slides[cur].dataset.pace&&reversePace(cur))return;
+    go(cur-1);
+  }
 });
 document.getElementById('next-btn').addEventListener('click',()=>go(cur+1));
 document.getElementById('prev-btn').addEventListener('click',()=>go(cur-1));
@@ -1233,7 +1418,14 @@ function finishVideo(){
   document.getElementById('skip-video').classList.remove('visible');
   ['nav-bar','slide-counter','prev-btn','next-btn'].forEach(id=>document.getElementById(id).classList.add('visible'));
   document.getElementById('ai-fab').classList.add('vis');
-  setTimeout(()=>{slides[0].querySelectorAll('.anim').forEach(e=>e.classList.add('in'));revealSplit(slides[0]);animCounts(slides[0]);},300);
+  setTimeout(()=>{
+    slides[0].querySelectorAll('.anim').forEach(e=>e.classList.add('in'));
+    revealSplit(slides[0]);animCounts(slides[0]);
+    initPaceSlide(slides[0],0);
+    twQuotes(slides[0]);drawStrokes(slides[0]);clipTitleWords(slides[0]);
+    fireDonut(slides[0]);particlesForSlide();preloadNextImg(0);
+    bindMagnetic();
+  },300);
   syncA11y();updNav();
 }
 document.getElementById('start-btn').addEventListener('click',startPres);
