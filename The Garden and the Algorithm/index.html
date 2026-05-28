@@ -1774,11 +1774,14 @@ function goTo(n){
 function go(dir){ goTo(cur + dir); }
 
 /* ── Start ──────────────────────────────────────────────── */
+let deckStarted = false;
 function startDeck(){
   document.getElementById('entry').classList.add('out');
-  const nav = document.getElementById('nav');
+  deckStarted = true;
   setTimeout(() => {
-    nav.classList.add('show');
+    /* brief discovery hint so users know nav exists, then auto-hide */
+    revealNav();
+    scheduleHideNav(2600);
     const el = document.documentElement;
     if (el.requestFullscreen) el.requestFullscreen().catch(()=>{});
     else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
@@ -1793,6 +1796,45 @@ function startDeck(){
   }, 600);
   syncNav();
 }
+
+/* ── Nav auto-hide / hover-to-reveal ────────────────────── */
+const navEl = document.getElementById('nav');
+const NAV_HOTZONE_PX = 140;   /* bottom zone that triggers reveal */
+const NAV_HIDE_DELAY = 450;   /* ms after leaving zone */
+let navHideTimer = null;
+
+function revealNav(){
+  if (!deckStarted) return;
+  if (navHideTimer){ clearTimeout(navHideTimer); navHideTimer = null; }
+  navEl.classList.add('show');
+}
+function scheduleHideNav(delay = NAV_HIDE_DELAY){
+  if (!deckStarted) return;
+  if (navHideTimer) clearTimeout(navHideTimer);
+  navHideTimer = setTimeout(() => {
+    if (navEl.matches(':hover')) return;        /* keep visible if user is on it */
+    if (modalEl.classList.contains('open')) return;
+    if (sphModal.classList.contains('open')) return;
+    navEl.classList.remove('show');
+  }, delay);
+}
+
+document.addEventListener('mousemove', e => {
+  if (!deckStarted) return;
+  const inHotzone = (window.innerHeight - e.clientY) < NAV_HOTZONE_PX;
+  if (inHotzone) revealNav();
+  else scheduleHideNav();
+});
+
+navEl.addEventListener('mouseenter', revealNav);
+navEl.addEventListener('mouseleave', () => scheduleHideNav(120));
+
+/* On touch devices, briefly reveal the nav after any tap so it's still reachable */
+document.addEventListener('touchend', () => {
+  if (!deckStarted) return;
+  revealNav();
+  scheduleHideNav(2500);
+}, { passive: true });
 
 /* ── Keyboard ───────────────────────────────────────────── */
 document.addEventListener('keydown', e => {
