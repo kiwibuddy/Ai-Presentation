@@ -1,0 +1,7 @@
+{
+  "name": "the-great-redeployment-deck",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Single-file HTML deck with Vercel serverless API routes for live demos"
+}
